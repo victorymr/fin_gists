@@ -142,4 +142,4 @@ def sim_equity_value(company_ticker="MSFT", market_risk_premium= 0.059, debt_ret
     return mean, standard_error, lower_bound, upper_bound
 
 if __name__ == "__main__": 
-    return mean, standard_error, lower_bound, upper_bound = sim_equity_value() 
+    mean, standard_error, lower_bound, upper_bound = sim_equity_value() 
