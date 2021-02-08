@@ -106,7 +106,7 @@ def discount(forecast, discount_rate, long_term_rate):
     return sum(discount_lst)
 
 '''----// Run simulation and plot distribution of model forecasts //----'''
-def sim_equity_value(company_ticker="MSFT", market_risk_premium= 0.059, debt_return = 0.01, tax_rate=0.3):
+def sim_equity_value(company_ticker="MSFT", market_risk_premium= 0.059, debt_return = 0.01, tax_rate=0.3,iterations=1000):
 
     input_df = get_fin_st(company_ticker)
     mean_cagr = get_cagr(input_df)
