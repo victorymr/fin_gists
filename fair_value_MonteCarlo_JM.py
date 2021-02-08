@@ -16,12 +16,13 @@ tax_rate = 0.3
 iterations = 1000
 
 '''----// Get financial information from yahoo finance //----'''
+def get_fin_st(company_ticker='MSFT'):
+    income_statement_df = si.get_income_statement(company_ticker)
 
-income_statement_df = si.get_income_statement(company_ticker)
+    pars_df = income_statement_df.loc[['totalRevenue', 'ebit']]
 
-pars_df = income_statement_df.loc[['totalRevenue', 'ebit']]
-
-input_df = pars_df.iloc[:, ::-1]
+    input_df = pars_df.iloc[:, ::-1]
+    return input_df
 
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
 
@@ -53,7 +54,7 @@ def get_forecast(input_df, cagr, margin, long_term_growth):
 
 '''----// Get WACC and net debt //----'''
 
-def get_wacc(company_ticker, market_risk_premium, debt_return, tax_rate):
+def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.01, tax_rate=0.3):
     risk_free_rate_df = dr.DataReader('^TNX', 'yahoo') 
     risk_free_rate = (risk_free_rate_df.iloc[len(risk_free_rate_df)-1,5])/100
     equity_beta = si.get_quote_table('msft')['Beta (5Y Monthly)']
@@ -105,29 +106,40 @@ def discount(forecast, discount_rate, long_term_rate):
     return sum(discount_lst)
 
 '''----// Run simulation and plot distribution of model forecasts //----'''
+def sim_equity_value(company_ticker="MSFT", market_risk_premium= 0.059, debt_return = 0.01, tax_rate=0.3):
 
-hist_lst = []
+    input_df = get_fin_st(company_ticker)
+    mean_cagr = get_cagr(input_df)
+    mean_margin = get_average_margin(input_df)
 
-for i in range(iterations):
-    cagr = np.random.normal(mean_cagr, 0.01)
-    margin = np.random.normal(mean_margin, 0.005)
-    long_term_rate = np.random.normal(long_term_growth, 0.001)
-    discount_rate = np.random.normal(mean_wacc, 0.001)
-    forecast = get_forecast(input_df, cagr, margin, long_term_rate)
-    hist_lst.append(discount(forecast, discount_rate, long_term_rate)-net_debt)
-hist_array = np.array(hist_lst)
-plt.hist(hist_array, bins=50, align='mid', color = 'steelblue', edgecolor='black')
-plt.title('Sample Distribution ' + company_ticker, {'fontname':'Calibri'})
-plt.xlabel('Equity Value in $', {'fontname':'Calibri'})
-plt.ylabel('Frequency', {'fontname':'Calibri'})
+    mean_wacc = get_wacc(company_ticker, market_risk_premium, debt_return, tax_rate)
+    net_debt = get_net_debt()
+    
+    hist_lst = []
+    for i in range(iterations):
+        cagr = np.random.normal(mean_cagr, 0.01)
+        margin = np.random.normal(mean_margin, 0.005)
+        long_term_rate = np.random.normal(long_term_growth, 0.001)
+        discount_rate = np.random.normal(mean_wacc, 0.001)
+        forecast = get_forecast(input_df, cagr, margin, long_term_rate)
+        hist_lst.append(discount(forecast, discount_rate, long_term_rate)-net_debt)
+    hist_array = np.array(hist_lst)
+    plt.hist(hist_array, bins=50, align='mid', color = 'steelblue', edgecolor='black')
+    plt.title('Sample Distribution ' + company_ticker, {'fontname':'Calibri'})
+    plt.xlabel('Equity Value in $', {'fontname':'Calibri'})
+    plt.ylabel('Frequency', {'fontname':'Calibri'})
 
-plt.show()
+    plt.show()
 
-mean = hist_array.mean()
-standard_error = hist_array.std()/(iterations**(1/2))
+    mean = hist_array.mean()
+    standard_error = hist_array.std()/(iterations**(1/2))
 
-lower_bound = mean-1.96*standard_error
-upper_bound = mean+1.96*standard_error 
+    lower_bound = mean-1.96*standard_error
+    upper_bound = mean+1.96*standard_error 
 
-print(lower_bound)
-print(upper_bound)
+    print(lower_bound)
+    print(upper_bound)
+    return mean, standard_error, lower_bound, upper_bound
+
+if __name__ == "__main__": 
+    return mean, standard_error, lower_bound, upper_bound = sim_equity_value() 
