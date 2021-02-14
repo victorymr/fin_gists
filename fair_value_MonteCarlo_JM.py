@@ -38,8 +38,6 @@ def get_average_margin(past_ebit):
     margin_lst.append(margin)
     return(sum(margin_lst)/len(margin_lst))
 
-mean_cagr = get_cagr(input_df)
-mean_margin = get_average_margin(input_df)
 
 '''----// Create forecast function through which random variables will flow //----'''
 
@@ -90,9 +88,6 @@ def get_net_debt():
 
     return short_term_debt_series.iloc[0] + long_term_debt_series.iloc[0] - cash_series.iloc[0]
     
-mean_wacc = get_wacc(company_ticker, market_risk_premium, debt_return, tax_rate)
-
-net_debt = get_net_debt()
 
 '''----// Discount EBIT figures to arrive at the PV of the firm's cash flows //----'''
 
