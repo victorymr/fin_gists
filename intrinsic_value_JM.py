@@ -15,7 +15,7 @@ tax_rate = 0.3
 '''---------- // Hard-coded variables above // ----------'''
 '''----- // I. Financial Information from Yahoo Finance // -----'''
 def get_income_statement(company_ticker='AAPL'):
-    income_statement_url = '<https://finance.yahoo.com/quote/>' + company_ticker + '/financials?p=' + company_ticker
+    income_statement_url = 'https://finance.yahoo.com/quote/' + company_ticker + '/financials?p=' + company_ticker
 
     income_statement_html = requests.get(income_statement_url)
     income_statement_soup = bs(income_statement_html.text, 'html.parser')
