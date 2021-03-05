@@ -6,7 +6,7 @@ import pandas_datareader as dr
 import datetime
 '''---------- // Hard-coded variables below // ----------'''
 
-company_ticker = 'AAPL'
+company_ticker = "AAPL"
 timespan = 100 #timespan for the equity beta calculation
 market_risk_premium = 0.0523
 long_term_growth = 0.01
@@ -14,7 +14,8 @@ debt_return = 0.01
 tax_rate = 0.3
 '''---------- // Hard-coded variables above // ----------'''
 '''----- // I. Financial Information from Yahoo Finance // -----'''
-def get_income_statement(company_ticker='AAPL'):
+
+def get_income_statement(company_ticker="AAPL"):
     income_statement_url = 'https://finance.yahoo.com/quote/' + company_ticker + '/financials?p=' + company_ticker
 
     income_statement_html = requests.get(income_statement_url)
@@ -86,6 +87,7 @@ def fcst_rev_ebit(income_statement_df):
     return forecast_df
 
 '''---------- // III. Calculating the WACC // ----------'''
+
 def calc_wacc(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_return=0.01):
     current_date = datetime.date.today()
     past_date = current_date-datetime.timedelta(days=timespan)
@@ -143,7 +145,7 @@ def calc_wacc(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_
         net_debt_lst.append(value)
     net_debt_int = int(net_debt_lst[3])
 
-    market_cap_url = '<https://finance.yahoo.com/quote/>' + company_ticker + '?p=' + company_ticker
+    market_cap_url = 'https://finance.yahoo.com/quote/' + company_ticker + '?p=' + company_ticker
     market_cap_html = requests.get(market_cap_url)
     market_cap_soup = bs(market_cap_html.text, 'html.parser')
 
@@ -169,8 +171,7 @@ def calc_wacc(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_
     return WACC, net_debt_int
 
 '''-------- // IV. Discounting the Forecasted EBIT // --------'''
-def get_equity_value(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_return=0.01,long_term_growth=0.01):
-    
+def get_equity_value(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_return=0.01,long_term_growth=0.01):    
     income_statement_df = pd.DataFrame()
     income_statement_df = get_income_statement(company_ticker)
     print(income_statement_df)
