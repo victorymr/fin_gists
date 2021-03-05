@@ -169,7 +169,7 @@ def calc_wacc(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_
     return WACC, net_debt_int
 
 '''-------- // IV. Discounting the Forecasted EBIT // --------'''
-def get_equity_value(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_return=0.01,long_term_growth=0.01,):
+def get_equity_value(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_return=0.01,long_term_growth=0.01):
     
     income_statement_df = pd.DataFrame()
     income_statement_df = get_income_statement(company_ticker)
