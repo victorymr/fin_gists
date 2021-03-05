@@ -129,7 +129,7 @@ def calc_wacc(company_ticker="AAPL",market_risk_premium=0.053,tax_rate=0.3,debt_
     equity_beta = covariance_float/market_variance_float
     equity_return = risk_free_rate_float+equity_beta*(market_risk_premium)
 
-    balance_sheet_url = '<https://finance.yahoo.com/quote/>' + company_ticker + '/balance-sheet?p=' + company_ticker
+    balance_sheet_url = 'https://finance.yahoo.com/quote/' + company_ticker + '/balance-sheet?p=' + company_ticker
 
     balance_sheet_html = requests.get(balance_sheet_url)
     balance_sheet_soup = bs(balance_sheet_html.text, 'html.parser')
