@@ -15,7 +15,7 @@ def get_average_margin(past_ebit):
     margin_lst.append(margin)
     return(sum(margin_lst)/len(margin_lst))
   
-  '''----// Get WACC and net debt //----'''
+'''----// Get WACC and net debt //----'''
 def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.01, tax_rate=0.3):
     risk_free = yf.Ticker('^TNX')
     risk_free_rate = risk_free.info['previousClose']/100
@@ -38,7 +38,7 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.01,
     WACC = market_cap/company_value * equity_return + net_debt.iloc[0]/company_value * debt_return * (1-tax_rate)
     return WACC
 
-  ## growth patterns
+## growth patterns
 def rate_of_change(beg_rate,year_conv,long_term_rate,terminal_year=10,change_type=1):
   rate_arr = np.zeros([terminal_year])
   if change_type==1: #flat and taper to long term- typical for revenue
@@ -120,6 +120,10 @@ def option_conv(comp):
 
 def calc_cashflow(comp,Inp_dict):
   locals().update(Inp_dict)
+  
+  long_tax_rate = country_df.loc[country_df.index.str.contains(comp.Country)] # for long term
+  long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
+  
   rev_rate = dacf.rate_of_change(beg_cagr,year_conv,long_term_cagr,terminal_year,1)
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
