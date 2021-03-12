@@ -118,6 +118,76 @@ def option_conv(comp):
   value_op_outstanding = opt_value*n_options
   return value_op_outstanding
 
+def calc_cashflow(comp,Inp_dict):
+  locals().update(Inp_dict)
+  rev_rate = dacf.rate_of_change(beg_cagr,year_conv,long_term_cagr,terminal_year,1)
+  rev_cumrate = (1+rev_rate).cumprod()
+  rev_fcst = ttm_revs*rev_cumrate
+  margin_rate = dacf.rate_of_change(beg_margin,year_conv,long_term_margin,terminal_year,2)
+  cost_capital = dacf.rate_of_change(wacc,year_conv,long_term_coc,terminal_year,1)
+  cost_capital_cumm = (1+cost_capital).cumprod()
+  discount_factor = 1/cost_capital_cumm
+
+  debt_book_value = (comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
+                     + comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
+                     )
+  equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
+  invested_capital = (equity_book_value + debt_book_value 
+                      + rnd_dict['rnd_asset'] 
+                      - lease_dict['debt_value_lease']
+                      - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
+  
+  '''--------// Build the Cashflow //-----'''
+  cashflow = pd.DataFrame()
+  cashflow['rev_rate'] = rev_rate
+  cashflow['rev_fcst'] = rev_fcst
+  cashflow['margin_rate'] = margin_rate
+  cashflow['EBIT'] = rev_fcst*margin_rate
+  cashflow['tax_rate'] = tax_rate*np.ones([terminal_year])
+  cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/sales_to_capital
+  NOL = [NOLbase]
+  InvCap = [invested_capital]
+  for inol in range(terminal_year):
+    NOL.append(max(NOL[inol]-cashflow['EBIT'].iloc[inol],0))
+    InvCap.append(InvCap[inol]+cashflow['Reinvestment'].iloc[inol])
+  NOL.pop(0)
+  InvCap.pop(0)
+  cashflow['NOL'] = NOL
+  cashflow['EBITafterTax'] = cashflow['EBIT']-(cashflow['EBIT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
+  cashflow['FCFF'] = cashflow['EBITafterTax'] - cashflow['Reinvestment']
+  cashflow['cost_capital'] = cost_capital
+  cashflow['discount_factor'] = discount_factor
+  cashflow['PVFCFF'] = cashflow['FCFF']*cashflow['discount_factor']
+
+  cashflow['InvestedCapital'] = InvCap
+  cashflow['ROIC'] = cashflow['EBITafterTax']/cashflow['InvestedCapital']
+
+
+  # Calculate terminal value
+  terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + long_term_cagr)
+  terminal_value = terminal_cashflow / ((wacc-long_term_cagr))
+  # PV of Terminal Value
+  pv_terminal_value = terminal_value * cashflow['discount_factor'].iloc[-1]
+  pv_CFNyr = sum(cashflow['PVFCFF'])
+  pv_totalCF = pv_CFNyr + pv_terminal_value
+  if liquidation_type=="V":
+    liquid_val = pv_totalCF
+  else:
+    liquid_val =  equity_book_value + debt_book_value
+  value_of_OpAss = pv_totalCF + liquid_val*prob_failure*distress_price
+  equity_value = (value_of_OpAss - debt_book_value 
+                  - lease_dict['debt_value_lease']  
+                  - minority_interest 
+                  + comp.quarterly_balance_sheet.loc['Cash'].iloc[0]
+                  + crossholdings_nonopassets)
+  value_equity_commonstock = equity_value - value_op_outstanding
+  equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
+  
+  cfdict = {'cashflow': cashflow,
+            'equity_val_pershare': equity_val_pershare
+           }
+  return 
+
 def damoCF():
   return
 
