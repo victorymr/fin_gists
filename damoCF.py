@@ -1,3 +1,12 @@
+import sys
+import importlib
+import pandas as pd
+import numpy as np
+import scipy as sp
+from scipy.stats import norm
+from datetime import date
+import pdb
+
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
 def get_cagr(comp):
   #CAGR = (past_revs.iloc[0]/past_revs.iloc[3])**(1/4)-1
