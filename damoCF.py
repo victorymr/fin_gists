@@ -7,6 +7,7 @@ from scipy.stats import norm
 from datetime import date
 import pdb
 #from compdata import comp_data
+from yfinance import yfinance as yf
 
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
 def get_cagr(comp):
