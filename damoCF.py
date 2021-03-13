@@ -32,7 +32,7 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.01,
     risk_free_rate = risk_free.info['previousClose']/100
 
     prev_year = str(int(date.today().strftime('%Y'))-1)
-    market_risk_premium = float(comp_data.Market().get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
+    market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
 
     if isinstance(company_ticker,str):
       comp = yf.Ticker(company_ticker)
