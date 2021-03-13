@@ -135,7 +135,7 @@ def option_conv(comp):
 def calc_cashflow(comp,Inp_dict):
   locals().update(Inp_dict)
   
-  inddata = comp.inddate
+  inddata = comp.inddata
   marketdata = comp.marketdata
   country_df = marketdata.get_country_tax_rates()
   
