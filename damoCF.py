@@ -6,6 +6,7 @@ import scipy as sp
 from scipy.stats import norm
 from datetime import date
 import pdb
+from compdata import comp_data
 
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
 def get_cagr(comp):
@@ -96,6 +97,7 @@ def rnd_conv(comp):
 ## options_conv
 def option_conv(comp):
   opt_dict = comp.opt_dict
+  inddata = comp_data.Industry(comp.Industry)
   stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
@@ -129,6 +131,10 @@ def option_conv(comp):
 
 def calc_cashflow(comp,Inp_dict):
   locals().update(Inp_dict)
+  
+  inddata = comp_data.Industry(comp.Industry)
+  marketdata = comp_data.Market()
+  country_df = marketdata.get_country_tax_rates()
   
   long_tax_rate = country_df.loc[country_df.index.str.contains(comp.Country)] # for long term
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
