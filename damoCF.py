@@ -135,6 +135,9 @@ def option_conv(comp):
 def calc_cashflow(comp,ID):
   #locals().update(Inp_dict)
   
+  rnd_dict = ID['rnd_dict']
+  lease_dict = ID['lease_dict']
+  
   inddata = comp.inddata
   marketdata = comp.marketdata
   country_df = marketdata.get_country_tax_rates()
@@ -160,8 +163,8 @@ def calc_cashflow(comp,ID):
                      )
   equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
   invested_capital = (equity_book_value + debt_book_value 
-                      + ID.rnd_dict['rnd_asset'] 
-                      - ID.lease_dict['debt_value_lease']
+                      + rnd_dict['rnd_asset'] 
+                      - lease_dict['debt_value_lease']
                       - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
   curr_sale2cap = ID.ttm_revs/invested_capital
   
