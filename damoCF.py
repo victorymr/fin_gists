@@ -166,7 +166,7 @@ def calc_cashflow(comp,ID):
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
                       - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
-  curr_sale2cap = ID.ttm_revs/invested_capital
+  curr_sale2cap = ID['ttm_revs']/invested_capital
   
   '''--------// Build the Cashflow //-----'''
   cashflow = pd.DataFrame()
