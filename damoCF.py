@@ -178,7 +178,7 @@ def calc_cashflow(comp,ID):
   cashflow['EBIT'] = rev_fcst*margin_rate
   cashflow['tax_rate'] = ID['tax_rate']*np.ones([ID['terminal_year']])
   cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/ID['sales_to_capital']
-  NOL = [NOLbase]
+  NOL = [ID['NOLbase']]
   InvCap = [invested_capital]
   for inol in range(terminal_year):
     NOL.append(max(NOL[inol]-cashflow['EBIT'].iloc[inol],0))
