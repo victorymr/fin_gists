@@ -145,13 +145,13 @@ def calc_cashflow(comp,ID):
   #pdb.set_trace()
   wacc = get_wacc(comp)
 
-  rev_rate = rate_of_change(ID.beg_cagr,ID.year_conv,ID.long_term_cagr,ID.terminal_year,1)
+  rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],ID['long_term_cagr'],ID['terminal_year'],1)
   #pdb.set_trace()
 
   rev_cumrate = (1+rev_rate).cumprod()
-  rev_fcst = ID.ttm_revs*rev_cumrate
-  margin_rate = rate_of_change(ID.beg_margin,ID.year_conv,ID.long_term_margin,ID.terminal_year,2)
-  cost_capital = rate_of_change(wacc,ID.year_conv,ID.long_term_coc,ID.terminal_year,1)
+  rev_fcst = ID['ttm_revs']*rev_cumrate
+  margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],ID['long_term_margin'],ID['terminal_year'],2)
+  cost_capital = rate_of_change(wacc,ID['year_conv'],ID['long_term_coc'],ID['terminal_year'],1)
   cost_capital_cumm = (1+cost_capital).cumprod()
   discount_factor = 1/cost_capital_cumm
 
