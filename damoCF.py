@@ -137,6 +137,8 @@ def calc_cashflow(comp,ID):
   
   rnd_dict = ID['rnd_dict']
   lease_dict = ID['lease_dict']
+  ttm_revs = ID['ttm_revs']
+  tax_rate = ID['tax_rate']
   
   inddata = comp.inddata
   marketdata = comp.marketdata
@@ -152,7 +154,7 @@ def calc_cashflow(comp,ID):
   #pdb.set_trace()
 
   rev_cumrate = (1+rev_rate).cumprod()
-  rev_fcst = ID['ttm_revs']*rev_cumrate
+  rev_fcst = ttm_revs*rev_cumrate
   margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],ID['long_term_margin'],ID['terminal_year'],2)
   cost_capital = rate_of_change(wacc,ID['year_conv'],long_term_coc,ID['terminal_year'],1)
   cost_capital_cumm = (1+cost_capital).cumprod()
@@ -166,7 +168,7 @@ def calc_cashflow(comp,ID):
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
                       - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
-  curr_sale2cap = ID['ttm_revs']/invested_capital
+  curr_sale2cap = ttm_revs/invested_capital
   
   '''--------// Build the Cashflow //-----'''
   cashflow = pd.DataFrame()
@@ -175,7 +177,7 @@ def calc_cashflow(comp,ID):
   cashflow['margin_rate'] = margin_rate
   cashflow['EBIT'] = rev_fcst*margin_rate
   cashflow['tax_rate'] = ID['tax_rate']*np.ones([ID['terminal_year']])
-  cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/sales_to_capital
+  cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/ID['sales_to_capital']
   NOL = [NOLbase]
   InvCap = [invested_capital]
   for inol in range(terminal_year):
