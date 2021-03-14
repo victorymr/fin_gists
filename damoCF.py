@@ -197,23 +197,23 @@ def calc_cashflow(comp,ID):
 
 
   # Calculate terminal value
-  terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + long_term_cagr)
-  terminal_value = terminal_cashflow / ((wacc-long_term_cagr))
+  terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + ID['long_term_cagr'])
+  terminal_value = terminal_cashflow / ((wacc-ID['long_term_cagr']))
   # PV of Terminal Value
   pv_terminal_value = terminal_value * cashflow['discount_factor'].iloc[-1]
   pv_CFNyr = sum(cashflow['PVFCFF'])
   pv_totalCF = pv_CFNyr + pv_terminal_value
-  if liquidation_type=="V":
+  if ID['liquidation_type']=="V":
     liquid_val = pv_totalCF
   else:
     liquid_val =  equity_book_value + debt_book_value
-  value_of_OpAss = pv_totalCF + liquid_val*prob_failure*distress_price
+  value_of_OpAss = pv_totalCF + liquid_val*ID['prob_failure']*ID['distress_price']
   equity_value = (value_of_OpAss - debt_book_value 
                   - lease_dict['debt_value_lease']  
-                  - minority_interest 
+                  - ID['minority_interest'] 
                   + comp.quarterly_balance_sheet.loc['Cash'].iloc[0]
-                  + crossholdings_nonopassets)
-  value_equity_commonstock = equity_value - value_op_outstanding
+                  + ID['crossholdings_nonopassets'])
+  value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   
   cfdict = {'cashflow': cashflow, 'wacc': wacc, 
