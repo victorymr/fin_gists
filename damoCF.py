@@ -160,8 +160,8 @@ def calc_cashflow(comp,ID):
                      )
   equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
   invested_capital = (equity_book_value + debt_book_value 
-                      + rnd_dict['rnd_asset'] 
-                      - lease_dict['debt_value_lease']
+                      + ID.rnd_dict['rnd_asset'] 
+                      - ID.lease_dict['debt_value_lease']
                       - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
   curr_sale2cap = ID.ttm_revs/invested_capital
   
