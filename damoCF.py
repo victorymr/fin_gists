@@ -220,7 +220,7 @@ def calc_cashflow(comp,ID):
             'curr_sale2cap': curr_sales2cap,
             'equity_val_pershare': equity_val_pershare
            }
-  return 
+  return cfdict
 
 def damoCF():
   return
