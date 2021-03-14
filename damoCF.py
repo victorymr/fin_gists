@@ -133,7 +133,7 @@ def option_conv(comp):
   return value_op_outstanding
 
 def calc_cashflow(comp,**Inp_dict):
-  locals().update(Inp_dict)
+  #locals().update(Inp_dict)
   
   inddata = comp.inddata
   marketdata = comp.marketdata
