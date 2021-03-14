@@ -174,7 +174,7 @@ def calc_cashflow(comp,ID):
   cashflow['rev_fcst'] = rev_fcst
   cashflow['margin_rate'] = margin_rate
   cashflow['EBIT'] = rev_fcst*margin_rate
-  cashflow['tax_rate'] = ID['tax_rate']*np.ones([terminal_year])
+  cashflow['tax_rate'] = ID['tax_rate']*np.ones([ID['terminal_year']])
   cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/sales_to_capital
   NOL = [NOLbase]
   InvCap = [invested_capital]
