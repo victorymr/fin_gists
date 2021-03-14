@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import scipy as sp
 from scipy.stats import norm
+from scipy.stats import lognorm
+import random
+
 from datetime import date
 import pdb
 #from compdata import comp_data
@@ -132,13 +135,22 @@ def option_conv(comp):
   value_op_outstanding = opt_value*n_options
   return value_op_outstanding
 
-def calc_cashflow(comp,ID):
+def create_rand(s,l,v=0,type='lognorm'):
+  if type=='lognorm':
+    rv = lognorm(s,v,l)
+  outrand = rv.pps(random.random())
+  return outrand
+ 
+    
+def calc_cashflow(comp,ID,sim=0):
   #locals().update(Inp_dict)
   
   rnd_dict = ID['rnd_dict']
   lease_dict = ID['lease_dict']
   ttm_revs = ID['ttm_revs']
   tax_rate = ID['tax_rate']
+  long_term_cagr = ID['long_term_cagr']
+  long_term_margin = ID['long_term_margin']
   
   inddata = comp.inddata
   marketdata = comp.marketdata
@@ -150,12 +162,17 @@ def calc_cashflow(comp,ID):
   #pdb.set_trace()
   wacc = get_wacc(comp)
 
-  rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],ID['long_term_cagr'],ID['terminal_year'],1)
+  if sim:
+    long_term_margin = creae_rand(long_term_margin*5,long_term_margin)
+    long_term_coc = creae_rand(long_term_coc*5,long_term_coc)
+    long_term_cagr = min(long_term_coc/2,creae_rand(long_term_cagr*5,long_term_cagr))
+    
+  rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],long_term_cagr,ID['terminal_year'],1)
   #pdb.set_trace()
 
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
-  margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],ID['long_term_margin'],ID['terminal_year'],2)
+  margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],long_term_margin,ID['terminal_year'],2)
   cost_capital = rate_of_change(wacc,ID['year_conv'],long_term_coc,ID['terminal_year'],1)
   cost_capital_cumm = (1+cost_capital).cumprod()
   discount_factor = 1/cost_capital_cumm
@@ -197,8 +214,8 @@ def calc_cashflow(comp,ID):
 
 
   # Calculate terminal value
-  terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + ID['long_term_cagr'])
-  terminal_value = terminal_cashflow / ((wacc-ID['long_term_cagr']))
+  terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + long_term_cagr)
+  terminal_value = terminal_cashflow / (long_term_coc-long_term_cagr)
   # PV of Terminal Value
   pv_terminal_value = terminal_value * cashflow['discount_factor'].iloc[-1]
   pv_CFNyr = sum(cashflow['PVFCFF'])
