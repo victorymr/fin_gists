@@ -132,8 +132,8 @@ def option_conv(comp):
   value_op_outstanding = opt_value*n_options
   return value_op_outstanding
 
-def calc_cashflow(comp,Inp_dict):
-  locals().update(Inp_dict)
+def calc_cashflow(comp,ID):
+  #locals().update(Inp_dict)
   
   inddata = comp.inddata
   marketdata = comp.marketdata
@@ -142,15 +142,16 @@ def calc_cashflow(comp,Inp_dict):
   long_tax_rate = country_df.loc[country_df.index.str.contains(comp.Country)] # for long term
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   
-  pdb.set_trace()
-  
-  rev_rate = rate_of_change(beg_cagr,year_conv,long_term_cagr,terminal_year,1)
-  pdb.set_trace()
+  #pdb.set_trace()
+  wacc = get_wacc(comp)
+
+  rev_rate = rate_of_change(ID.beg_cagr,ID.year_conv,ID.long_term_cagr,ID.terminal_year,1)
+  #pdb.set_trace()
 
   rev_cumrate = (1+rev_rate).cumprod()
-  rev_fcst = ttm_revs*rev_cumrate
-  margin_rate = rate_of_change(beg_margin,year_conv,long_term_margin,terminal_year,2)
-  cost_capital = rate_of_change(wacc,year_conv,long_term_coc,terminal_year,1)
+  rev_fcst = ID.ttm_revs*rev_cumrate
+  margin_rate = rate_of_change(ID.beg_margin,ID.year_conv,ID.long_term_margin,ID.terminal_year,2)
+  cost_capital = rate_of_change(wacc,ID.year_conv,ID.long_term_coc,ID.terminal_year,1)
   cost_capital_cumm = (1+cost_capital).cumprod()
   discount_factor = 1/cost_capital_cumm
 
@@ -162,6 +163,7 @@ def calc_cashflow(comp,Inp_dict):
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
                       - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
+  curr_sale2cap = ID.ttm_revs/invested_capital
   
   '''--------// Build the Cashflow //-----'''
   cashflow = pd.DataFrame()
@@ -209,7 +211,8 @@ def calc_cashflow(comp,Inp_dict):
   value_equity_commonstock = equity_value - value_op_outstanding
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   
-  cfdict = {'cashflow': cashflow,
+  cfdict = {'cashflow': cashflow, 'wacc': wacc, 
+            'curr_sale2cap': curr_sales2cap,
             'equity_val_pershare': equity_val_pershare
            }
   return 
