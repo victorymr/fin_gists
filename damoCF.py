@@ -142,9 +142,11 @@ def calc_cashflow(comp,Inp_dict):
   long_tax_rate = country_df.loc[country_df.index.str.contains(comp.Country)] # for long term
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   
-  #pdb.set_trace()
+  pdb.set_trace()
   
   rev_rate = rate_of_change(beg_cagr,year_conv,long_term_cagr,terminal_year,1)
+  pdb.set_trace()
+
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
   margin_rate = rate_of_change(beg_margin,year_conv,long_term_margin,terminal_year,2)
