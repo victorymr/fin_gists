@@ -132,7 +132,7 @@ def option_conv(comp):
   value_op_outstanding = opt_value*n_options
   return value_op_outstanding
 
-def calc_cashflow(comp,**Inp_dict):
+def calc_cashflow(comp,Inp_dict):
   locals().update(Inp_dict)
   
   inddata = comp.inddata
@@ -142,7 +142,7 @@ def calc_cashflow(comp,**Inp_dict):
   long_tax_rate = country_df.loc[country_df.index.str.contains(comp.Country)] # for long term
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   
-  #pdb.set_trace()
+  pdb.set_trace()
   
   rev_rate = rate_of_change(beg_cagr,year_conv,long_term_cagr,terminal_year,1)
   rev_cumrate = (1+rev_rate).cumprod()
