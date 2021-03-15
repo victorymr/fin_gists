@@ -138,7 +138,7 @@ def option_conv(comp):
 def create_rand(s,l,v=0,type='lognorm'):
   if type=='lognorm':
     rv = lognorm(s,v,l)
-  outrand = rv.ppf(min(0.95,random.random()) # stay away from the extreme tail of log normal
+  outrand = rv.ppf(random.random()) 
   return outrand
  
     
@@ -163,7 +163,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   wacc = get_wacc(comp)
 
   if sim['Do']:
-    long_term_margin = create_rand(long_term_margin*sim['Vol'],long_term_margin)
+    long_term_margin = min(0.6,create_rand(long_term_margin*sim['Vol']/5,long_term_margin)) #margin can't be >60%!!
     long_term_coc = create_rand(long_term_coc*sim['Vol'],long_term_coc)
     long_term_cagr = min(long_term_coc/2,create_rand(long_term_cagr*sim['Vol'],long_term_cagr)) #long term growth rate has to be lower than cost of capital or else infite growth
     
