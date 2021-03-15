@@ -30,7 +30,7 @@ def get_average_margin(past_ebit):
     return(sum(margin_lst)/len(margin_lst))
   
 '''----// Get WACC and net debt //----'''
-def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.01, tax_rate=0.3):
+def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02, tax_rate=0.3):
     risk_free = yf.Ticker('^TNX')
     risk_free_rate = risk_free.info['previousClose']/100
 
@@ -181,7 +181,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                      + comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
                      )
   equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
-  cash_mms = comp.quarterly_balance_sheet.loc['Total Current Assets'].iloc[0]-comp.quarterly_balance_sheet.loc['Inventory'].iloc[0]
+  cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
   invested_capital = (equity_book_value + debt_book_value 
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
