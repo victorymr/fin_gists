@@ -138,7 +138,7 @@ def option_conv(comp):
 def create_rand(s,l,v=0,type='lognorm'):
   if type=='lognorm':
     rv = lognorm(s,v,l)
-  outrand = rv.ppf(random.random())
+  outrand = rv.ppf(min(0.95,random.random()) # stay away from the extreme tail of log normal
   return outrand
  
     
