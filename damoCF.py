@@ -240,6 +240,20 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cfdict = locals()
   return cfdict
 
+def run_sim(comp,Inp_dict,nsim=100):
+  simlist = []
+  selcols = ['equity_val_pershare', 'value_equity_commonstock','long_term_coc','long_term_margin',
+             'long_term_cagr','terminal_value',  'pv_totalCF',
+             'pv_CFNyr', 'pv_terminal_value']
+  for irnd in range(nsim):
+    simdict = dacf.calc_cashflow(comp,Inp_dict,sim={'Do':1,'Vol':5})
+    rowlist=[]
+    for isel in selcols:
+      rowlist.append(simdict[isel])
+    simlist.append(rowlist)
+  sim_df = pd.DataFrame(simlist,columns=selcols)
+  return sim_df
+
 def damoCF():
   return
 
