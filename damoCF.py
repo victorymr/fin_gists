@@ -142,7 +142,7 @@ def create_rand(s,l,v=0,type='lognorm'):
   return outrand
  
     
-def calc_cashflow(comp,ID,sim=0):
+def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #locals().update(Inp_dict)
   
   rnd_dict = ID['rnd_dict']
@@ -162,10 +162,10 @@ def calc_cashflow(comp,ID,sim=0):
   #pdb.set_trace()
   wacc = get_wacc(comp)
 
-  if sim:
-    long_term_margin = creae_rand(long_term_margin*5,long_term_margin)
-    long_term_coc = creae_rand(long_term_coc*5,long_term_coc)
-    long_term_cagr = min(long_term_coc/2,creae_rand(long_term_cagr*5,long_term_cagr))
+  if sim['Do']:
+    long_term_margin = creae_rand(long_term_margin*sim['Vol'],long_term_margin)
+    long_term_coc = creae_rand(long_term_coc*sim['Vol'],long_term_coc)
+    long_term_cagr = min(long_term_coc/2,creae_rand(long_term_cagr*['Vol'],long_term_cagr))
     
   rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],long_term_cagr,ID['terminal_year'],1)
   #pdb.set_trace()
@@ -233,10 +233,7 @@ def calc_cashflow(comp,ID,sim=0):
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   
-  cfdict = {'cashflow': cashflow, 'wacc': wacc, 
-            'curr_sale2cap': curr_sales2cap,
-            'equity_val_pershare': equity_val_pershare
-           }
+  cfdict = locals()
   return cfdict
 
 def damoCF():
