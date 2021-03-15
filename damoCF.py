@@ -138,7 +138,7 @@ def option_conv(comp):
 def create_rand(s,l,v=0,type='lognorm'):
   if type=='lognorm':
     rv = lognorm(s,v,l)
-  outrand = rv.pps(random.random())
+  outrand = rv.ppf(random.random())
   return outrand
  
     
