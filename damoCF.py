@@ -181,10 +181,11 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                      + comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
                      )
   equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
+  cash_mms = comp.quarterly_balance_sheet.loc['Total Current Assets'].iloc[0]-comp.quarterly_balance_sheet.loc['Inventory'].iloc[0]
   invested_capital = (equity_book_value + debt_book_value 
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
-                      - comp.quarterly_balance_sheet.loc['Cash'].iloc[0])
+                      - cash_mms)
   curr_sales2cap = ttm_revs/invested_capital
   
   '''--------// Build the Cashflow //-----'''
@@ -228,7 +229,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   equity_value = (value_of_OpAss - debt_book_value 
                   - lease_dict['debt_value_lease']  
                   - ID['minority_interest'] 
-                  + comp.quarterly_balance_sheet.loc['Cash'].iloc[0]
+                  + cash_mms
                   + ID['crossholdings_nonopassets'])
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
