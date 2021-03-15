@@ -168,10 +168,11 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     long_term_cagr = min(long_term_coc/2,create_rand(long_term_cagr*sim['Vol'],long_term_cagr)) #long term growth rate has to be lower than cost of capital or else infite growth
     
   rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],long_term_cagr,ID['terminal_year'],1)
-  #pdb.set_trace()
-
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
+  
+  tax_rate = rate_of_change(ID['tax_rate'],ID['year_conv'],long_tax_rate,1)
+  
   margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],long_term_margin,ID['terminal_year'],2)
   cost_capital = rate_of_change(wacc,ID['year_conv'],long_term_coc,ID['terminal_year'],1)
   cost_capital_cumm = (1+cost_capital).cumprod()
@@ -194,7 +195,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cashflow['rev_fcst'] = rev_fcst
   cashflow['margin_rate'] = margin_rate
   cashflow['EBIT'] = rev_fcst*margin_rate
-  cashflow['tax_rate'] = ID['tax_rate']*np.ones([ID['terminal_year']])
+  cashflow['tax_rate'] = tax_rate
   cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/ID['sales_to_capital']
   NOL = [ID['NOLbase']]
   InvCap = [invested_capital]
