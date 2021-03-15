@@ -154,9 +154,11 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   
   inddata = comp.inddata
   marketdata = comp.marketdata
-  country_df = marketdata.get_country_tax_rates()
   
-  long_tax_rate = float(country_df.loc[country_df.index.str.contains(comp.Country)].strip('%'))/100 # for long term
+  country_df = marketdata.get_country_tax_rates()
+  prev_year = str(int(date.today().strftime('%Y'))-1)
+  long_tax_rate = float(country_df.loc[country_df.index.str.contains(comp.Country)].loc[prev_year].strip('%'))/100 # for long term
+  
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   
   #pdb.set_trace()
