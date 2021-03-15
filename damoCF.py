@@ -173,7 +173,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
   
-  tax_rate = rate_of_change(ID['tax_rate'],ID['year_conv'],long_tax_rate,1)
+  tax_rate = rate_of_change(ID['tax_rate'],ID['year_conv'],long_tax_rate,ID['terminal_year'],1)
   
   margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],long_term_margin,ID['terminal_year'],2)
   cost_capital = rate_of_change(wacc,ID['year_conv'],long_term_coc,ID['terminal_year'],1)
