@@ -163,9 +163,9 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   wacc = get_wacc(comp)
 
   if sim['Do']:
-    long_term_margin = creae_rand(long_term_margin*sim['Vol'],long_term_margin)
-    long_term_coc = creae_rand(long_term_coc*sim['Vol'],long_term_coc)
-    long_term_cagr = min(long_term_coc/2,creae_rand(long_term_cagr*['Vol'],long_term_cagr))
+    long_term_margin = create_rand(long_term_margin*sim['Vol'],long_term_margin)
+    long_term_coc = create_rand(long_term_coc*sim['Vol'],long_term_coc)
+    long_term_cagr = min(long_term_coc/2,create_rand(long_term_cagr*sim['Vol'],long_term_cagr)) #long term growth rate has to be lower than cost of capital or else infite growth
     
   rev_rate = rate_of_change(ID['beg_cagr'],ID['year_conv'],long_term_cagr,ID['terminal_year'],1)
   #pdb.set_trace()
