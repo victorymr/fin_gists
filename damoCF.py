@@ -152,16 +152,16 @@ def get_market_info(ID,metric='long_tax_rate'):
   prev_year = str(int(date.today().strftime('%Y'))-1)
   for icont in ['Country1','Country2','Country3']:
     if metric=='long_tax_rate':
-      metdat = float(country_df.loc[comp.icont][prev_year].values[0].strip('%'))/100
+      metdat = float(country_df.loc[ID[icont]][prev_year].values[0].strip('%'))/100
     elif metric=='risk_premium':
       metdat = float(country_df['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
   return metdat_av
 
-def get_industry_info(comp,metric='long_term_coc'):
+def get_industry_info(ID,metric='long_term_coc'):
   for iindt in ['Industry1','Industry2','Industry3']:
-    inddata = comp_data.Industry(comp.iindt)
+    inddata = comp_data.Industry(ID[iindt])
     if metric == 'long_term_coc':
       metdat = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
     elif metric == 'stddev':
