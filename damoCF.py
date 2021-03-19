@@ -142,28 +142,33 @@ def create_rand(s,l,v=0,type='lognorm'):
   outrand = rv.ppf(random.random()) 
   return outrand
  
-def get_market_info(comp,metric='long_tax_rate'):
+def get_market_info(ID,metric='long_tax_rate'):
   marketdata = comp_data.Market()
   if metric=='long_tax_rate':
     country_df = marketdata.get_country_tax_rates()
-  
+  elif metric=='risk_premium':
+    country_df = marketdata.get_risk_premiums_US()
+
   prev_year = str(int(date.today().strftime('%Y'))-1)
   for icont in ['Country1','Country2','Country3']:
-    long_tax = float(country_df.loc[comp.icont][prev_year].values[0].strip('%'))/100
-    wts = comp.loc[icont + 'Wt']
-    long_tax_rate += long_tax*wts
-  return long_tax_rate
+    if metric=='long_tax_rate':
+      metdat = float(country_df.loc[comp.icont][prev_year].values[0].strip('%'))/100
+    elif: metric=='risk_premium':
+      metdat = float(country_df['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
+    wts = ID[icont + 'Wt']
+    metdat_av += metdat*wts
+  return metdat_av
 
 def get_industry_info(comp,metric='long_term_coc'):
-  if metric=='long_term_coc':
-    country_df = marketdata.get_country_tax_rates()
-  
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(comp.iindt)
-    long_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
-    wts = comp.loc[iindt + 'Wt']
-    long_tax_rate += long_tax*wts
-  return long_tax_rate
+    if metric == 'long_term_coc':
+      metdat = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
+    elif metric == 'stddev':
+      metdat = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))/100
+    wts = ID[iindt + 'Wt']
+    metdat_av += metdat*wts
+  return metdat_av
 
 def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #locals().update(Inp_dict)
