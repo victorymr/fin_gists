@@ -9,7 +9,7 @@ import random
 
 from datetime import date
 import pdb
-#from compdata import comp_data
+import comp_data
 from yfinance import yfinance as yf
 
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
@@ -40,14 +40,15 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
     elif isinstance(company_ticker,yf.Ticker):
       comp = company_ticker
     
-    
     prev_year = str(int(date.today().strftime('%Y'))-1)
     market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
 
     equity_beta = comp.info['beta']
     equity_return = risk_free_rate+equity_beta*market_risk_premium
-
-    net_debt = comp.balance_sheet.loc['Short Long Term Debt'] + comp.balance_sheet.loc['Long Term Debt'] - comp.balance_sheet.loc['Cash']
+    
+    cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
+    net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'] + comp.quarterly_balance_sheet.loc['Long Term Debt'] - cash_mms
+    
     market_cap = comp.info['marketCap']
 
     company_value = market_cap + net_debt.iloc[0]
@@ -103,7 +104,7 @@ def rnd_conv(comp):
 ## options_conv
 def option_conv(comp):
   opt_dict = comp.opt_dict
-  inddata = comp.inddata
+  inddata = comp_data.Industry(Inp_dict['Industry1']) 
   stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
@@ -141,7 +142,29 @@ def create_rand(s,l,v=0,type='lognorm'):
   outrand = rv.ppf(random.random()) 
   return outrand
  
-    
+def get_market_info(comp,metric='long_tax_rate'):
+  marketdata = comp_data.Market()
+  if metric=='long_tax_rate':
+    country_df = marketdata.get_country_tax_rates()
+  
+  prev_year = str(int(date.today().strftime('%Y'))-1)
+  for icont in ['Country1','Country2','Country3']:
+    long_tax = float(country_df.loc[comp.icont][prev_year].values[0].strip('%'))/100
+    wts = comp.loc[icont + 'Wt']
+    long_tax_rate += long_tax*wts
+  return long_tax_rate
+
+def get_industry_info(comp,metric='long_term_coc'):
+  if metric=='long_term_coc':
+    country_df = marketdata.get_country_tax_rates()
+  
+  for iindt in ['Industry1','Industry2','Industry3']:
+    inddata = comp_data.Industry(comp.iindt)
+    long_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
+    wts = comp.loc[iindt + 'Wt']
+    long_tax_rate += long_tax*wts
+  return long_tax_rate
+
 def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #locals().update(Inp_dict)
   
@@ -158,6 +181,8 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   country_df = marketdata.get_country_tax_rates()
   prev_year = str(int(date.today().strftime('%Y'))-1)
   long_tax_rate = float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
+  
+  long_tax_rate = get_market_inf(comp,metric='long_tax_rate')
   
   long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   
