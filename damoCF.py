@@ -62,11 +62,11 @@ def get_industry_info(ID,metric='long_term_coc'):
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
   return metdat_av
+
 '''----// Get WACC and net debt //----'''
 def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02, tax_rate=0.3):
     risk_free = yf.Ticker('^TNX')
     risk_free_rate = risk_free.info['previousClose']/100
-
 
     if isinstance(company_ticker,str):
       comp = yf.Ticker(company_ticker)
@@ -138,7 +138,9 @@ def rnd_conv(comp):
 def option_conv(comp):
   opt_dict = sv.comp.opt_dict
   inddata = comp_data.Industry(sv.Inp_dict['Industry1']) 
-  stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
+  
+  stddev = get_industry_info(ID,metric='stddev')
+  #stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
   price = (comp.info['bid']+comp.info['ask'])/2
@@ -182,7 +184,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   
   rnd_dict = ID['rnd_dict']
   lease_dict = ID['lease_dict']
-  ttm_revs = ID['ttm_revs']
+  ttm_revs = comp.ttm_revs
   tax_rate = ID['tax_rate']
   long_term_cagr = ID['long_term_cagr']
   long_term_margin = ID['long_term_margin']
@@ -192,11 +194,13 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   
   country_df = marketdata.get_country_tax_rates()
   prev_year = str(int(date.today().strftime('%Y'))-1)
-  long_tax_rate = float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
+  #long_tax_rate = get_market_info(ID,metric='long_tax_rate')
+  #float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
   
-  long_tax_rate = get_market_inf(comp,metric='long_tax_rate')
+  long_tax_rate = get_market_info(comp,metric='long_tax_rate')
   
-  long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
+  #long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
+  long_term_coc = get_industry_info(ID,metric='long_term_coc')
   
   #pdb.set_trace()
   wacc = get_wacc(comp)
