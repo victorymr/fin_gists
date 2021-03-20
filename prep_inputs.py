@@ -160,6 +160,8 @@ def value_inputs():
   lsdts_conf = ['Country1Wt','Country2Wt','Country3Wt']
   lsdts_liqp = ['prob_failure','distress_price']
   lsdts_liqt = ['liquidation_type']
+  
+  pdb.set_trace()
 
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
