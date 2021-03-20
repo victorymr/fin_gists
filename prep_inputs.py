@@ -32,6 +32,7 @@ def read_DB(gc,filn='StockDB'):
   dft.replace(np.nan, '', regex=True,inplace=True)
   dfl.replace(np.nan, '', regex=True,inplace=True)
   dfo.replace(np.nan, '', regex=True,inplace=True)
+  return dft,dfl,dfo
   
 def get_ticker():
   ## Enter your Ticker Symbol - make sure no mistakes!!
