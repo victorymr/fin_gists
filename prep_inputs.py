@@ -41,7 +41,8 @@ def get_ticker(DBdict):
   ## If this symbol exists in my DB - I am going to get its latest data else empty df
   ## populate the cells - either from spreadhseet or calculations or defaults
   ## Where the spreadsheet populates but we have more recent data - print the new data to allow user to decide
-  
+  global dfts, dfls, dfos, comp, rnd_dict
+
   dft = DBdict['Ticker']
   dfl = DBdict['Lease']
   dfo = DBdict['Optionholdings']
