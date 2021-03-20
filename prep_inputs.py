@@ -68,9 +68,9 @@ def get_ticker(DBdict):
       dfos = dfo[dfo['UUID'].astype(str)==dfts['UUID']]
       print(ticksym, ' Last Updated on ', dfts['LastUpdate'])
     else:
-      dfts = dft.loc[0].copy() #default take the first row
-      dfls = dfl.loc[0].copy()
-      dfos = dfo.loc[0].copy()
+      dfts = dft.loc[0].copy().to_frame() #default take the first row
+      dfls = dfl.loc[0].copy().to_frame()
+      dfos = dfo.loc[0].copy().to_frame()
       print(ticksym, ' NOT FOUND in DB - Using defaults please update appropriately')
     # get comp info
     comp = yf.Ticker(ticksym)
@@ -80,7 +80,7 @@ def get_ticker(DBdict):
     comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - comp.cash_mms
     comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/comp.net_debt
     comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
-    rnd_dict = dacf.rnd_conv(comp)
+    comp.rnd_dict = dacf.rnd_conv(comp)
     comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
     sv.comp = comp
@@ -122,7 +122,7 @@ def get_lease_opt():
   display(lsui, lsout)
 
   ## Options inputs
-  opdict = {}
+  opdict = opt_dict = {} # we may have some duplication here.
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['Strike'][0],style=style)
   opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['AvgMaturity'][0],style=style)
   opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['NumOptions'][0],style=style)
