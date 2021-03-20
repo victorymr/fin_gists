@@ -21,6 +21,8 @@ from gspread_dataframe import get_as_dataframe, set_with_dataframe
 
 from fin_gists import damoCF as dacf
 
+style = {'description_width': 'initial'}
+
 def read_DB(gc,filn='StockDB'):
   worksheet = gc.open('StockDB')
   wst = worksheet.worksheet("Ticker")
