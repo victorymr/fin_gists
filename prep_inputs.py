@@ -24,6 +24,7 @@ from fin_gists import damoCF as dacf
 style = {'description_width': 'initial'}
 
 def read_sheet(workbook,sheet):
+  pdb.set_trace()
   ws = workbook.worksheet(sheet)
   df = get_as_dataframe(ws)
   df.replace(np.nan, '', regex=True,inplace=True)
