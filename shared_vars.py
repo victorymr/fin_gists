@@ -14,5 +14,5 @@ import pdb
 import comp_data
 from yfinance import yfinance as yf
 
-Input_dict = {}
+Inp_dict = {}
 comp = yf.Ticker("MSFT")
