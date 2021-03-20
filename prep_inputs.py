@@ -131,8 +131,6 @@ def get_lease_opt():
     opt_dict['expiration'] = opdict['expiration']
     opt_dict['n_options'] = opdict['n_options']
     comp.opt_dict = opt_dict
-    value_op_outstanding = dacf.option_conv(comp)
-    sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     sv.comp = comp
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
@@ -172,6 +170,9 @@ def value_inputs():
     for k,v in dfts_dict.items():
       sv.Inp_dict[k] = v
 
+    value_op_outstanding = dacf.option_conv(sv.comp)
+    sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
+    
     indt_list = [v for k,v in Inp_dict.items() if k in lsdts_indt]
     ind_df = pd.DataFrame(columns=indt_list)
     for iindt in indt_list:
