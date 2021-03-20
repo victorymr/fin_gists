@@ -79,7 +79,7 @@ def get_ticker(DBdict):
     tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
     rnd_dict = dacf.rnd_conv(comp)
     curr_cagr = dacf.get_cagr(comp)
-    comp.marketdata = marketdata
+    comp.marketdata = comp_data.Market()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
   display(ticksym,out)
