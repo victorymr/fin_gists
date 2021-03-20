@@ -150,7 +150,7 @@ def value_inputs():
   country_name_list = list(marketdata.get_country_tax_rates().index) + ['']
   industry_name_list = comp_data.industry_name_list + ['']
   dfts_list = dfts.index
-  dfts_res = [i for i in dfts_list if 'Unnamed' not in i] 
+  #dfts_res = [i for i in dfts_list if 'Unnamed' not in i] 
   lsdts_int = ['year_conv',	'terminal_year']
   lsdts_flt1 = ['beg_cagr',	'long_term_cagr',	'beg_margin',	'long_term_margin',	'tax_rate']
   lsdts_flt2 = ['sales_to_capital', 'minority_interest',	'crossholdings_nonopassets' ]
