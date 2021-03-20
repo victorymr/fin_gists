@@ -136,7 +136,7 @@ def rnd_conv(comp):
 
 ## options_conv
 def option_conv(comp):
-  opt_dict = comp.opt_dict
+  opt_dict = sv.comp.opt_dict
   inddata = comp_data.Industry(sv.Inp_dict['Industry1']) 
   stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
