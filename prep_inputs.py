@@ -117,7 +117,7 @@ def get_lease_opt():
     comp.mean_margin = comp.ebit_adj/comp.ttm_revs
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
-    value_inputs()
+    #value_inputs()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
@@ -161,7 +161,7 @@ def value_inputs():
   lsdts_liqp = ['prob_failure','distress_price']
   lsdts_liqt = ['liquidation_type']
   
-  pdb.set_trace()
+  #pdb.set_trace()
 
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
