@@ -87,6 +87,8 @@ def get_ticker(DBdict):
     comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
     sv.comp = comp
+    get_lease_opt()
+    value_inputs()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
   display(ticksym,out)
@@ -116,6 +118,7 @@ def get_lease_opt():
     comp.mean_margin = comp.ebit_adj/comp.ttm_revs
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
+    value_inputs()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
@@ -135,6 +138,7 @@ def get_lease_opt():
     opt_dict['n_options'] = opdict['n_options']
     comp.opt_dict = opt_dict
     sv.comp = comp
+    value_inputs()
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
