@@ -33,7 +33,7 @@ def read_DB(gc,filn='StockDB'):
   workbook = gc.open('StockDB')
   sheets = workbook.worksheets()
   #sheets = ["Ticker",'Lease','Optionholdings']
-  DBdict = {isheet: read_sheet(workbook,isheet) for isheet in sheets}
+  DBdict = {isheet: read_sheet(isheet) for isheet in sheets}
   return DBdict
   
 def get_ticker(DBdict):
