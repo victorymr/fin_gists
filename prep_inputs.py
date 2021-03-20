@@ -59,11 +59,13 @@ def get_ticker(DBdict):
     global dfts, dfls, dfos, comp, rnd_dict
 
     dftickset = dft[dft['Ticker']==ticksym]
+    print(dftickset)
     if len(dftickset):
       dfts = dftickset.iloc[-1]
       dfls = dfl[dfl['UUID'].astype(str)==dfts['UUID']]
       dfos = dfo[dfo['UUID'].astype(str)==dfts['UUID']]
       print(ticksym, ' Last Updated on ', dfts['LastUpdate'])
+      print(dfls)
     else:
       dfts = dft.loc[0].copy() #default take the first row
       dfls = dfl.loc[0].copy()
