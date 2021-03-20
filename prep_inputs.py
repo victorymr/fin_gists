@@ -84,6 +84,7 @@ def get_ticker(DBdict):
     comp.rnd_dict = dacf.rnd_conv(comp)
     comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
+    comp.ticksym = ticksym
     sv.comp = comp
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
@@ -191,7 +192,7 @@ def value_inputs():
                'interest_expense','tax_rate']
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     display(pd.DataFrame(data=list_dict.values(),
-                         index=list_dict.keys(),columns=[ticksym.value]))
+                         index=list_dict.keys(),columns=[comp.ticksym]))
 
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
