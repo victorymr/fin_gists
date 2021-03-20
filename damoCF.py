@@ -287,7 +287,7 @@ def run_sim(comp,Inp_dict,nsim=100):
              'long_term_cagr','terminal_value',  'pv_totalCF',
              'pv_CFNyr', 'pv_terminal_value']
   for irnd in range(nsim):
-    simdict = dacf.calc_cashflow(comp,Inp_dict,sim={'Do':1,'Vol':5})
+    simdict = calc_cashflow(comp,Inp_dict,sim={'Do':1,'Vol':5})
     rowlist=[]
     for isel in selcols:
       rowlist.append(simdict[isel])
