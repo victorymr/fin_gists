@@ -148,7 +148,8 @@ def get_market_info(ID,metric='long_tax_rate'):
     country_df = marketdata.get_country_tax_rates()
   elif metric=='risk_premium':
     country_df = marketdata.get_risk_premiums_US()
-
+  
+  metdat_av=0
   prev_year = str(int(date.today().strftime('%Y'))-1)
   for icont in ['Country1','Country2','Country3']:
     if metric=='long_tax_rate':
@@ -161,6 +162,7 @@ def get_market_info(ID,metric='long_tax_rate'):
   return metdat_av
 
 def get_industry_info(ID,metric='long_term_coc'):
+  metdat_av=0
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(ID[iindt])
     if metric == 'long_term_coc':
