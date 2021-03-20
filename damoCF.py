@@ -152,9 +152,10 @@ def get_market_info(ID,metric='long_tax_rate'):
   prev_year = str(int(date.today().strftime('%Y'))-1)
   for icont in ['Country1','Country2','Country3']:
     if metric=='long_tax_rate':
-      metdat = float(country_df.loc[ID[icont]][prev_year].values[0].strip('%'))/100
+      tmpstr = country_df.loc[ID[icont]][prev_year].strip('%')
     elif metric=='risk_premium':
-      metdat = float(country_df['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
+      tmpstr = country_df['implied premium (fcfe)'].loc[prev_year].strip('%')
+    metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
   return metdat_av
@@ -163,9 +164,10 @@ def get_industry_info(ID,metric='long_term_coc'):
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(ID[iindt])
     if metric == 'long_term_coc':
-      metdat = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
+      tmpstr = inddata.get_cost_of_capital().loc['cost of capital'].strip('%')
     elif metric == 'stddev':
-      metdat = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))/100
+      tmpstr = inddata.get_betas().loc['standard deviation of equity'].strip('%')
+    metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
   return metdat_av
