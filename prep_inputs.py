@@ -27,6 +27,7 @@ def read_sheet(workbook,sheet):
   ws = workbook.worksheet(sheet)
   df = get_as_dataframe(ws)
   df.replace(np.nan, '', regex=True,inplace=True)
+  return df
   
 def read_DB(gc,filn='StockDB'):
   ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
