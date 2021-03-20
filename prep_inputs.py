@@ -70,7 +70,7 @@ def get_ticker(DBdict):
       dfos = dfo.loc[0].copy()
       print(ticksym, ' NOT FOUND in DB - Using defaults please update appropriately')
     # get comp info
-    comp = yf.Ticker(ticksym.value)
+    comp = yf.Ticker(ticksym)
     ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
     ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
     cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
