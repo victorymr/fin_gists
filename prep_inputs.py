@@ -20,6 +20,7 @@ import gspread_dataframe
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 
 from fin_gists import damoCF as dacf
+from fin_gists import shared_vars as sv
 
 style = {'description_width': 'initial'}
 
@@ -58,6 +59,7 @@ def get_ticker(DBdict):
   def f(ticksym):
     ## If this symbol exists in my DB - I am going to get its latest data
     global dfts, dfls, dfos, comp, rnd_dict
+    comp = sv.comp
 
     dftickset = dft[dft['Ticker']==ticksym]
     print(dfts)
@@ -83,6 +85,7 @@ def get_ticker(DBdict):
     rnd_dict = dacf.rnd_conv(comp)
     comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
+    sv.comp = comp
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
   display(ticksym,out)
