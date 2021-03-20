@@ -68,9 +68,9 @@ def get_ticker(DBdict):
       dfos = dfo[dfo['UUID'].astype(str)==dfts['UUID']]
       print(ticksym, ' Last Updated on ', dfts['LastUpdate'])
     else:
-      dfts = dft.loc[0].copy().to_frame() #default take the first row
-      dfls = dfl.loc[0].copy().to_frame()
-      dfos = dfo.loc[0].copy().to_frame()
+      dfts = dft.iloc[[0]].copy() #default take the first row
+      dfls = dfl.iloc[[0]].copy()
+      dfos = dfo.iloc[[0]].copy()
       print(ticksym, ' NOT FOUND in DB - Using defaults please update appropriately')
     # get comp info
     comp = yf.Ticker(ticksym)
