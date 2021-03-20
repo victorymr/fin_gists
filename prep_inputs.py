@@ -62,13 +62,11 @@ def get_ticker(DBdict):
     comp = sv.comp
 
     dftickset = dft[dft['Ticker']==ticksym]
-    print(dfts)
     if len(dftickset):
       dfts = dftickset.iloc[-1]
       dfls = dfl[dfl['UUID'].astype(str)==dfts['UUID']]
       dfos = dfo[dfo['UUID'].astype(str)==dfts['UUID']]
       print(ticksym, ' Last Updated on ', dfts['LastUpdate'])
-      print(dfls)
     else:
       dfts = dft.loc[0].copy() #default take the first row
       dfls = dfl.loc[0].copy()
@@ -102,6 +100,7 @@ def get_lease_opt():
   lsdict['cost_of_debt'] = widgets.FloatText(description = 'debt cost', value = dfls['cost_of_debt'],style=style)
 
   #globals().update(lsdict)
+  lease_inp = {}
   lease_inp['Year'] = np.arange(1,6)
   def flease(**lsdict):
     lease_inp['current_commitment'] = lsdict[lstup[0]]
@@ -110,10 +109,10 @@ def get_lease_opt():
     lease_inp['nyrs_bulk'] = lsdict['nyrs_bulk']
     lease_inp['cost_of_debt'] = lsdict['cost_of_debt']
     lease_dict = dacf.lease_conv(lease_inp)
-    ebit_adj = ttm_ebit + lease_dict['adj_op_income'] + rnd_dict['adj_op_income']
-    mean_margin = ebit_adj/ttm_revs
-
-    #print(lstup)
+    comp.ebit_adj = comp.ttm_ebit + lease_dict['adj_op_income'] + comp.rnd_dict['adj_op_income']
+    comp.mean_margin = comp.ebit_adj/comp.ttm_revs
+    sv.Inp_dict['lease_dict'] = lease_dict
+    sv.comp = comp
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
@@ -132,6 +131,9 @@ def get_lease_opt():
     opt_dict['expiration'] = opdict['expiration']
     opt_dict['n_options'] = opdict['n_options']
     comp.opt_dict = opt_dict
+    value_op_outstanding = dacf.option_conv(comp)
+    sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
+    sv.comp = comp
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
@@ -168,7 +170,7 @@ def value_inputs():
 
   def finpdict(**dfts_dict):
     for k,v in dfts_dict.items():
-      Inp_dict[k] = v
+      sv.Inp_dict[k] = v
 
     indt_list = [v for k,v in Inp_dict.items() if k in lsdts_indt]
     ind_df = pd.DataFrame(columns=indt_list)
