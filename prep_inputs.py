@@ -42,6 +42,10 @@ def get_ticker(DBdict):
   ## populate the cells - either from spreadhseet or calculations or defaults
   ## Where the spreadsheet populates but we have more recent data - print the new data to allow user to decide
   
+  dft = DBdict['Ticker']
+  dfl = DBdict['Lease']
+  dfo = DBdict['Optionholdings']
+  
   ticksym = widgets.Text(
       value='MSFT',
       placeholder='Type something',
@@ -49,6 +53,7 @@ def get_ticker(DBdict):
       disabled=False,
       style=style
   )
+  
   def f(ticksym):
     ## If this symbol exists in my DB - I am going to get its latest data
     #global dfts, dfls, dfos
