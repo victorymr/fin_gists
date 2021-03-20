@@ -24,14 +24,15 @@ from fin_gists import damoCF as dacf
 style = {'description_width': 'initial'}
 
 def read_sheet(workbook,sheet):
-  ws = workbook.worksheet()
+  ws = workbook.worksheet(sheet)
   df = get_as_dataframe(ws)
   df.replace(np.nan, '', regex=True,inplace=True)
   
 def read_DB(gc,filn='StockDB'):
   ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
   workbook = gc.open('StockDB')
-  sheets = ["Ticker",'Lease','Optionholdings']
+  sheets = sh.worksheets()
+  #sheets = ["Ticker",'Lease','Optionholdings']
   DBdict = {isheet: read_sheet(workbook,isheet) for isheet in sheets}
   return DBdict
   
