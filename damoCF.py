@@ -12,6 +12,8 @@ import pdb
 import comp_data
 from yfinance import yfinance as yf
 
+from fin_gists import shared_vars as sv
+
 '''----// Calculate average revenue CAGR & EBIT margin //----'''
 def get_cagr(comp):
   #CAGR = (past_revs.iloc[0]/past_revs.iloc[3])**(1/4)-1
@@ -135,7 +137,7 @@ def rnd_conv(comp):
 ## options_conv
 def option_conv(comp):
   opt_dict = comp.opt_dict
-  inddata = comp_data.Industry(Inp_dict['Industry1']) 
+  inddata = comp_data.Industry(sv.Inp_dict['Industry1']) 
   stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
