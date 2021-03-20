@@ -74,8 +74,8 @@ def get_ticker(DBdict):
     comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
     comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
     comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
-    comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - cash_mms
-    comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/net_debt
+    comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - comp.cash_mms
+    comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/comp.net_debt
     comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
     rnd_dict = dacf.rnd_conv(comp)
     comp.curr_cagr = dacf.get_cagr(comp)
