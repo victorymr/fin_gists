@@ -139,7 +139,7 @@ def option_conv(comp):
   opt_dict = sv.comp.opt_dict
   inddata = comp_data.Industry(sv.Inp_dict['Industry1']) 
   
-  stddev = get_industry_info(ID,metric='stddev')
+  stddev = get_industry_info(sv.Inp_dict,metric='stddev')
   #stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
