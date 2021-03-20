@@ -88,6 +88,7 @@ def get_ticker(DBdict):
     comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
     sv.comp = comp
+    sv.Inp_dict['rnd_dict'] = rnd_dict
     #get_lease_opt()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
@@ -161,7 +162,7 @@ def value_inputs():
   lsdts_conf = ['Country1Wt','Country2Wt','Country3Wt']
   lsdts_liqp = ['prob_failure','distress_price']
   lsdts_liqt = ['liquidation_type']
-  
+  lsdts_flt3 = ['NOLbase']
   #pdb.set_trace()
   #print(industry_name_list)
   #print(lsdts_indt)
@@ -178,6 +179,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_conf})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
+  dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
 
   def finpdict(**dfts_dict):
     comp = sv.comp
