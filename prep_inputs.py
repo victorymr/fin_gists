@@ -75,7 +75,7 @@ def get_ticker(DBdict):
       dfos = dfo.loc[0].transpose()  #.iloc[[0]].copy()
       print(ticksym, ' NOT FOUND in DB - Using defaults please update appropriately')
     # get comp info
-    print(dfts)
+    #print(dfts)
     comp = yf.Ticker(ticksym)
     comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
     comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
@@ -163,9 +163,9 @@ def value_inputs():
   lsdts_liqt = ['liquidation_type']
   
   #pdb.set_trace()
-  print(industry_name_list)
-  print(lsdts_indt)
-  print(dfts)
+  #print(industry_name_list)
+  #print(lsdts_indt)
+  #print(dfts)
 
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
