@@ -23,6 +23,7 @@ from fin_gists import damoCF as dacf
 from fin_gists import shared_vars as sv
 
 style = {'description_width': 'initial'}
+marketdata = comp_data.Market()
 
 def read_sheet(sheet):
   df = get_as_dataframe(sheet)
