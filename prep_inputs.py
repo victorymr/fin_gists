@@ -88,7 +88,6 @@ def get_ticker(DBdict):
     comp.ticksym = ticksym
     sv.comp = comp
     get_lease_opt()
-    value_inputs()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
   display(ticksym,out)
@@ -138,7 +137,8 @@ def get_lease_opt():
     opt_dict['n_options'] = opdict['n_options']
     comp.opt_dict = opt_dict
     sv.comp = comp
-    value_inputs()
+    value_op_outstanding = dacf.option_conv(comp)
+    sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
@@ -178,8 +178,7 @@ def value_inputs():
     for k,v in dfts_dict.items():
       sv.Inp_dict[k] = v
 
-    value_op_outstanding = dacf.option_conv(comp)
-    sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
+
     
     indt_list = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
     ind_df = pd.DataFrame(columns=indt_list)
