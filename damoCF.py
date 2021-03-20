@@ -189,7 +189,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   long_term_cagr = ID['long_term_cagr']
   long_term_margin = ID['long_term_margin']
   
-  inddata = comp.inddata
+  #inddata = comp.inddata
   marketdata = comp.marketdata
   
   country_df = marketdata.get_country_tax_rates()
@@ -197,7 +197,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #long_tax_rate = get_market_info(ID,metric='long_tax_rate')
   #float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
   
-  long_tax_rate = get_market_info(comp,metric='long_tax_rate')
+  long_tax_rate = get_market_info(ID,metric='long_tax_rate')
   
   #long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   long_term_coc = get_industry_info(ID,metric='long_term_coc')
