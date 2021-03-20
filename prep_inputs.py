@@ -96,6 +96,7 @@ def get_lease_opt():
   ## get the lease input and options data
   ## Make a widgets and prepopulate them? Allow user to modify if need be
   ## 
+  global dfls, dflo
   lslist = [widgets.FloatText(description = 'Year' + str(i), value = dfls['Year'+str(i)],readout_format=':,.2f') for i in range(6)]
   lstup = ['Year' + str(i) for i in range(6)]
   lsdict = dict(zip(lstup,lslist))
