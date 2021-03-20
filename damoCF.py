@@ -28,7 +28,38 @@ def get_average_margin(past_ebit):
         margin = past_ebit.iloc[1,i]/past_ebit.iloc[0,i]
     margin_lst.append(margin)
     return(sum(margin_lst)/len(margin_lst))
+
+def get_market_info(ID,metric='long_tax_rate'):
+  marketdata = comp_data.Market()
+  if metric=='long_tax_rate':
+    country_df = marketdata.get_country_tax_rates()
+  elif metric=='risk_premium':
+    country_df = marketdata.get_risk_premiums_US()
   
+  metdat_av=0
+  prev_year = str(int(date.today().strftime('%Y'))-1)
+  for icont in ['Country1','Country2','Country3']:
+    if metric=='long_tax_rate':
+      tmpstr = country_df.loc[ID[icont]][prev_year].strip('%')
+    elif metric=='risk_premium':
+      tmpstr = country_df['implied premium (fcfe)'].loc[prev_year].strip('%')
+    metdat = float(tmpstr)/100 if tmpstr else 0
+    wts = ID[icont + 'Wt']
+    metdat_av += metdat*wts
+  return metdat_av
+
+def get_industry_info(ID,metric='long_term_coc'):
+  metdat_av=0
+  for iindt in ['Industry1','Industry2','Industry3']:
+    inddata = comp_data.Industry(ID[iindt])
+    if metric == 'long_term_coc':
+      tmpstr = inddata.get_cost_of_capital().loc['cost of capital'].strip('%')
+    elif metric == 'stddev':
+      tmpstr = inddata.get_betas().loc['standard deviation of equity'].strip('%')
+    metdat = float(tmpstr)/100 if tmpstr else 0
+    wts = ID[iindt + 'Wt']
+    metdat_av += metdat*wts
+  return metdat_av
 '''----// Get WACC and net debt //----'''
 def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02, tax_rate=0.3):
     risk_free = yf.Ticker('^TNX')
@@ -142,37 +173,7 @@ def create_rand(s,l,v=0,type='lognorm'):
   outrand = rv.ppf(random.random()) 
   return outrand
  
-def get_market_info(ID,metric='long_tax_rate'):
-  marketdata = comp_data.Market()
-  if metric=='long_tax_rate':
-    country_df = marketdata.get_country_tax_rates()
-  elif metric=='risk_premium':
-    country_df = marketdata.get_risk_premiums_US()
-  
-  metdat_av=0
-  prev_year = str(int(date.today().strftime('%Y'))-1)
-  for icont in ['Country1','Country2','Country3']:
-    if metric=='long_tax_rate':
-      tmpstr = country_df.loc[ID[icont]][prev_year].strip('%')
-    elif metric=='risk_premium':
-      tmpstr = country_df['implied premium (fcfe)'].loc[prev_year].strip('%')
-    metdat = float(tmpstr)/100 if tmpstr else 0
-    wts = ID[icont + 'Wt']
-    metdat_av += metdat*wts
-  return metdat_av
 
-def get_industry_info(ID,metric='long_term_coc'):
-  metdat_av=0
-  for iindt in ['Industry1','Industry2','Industry3']:
-    inddata = comp_data.Industry(ID[iindt])
-    if metric == 'long_term_coc':
-      tmpstr = inddata.get_cost_of_capital().loc['cost of capital'].strip('%')
-    elif metric == 'stddev':
-      tmpstr = inddata.get_betas().loc['standard deviation of equity'].strip('%')
-    metdat = float(tmpstr)/100 if tmpstr else 0
-    wts = ID[iindt + 'Wt']
-    metdat_av += metdat*wts
-  return metdat_av
 
 def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #locals().update(Inp_dict)
