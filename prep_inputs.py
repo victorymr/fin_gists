@@ -168,10 +168,11 @@ def value_inputs():
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
 
   def finpdict(**dfts_dict):
+    comp = sv.comp
     for k,v in dfts_dict.items():
       sv.Inp_dict[k] = v
 
-    value_op_outstanding = dacf.option_conv(sv.comp)
+    value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     
     indt_list = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
@@ -188,7 +189,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
-    list_dict = {i:'{:,.2f}'.format(eval(sv.comp.i)) for i in listvar}
+    list_dict = {i:'{:,.2f}'.format(eval(comp.i)) for i in listvar}
     display(pd.DataFrame(data=list_dict.values(),
                          index=list_dict.keys(),columns=[ticksym.value]))
 
