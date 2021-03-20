@@ -56,7 +56,7 @@ def get_ticker(DBdict):
   
   def f(ticksym):
     ## If this symbol exists in my DB - I am going to get its latest data
-    #global dfts, dfls, dfos
+    global dfts, dfls, dfos, comp, rnd_dict
 
     dftickset = dft[dft['Ticker']==ticksym]
     if len(dftickset):
@@ -71,14 +71,14 @@ def get_ticker(DBdict):
       print(ticksym, ' NOT FOUND in DB - Using defaults please update appropriately')
     # get comp info
     comp = yf.Ticker(ticksym)
-    ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
-    ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
-    cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
-    net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - cash_mms
-    interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/net_debt
-    tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
+    comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
+    comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
+    comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
+    comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - cash_mms
+    comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/net_debt
+    comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
     rnd_dict = dacf.rnd_conv(comp)
-    curr_cagr = dacf.get_cagr(comp)
+    comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
@@ -178,7 +178,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
-    list_dict = {i:'{:,.2f}'.format(eval(i)) for i in listvar}
+    list_dict = {i:'{:,.2f}'.format(eval(comp.i)) for i in listvar}
     display(pd.DataFrame(data=list_dict.values(),
                          index=list_dict.keys(),columns=[ticksym.value]))
 
