@@ -202,7 +202,7 @@ def value_inputs():
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
-    cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in Inp_dict.items() if k in lsdts_cont]
+    cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in sv.Inp_dict.items() if k in lsdts_cont]
     display(('Tax Rates ',cont_list))
 
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
