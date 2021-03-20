@@ -109,9 +109,9 @@ def get_lease_opt():
   lease_inp = {}
   lease_inp['Year'] = np.arange(1,6)
   def flease(**lsdict):
-    lease_inp['current_commitment'] = lsdict[lstup[0]]
-    lease_inp['future_commitments'] = [lsdict[lstup[i]] for i in range(1,6)]
-    lease_inp['bulk_commitment'] = lsdict['bulk_commitment']
+    lease_inp['current_commitment'] = lsdict[lstup[0]]*1e6  ## original entries are in $M
+    lease_inp['future_commitments'] = [lsdict[lstup[i]]*1e6 for i in range(1,6)]
+    lease_inp['bulk_commitment'] = lsdict['bulk_commitment']*1e6
     lease_inp['nyrs_bulk'] = lsdict['nyrs_bulk']
     lease_inp['cost_of_debt'] = lsdict['cost_of_debt']
     lease_dict = dacf.lease_conv(lease_inp)
