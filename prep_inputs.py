@@ -31,7 +31,7 @@ def read_sheet(workbook,sheet):
 def read_DB(gc,filn='StockDB'):
   ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
   workbook = gc.open('StockDB')
-  sheets = sh.worksheets()
+  sheets = workbook.worksheets()
   #sheets = ["Ticker",'Lease','Optionholdings']
   DBdict = {isheet: read_sheet(workbook,isheet) for isheet in sheets}
   return DBdict
