@@ -164,6 +164,7 @@ def value_inputs():
   #pdb.set_trace()
   print(industry_name_list)
   print(lsdts_indt)
+  print(dfts)
 
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
