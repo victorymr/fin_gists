@@ -130,9 +130,9 @@ def get_lease_opt():
 
   ## Options inputs
   opdict = opt_dict = {} # we may have some duplication here.
-  opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['Strike'][0],style=style)
-  opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['AvgMaturity'][0],style=style)
-  opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['NumOptions'][0],style=style)
+  opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['Strike'],style=style)
+  opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['AvgMaturity'],style=style)
+  opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['NumOptions'],style=style)
   def foptions(**opdict):
     opt_dict['strike'] = opdict['strike']
     opt_dict['expiration'] = opdict['expiration']
