@@ -23,24 +23,24 @@ from fin_gists import damoCF as dacf
 
 style = {'description_width': 'initial'}
 
-def read_DB(gc,filn='StockDB'):
-  worksheet = gc.open('StockDB')
-  wst = worksheet.worksheet("Ticker")
-  wsl = worksheet.worksheet('Lease')
-  wso = worksheet.worksheet('Optionholdings')
-  dft = get_as_dataframe(wst)
-  dfl = get_as_dataframe(wsl)
-  dfo = get_as_dataframe(wso)
-  dft.replace(np.nan, '', regex=True,inplace=True)
-  dfl.replace(np.nan, '', regex=True,inplace=True)
-  dfo.replace(np.nan, '', regex=True,inplace=True)
-  return dft,dfl,dfo
+def read_sheet(workbook,sheet):
+  ws = workbook.worksheet()
+  df = get_as_dataframe(ws)
+  df..replace(np.nan, '', regex=True,inplace=True)
   
-def get_ticker():
+def read_DB(gc,filn='StockDB'):
+  ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
+  workbook = gc.open('StockDB')
+  sheets = ["Ticker",'Lease','Optionholdings']
+  DBdict = {isheet: read_sheet(workbook,isheet) for isheet in sheets}
+  return DBdict
+  
+def get_ticker(DBdict):
   ## Enter your Ticker Symbol - make sure no mistakes!!
   ## If this symbol exists in my DB - I am going to get its latest data else empty df
   ## populate the cells - either from spreadhseet or calculations or defaults
   ## Where the spreadsheet populates but we have more recent data - print the new data to allow user to decide
+  
   ticksym = widgets.Text(
       value='MSFT',
       placeholder='Type something',
