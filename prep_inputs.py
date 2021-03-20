@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 
 from datetime import date
+from datetime import datetime
 import pdb
 import comp_data
 from yfinance import yfinance as yf
