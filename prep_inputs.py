@@ -57,7 +57,7 @@ def get_ticker(DBdict):
   
   def f(ticksym):
     ## If this symbol exists in my DB - I am going to get its latest data
-    global dfts, dfls, dfos, comp, rnd_dict
+    nonlocal dfts, dfls, dfos, comp, rnd_dict
 
     dftickset = dft[dft['Ticker']==ticksym]
     print(dftickset)
