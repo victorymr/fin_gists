@@ -189,7 +189,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
-    list_dict = {i:'{:,.2f}'.format(eval(comp.eval(i))) for i in listvar}
+    list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     display(pd.DataFrame(data=list_dict.values(),
                          index=list_dict.keys(),columns=[ticksym.value]))
 
