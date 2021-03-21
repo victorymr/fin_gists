@@ -193,7 +193,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   marketdata = comp.marketdata
   
   #country_df = marketdata.get_country_tax_rates()
-  prev_year = str(int(date.today().strftime('%Y'))-1)
+  #prev_year = str(int(date.today().strftime('%Y'))-1)
   #long_tax_rate = get_market_info(ID,metric='long_tax_rate')
   #float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
   
