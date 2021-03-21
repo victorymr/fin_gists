@@ -87,9 +87,6 @@ def get_ticker(DBdict):
     comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
-    comp.long_tax_rate = dacf.get_market_info(ID,metric='long_tax_rate')
-    comp.long_term_coc = dacf.get_industry_info(ID,metric='long_term_coc')
-    comp.wacc = dacf.get_wacc(comp)
 
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
@@ -192,6 +189,9 @@ def value_inputs():
     
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
+    sv.comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
+    sv.comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
+    sv.comp.wacc = dacf.get_wacc(sv.comp)
     
     indt_list = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
     ind_df = pd.DataFrame(columns=indt_list)
