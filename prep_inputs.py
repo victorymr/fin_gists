@@ -87,6 +87,10 @@ def get_ticker(DBdict):
     comp.curr_cagr = dacf.get_cagr(comp)
     comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
+    comp.long_tax_rate = dacf.get_market_info(ID,metric='long_tax_rate')
+    comp.long_term_coc = dacf.get_industry_info(ID,metric='long_term_coc')
+    comp.wacc = dacf.get_wacc(comp)
+
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
     #get_lease_opt()
