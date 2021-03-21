@@ -192,18 +192,18 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #inddata = comp.inddata
   marketdata = comp.marketdata
   
-  country_df = marketdata.get_country_tax_rates()
+  #country_df = marketdata.get_country_tax_rates()
   prev_year = str(int(date.today().strftime('%Y'))-1)
   #long_tax_rate = get_market_info(ID,metric='long_tax_rate')
   #float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
   
-  long_tax_rate = get_market_info(ID,metric='long_tax_rate')
+  long_tax_rate = comp.long_tax_rate  #get_market_info(ID,metric='long_tax_rate')
   
   #long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
-  long_term_coc = get_industry_info(ID,metric='long_term_coc')
+  long_term_coc = comp.long_term_coc  #get_industry_info(ID,metric='long_term_coc')
   
   #pdb.set_trace()
-  wacc = get_wacc(comp)
+  wacc = comp.wacc  #get_wacc(comp)
 
   if sim['Do']:
     long_term_margin = min(0.6,create_rand(long_term_margin*sim['Vol']/5,long_term_margin)) #margin can't be >60%!!
