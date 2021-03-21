@@ -88,7 +88,7 @@ def get_ticker(DBdict):
     comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
     sv.comp = comp
-    sv.Inp_dict['rnd_dict'] = rnd_dict
+    sv.Inp_dict['rnd_dict'] = comp.rnd_dict
     #get_lease_opt()
 
   out = widgets.interactive_output(f, {'ticksym': ticksym})
