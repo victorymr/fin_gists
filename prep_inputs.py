@@ -183,6 +183,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
   out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
+  display(out_gen)
   
   def finpdict(**dfts_dict):
     comp = sv.comp
@@ -218,6 +219,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
     with out_gen:
+      clear_output()
       display(ind_df)
     
     display(out_gen)
@@ -234,6 +236,3 @@ def value_inputs():
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
   display(inptit)
   display(dfts_ui, dfts_out,out_gen)
-  display(pd.DataFrame(data=list_dict.values(),
-                       index=list_dict.keys(),columns=[comp.ticksym]))
-
