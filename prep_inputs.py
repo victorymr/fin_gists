@@ -219,6 +219,8 @@ def value_inputs():
     print(ind_df)
     with out_gen:
       display(ind_df)
+    
+    display(out_gen)
 
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
