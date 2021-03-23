@@ -222,7 +222,7 @@ def value_inputs():
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     print(list_dict)
     #display(pd.DataFrame(data=list_dict.values(),
-                         index=list_dict.keys(),columns=[comp.ticksym]))
+    #                     index=list_dict.keys(),columns=[comp.ticksym]))
 
     ## Relevant Industry Metrics
     #display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
