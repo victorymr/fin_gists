@@ -181,7 +181,9 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
-
+  
+  out_gen = widgets.Output(layout={'border': '1px solid black'},wait=Treu)
+  
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
@@ -202,7 +204,7 @@ def value_inputs():
       tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/capital']
       tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
       ind_df[iindt] = tmp_df
-
+      
     ## Relevant Metrics from Company's recent financials
     display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
@@ -211,18 +213,18 @@ def value_inputs():
     print(list_dict)
     display(pd.DataFrame(data=list_dict.values(),
                          index=list_dict.keys(),columns=[comp.ticksym]))
-
+    
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
     display(ind_df)
-
+    
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
     cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in sv.Inp_dict.items() if k in lsdts_cont]
     display(('Tax Rates ',cont_list))
-
+    
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   dfts_ui = widgets.GridBox( tuple(dfts_dict.values()),layout = layout)
   dfts_out = widgets.interactive_output(finpdict, dfts_dict)
