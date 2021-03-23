@@ -233,4 +233,4 @@ def value_inputs():
   dfts_out = widgets.interactive_output(finpdict, dfts_dict)
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
   display(inptit)
-  display(dfts_ui, dfts_out)
+  display(dfts_ui, dfts_out,out_gen)
