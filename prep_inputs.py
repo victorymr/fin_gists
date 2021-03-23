@@ -234,3 +234,6 @@ def value_inputs():
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
   display(inptit)
   display(dfts_ui, dfts_out,out_gen)
+  display(pd.DataFrame(data=list_dict.values(),
+                       index=list_dict.keys(),columns=[comp.ticksym]))
+
