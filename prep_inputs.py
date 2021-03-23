@@ -2,6 +2,8 @@ import sys
 import importlib
 import pandas as pd
 import numpy as np
+# Set it to None to display all columns in the dataframe
+pd.set_option('display.max_columns', None)
 
 from datetime import date
 from datetime import datetime
@@ -216,22 +218,22 @@ def value_inputs():
       ind_df[iindt] = tmp_df
       
     ## Relevant Metrics from Company's recent financials
-    #display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+    display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     print(list_dict)
-    #display(pd.DataFrame(data=list_dict.values(),
-    #                     index=list_dict.keys(),columns=[comp.ticksym]))
+    print(pd.DataFrame(data=list_dict.values(),
+                       index=list_dict.keys(),columns=[comp.ticksym]))
 
     ## Relevant Industry Metrics
-    #display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
+    display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
-    out_gen.append(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+    '''out_gen.append(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     out_gen.append_display_data(pd.DataFrame(data=list_dict.values(),
                            index=list_dict.keys(),columns=[comp.ticksym]))
     out_gen.append(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
-    out_gen.append_display_data(ind_df)
+    out_gen.append_display_data(ind_df)'''
     
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
@@ -257,5 +259,5 @@ def display_wids(DBdict):
   display(lease_ui_dict['ui'],lease_ui_dict['out'])
   display(options_ui_dict['ui'],options_ui_dict['out'])
   display(value_dict['ui'],value_dict['out'])
-  display(out_gen)
+  #display(out_gen)
   return out_gen
