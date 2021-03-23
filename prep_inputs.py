@@ -205,25 +205,26 @@ def value_inputs():
       tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
       ind_df[iindt] = tmp_df
       
-    ## Relevant Metrics from Company's recent financials
-    display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
-    listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
-               'interest_expense','tax_rate']
-    list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
-    print(list_dict)
-    display(pd.DataFrame(data=list_dict.values(),
-                         index=list_dict.keys(),columns=[comp.ticksym]))
-    
-    ## Relevant Industry Metrics
-    display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
-    print(ind_df)
-    display(ind_df)
-    
-    ## Relevant Country of operation Metrics
-    prev_year = str(int(datetime.today().strftime('%Y'))-1)
-    display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
-    cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in sv.Inp_dict.items() if k in lsdts_cont]
-    display(('Tax Rates ',cont_list))
+    with out:
+      ## Relevant Metrics from Company's recent financials
+      display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+      listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
+                 'interest_expense','tax_rate']
+      list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
+      print(list_dict)
+      display(pd.DataFrame(data=list_dict.values(),
+                           index=list_dict.keys(),columns=[comp.ticksym]))
+
+      ## Relevant Industry Metrics
+      display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
+      print(ind_df)
+      display(ind_df)
+
+      ## Relevant Country of operation Metrics
+      prev_year = str(int(datetime.today().strftime('%Y'))-1)
+      display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
+      cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in sv.Inp_dict.items() if k in lsdts_cont]
+      display(('Tax Rates ',cont_list))
     
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   dfts_ui = widgets.GridBox( tuple(dfts_dict.values()),layout = layout)
