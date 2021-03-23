@@ -257,5 +257,5 @@ def display_wids(DBdict):
   
   display(tick_dict['ui'],tick_dict['out'])
   display(lease_ui_dict['ui'],lease_opt_dict['out'])
-  display(options_ui_dict['ui],options_ui_dict['out'])
+  display(options_ui_dict['ui'],options_ui_dict['out'])
   display(value_dict['ui'],value_dict['out'])
