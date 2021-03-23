@@ -154,7 +154,7 @@ def get_lease_opt():
   otit = widgets.HTML('<h4> Options Outstanding Inputs </h4>')
   #display(otit)
   #display(opui, opout)
-  options_ui_dict = {'title':optit,'ui':opui,'out':opout}
+  options_ui_dict = {'title':otit,'ui':opui,'out':opout}
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
   return lease_ui_dict, options_ui_dict
 
