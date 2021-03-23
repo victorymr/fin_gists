@@ -229,11 +229,11 @@ def value_inputs():
     print(ind_df)
     with out_gen:
       clear_output()
-      display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
-      display(pd.DataFrame(data=list_dict.values(),
-                           index=list_dict.keys(),columns=[comp.ticksym]))
-      display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
-      display(ind_df)
+      display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'),
+              pd.DataFrame(data=list_dict.values(),
+                           index=list_dict.keys(),columns=[comp.ticksym]),
+              widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'),
+              ind_df)
     
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
