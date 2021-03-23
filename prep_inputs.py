@@ -228,7 +228,7 @@ def value_inputs():
     #display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
     with out_gen:
-      #clear_output()
+      clear_output()
       display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
       display(pd.DataFrame(data=list_dict.values(),
                            index=list_dict.keys(),columns=[comp.ticksym]))
@@ -255,8 +255,9 @@ def display_wids(DBdict):
   lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict, out_gen = value_inputs()
   
-  display(tick_dict['ui'],tick_dict['out'])
+  display(tick_dict['out'])
   display(lease_ui_dict['ui'],lease_ui_dict['out'])
   display(options_ui_dict['ui'],options_ui_dict['out'])
   display(value_dict['ui'],value_dict['out'])
   display(out_gen)
+  return out_gen
