@@ -98,7 +98,7 @@ def get_ticker(DBdict):
   ui =  {'ticksym': ticksym}
   out = widgets.interactive_output(f,ui)
   #display(ticksym,out)
-  tick_dict = {'title':'Symbol','ui'= ui,'out':out}
+  tick_dict = {'title':'Symbol','ui': ui,'out':out}
   return tick_dict
   
 def get_lease_opt():
