@@ -227,13 +227,11 @@ def value_inputs():
     ## Relevant Industry Metrics
     #display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
-    with out_gen:
-      clear_output()
-      display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'),
-              pd.DataFrame(data=list_dict.values(),
-                           index=list_dict.keys(),columns=[comp.ticksym]),
-              widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'),
-              ind_df)
+    out_gen.append_stdout(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+    out_gen.append_display_data(pd.DataFrame(data=list_dict.values(),
+                           index=list_dict.keys(),columns=[comp.ticksym]))
+    out_gen.append_stdout(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
+    out_gen.append_display_data(ind_df)
     
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
