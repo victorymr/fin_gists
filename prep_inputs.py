@@ -247,7 +247,7 @@ def value_inputs():
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
   #display(inptit)
   #display(dfts_ui, dfts_out)
-  value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out'}
+  value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
   return value_dict, out_gen
 
 def display_wids(DBdict):
