@@ -182,7 +182,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
-  out_gen = widgets.Output(layout={'border': '1px solid black'},wait=Treu)
+  out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   
   def finpdict(**dfts_dict):
     comp = sv.comp
