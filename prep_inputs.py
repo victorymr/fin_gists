@@ -38,6 +38,9 @@ def read_DB(gc,filn='StockDB'):
   #sheets = ["Ticker",'Lease','Optionholdings']
   DBdict = {isheet.title: read_sheet(isheet) for isheet in sheets}
   return DBdict
+
+
+  
   
 def get_ticker(DBdict):
   ## Enter your Ticker Symbol - make sure no mistakes!!
@@ -92,8 +95,11 @@ def get_ticker(DBdict):
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
     #get_lease_opt()
 
-  out = widgets.interactive_output(f, {'ticksym': ticksym})
-  display(ticksym,out)
+  ui =  {'ticksym': ticksym}
+  out = widgets.interactive_output(f,ui)
+  #display(ticksym,out)
+  tick_dict = {'title':'Symbol','ui'= ui,'out':out}
+  return tick_dict
   
 def get_lease_opt():
   ## get the lease input and options data
@@ -127,8 +133,8 @@ def get_lease_opt():
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
   lsout = widgets.interactive_output(flease, lsdict)
   ltit = widgets.HTML('<h4> Lease Commitment Inputs ($M) </h4>')
-  display(ltit)
-  display(lsui, lsout)
+  #display(ltit)
+  #display(lsui, lsout)
 
   ## Options inputs
   opdict = opt_dict = {} # we may have some duplication here.
@@ -146,8 +152,11 @@ def get_lease_opt():
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
   otit = widgets.HTML('<h4> Options Outstanding Inputs </h4>')
-  display(otit)
-  display(opui, opout)
+  #display(otit)
+  #display(opui, opout)
+  options_ui_dict = {'title':optit,'ui':opui,'out':opout}
+  lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
+  return lease_ui_dict, options_ui_dict
 
 def value_inputs():
   country_name_list = list(marketdata.get_country_tax_rates().index) + ['']
@@ -207,19 +216,23 @@ def value_inputs():
       ind_df[iindt] = tmp_df
       
     ## Relevant Metrics from Company's recent financials
-    display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+    #display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     print(list_dict)
-    display(pd.DataFrame(data=list_dict.values(),
+    #display(pd.DataFrame(data=list_dict.values(),
                          index=list_dict.keys(),columns=[comp.ticksym]))
 
     ## Relevant Industry Metrics
-    display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
+    #display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df)
     with out_gen:
       clear_output()
+      display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+      display(pd.DataFrame(data=list_dict.values(),
+                           index=list_dict.keys(),columns=[comp.ticksym]))
+      display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
       display(ind_df)
     
     ## Relevant Country of operation Metrics
@@ -232,6 +245,17 @@ def value_inputs():
   dfts_ui = widgets.GridBox( tuple(dfts_dict.values()),layout = layout)
   dfts_out = widgets.interactive_output(finpdict, dfts_dict)
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
-  display(inptit)
-  display(dfts_ui, dfts_out)
-  display(out_gen)
+  #display(inptit)
+  #display(dfts_ui, dfts_out)
+  value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out'}
+  return value_dict, out_gen
+
+def display_wids(DBdict):
+  tick_dict = get_ticker(DBdict)
+  lease_ui_dict, options_ui_dict = get_lease_opt()
+  value_dict, out_gen = value_inputs()
+  
+  display(tick_dict['ui'],tick_dict['out'])
+  display(lease_ui_dict['ui'],lease_opt_dict['out'])
+  display(options_ui_dict['ui],options_ui_dict['out'])
+  display(value_dict['ui'],value_dict['out'])
