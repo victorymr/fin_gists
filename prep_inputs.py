@@ -10,7 +10,7 @@ import comp_data
 from yfinance import yfinance as yf
 
 import ipywidgets as widgets
-from IPython.display import display
+from IPython.display import display, clear_output
 
 from google.colab import auth
 auth.authenticate_user()
