@@ -183,7 +183,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
   out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
-  display(out_gen)
+  #display(out_gen)
   
   def finpdict(**dfts_dict):
     comp = sv.comp
@@ -222,8 +222,6 @@ def value_inputs():
       clear_output()
       display(ind_df)
     
-    display(out_gen)
-
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
@@ -235,4 +233,5 @@ def value_inputs():
   dfts_out = widgets.interactive_output(finpdict, dfts_dict)
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
   display(inptit)
-  display(dfts_ui, dfts_out,out_gen)
+  display(dfts_ui, dfts_out)
+  display(out_gen)
