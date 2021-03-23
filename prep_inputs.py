@@ -193,7 +193,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
-  out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
+  #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
   
   def finpdict(**dfts_dict):
@@ -248,7 +248,7 @@ def value_inputs():
   #display(inptit)
   #display(dfts_ui, dfts_out)
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
-  return value_dict, out_gen
+  return value_dict #, out_gen
 
 def display_wids(DBdict):
   tick_dict = get_ticker(DBdict)
@@ -260,4 +260,4 @@ def display_wids(DBdict):
   display(options_ui_dict['ui'],options_ui_dict['out'])
   display(value_dict['ui'],value_dict['out'])
   #display(out_gen)
-  return out_gen
+  return #out_gen
