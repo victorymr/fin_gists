@@ -205,7 +205,7 @@ def value_inputs():
       tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
       ind_df[iindt] = tmp_df
       
-    with out:
+    with out_gen:
       ## Relevant Metrics from Company's recent financials
       display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
       listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
