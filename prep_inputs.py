@@ -256,6 +256,6 @@ def display_wids(DBdict):
   value_dict, out_gen = value_inputs()
   
   display(tick_dict['ui'],tick_dict['out'])
-  display(lease_ui_dict['ui'],lease_opt_dict['out'])
+  display(lease_ui_dict['ui'],lease_ui_dict['out'])
   display(options_ui_dict['ui'],options_ui_dict['out'])
   display(value_dict['ui'],value_dict['out'])
