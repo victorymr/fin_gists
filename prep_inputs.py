@@ -278,12 +278,11 @@ def value_inputs():
   display(inptit)
   display(dfts_ui, dfts_out)
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
-  return #value_dict, out_gen
+  return value_dict, out_gen
 
 def save_todb(gc):
   ## create button that will append a row to the DB
   button = widgets.Button(description="Save me!")
-  display(button)
 
   def on_button_clicked(b):
     ## do the appending business
@@ -303,17 +302,22 @@ def save_todb(gc):
     #export_to_sheets_gs(gc,ndfls,worksheet_name='Lease')
     #export_to_sheets_gs(gc,ndfos,worksheet_name='Optionholdings')
   button.on_click(on_button_clicked)
+  display(button)
+  return button
+
   
   
 def display_wids(DBdict):
-  tick_dict = get_ticker(DBdict)
-  lease_ui_dict, options_ui_dict = get_lease_opt()
+  #tick_dict = get_ticker(DBdict)
+  #lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict = value_inputs()
-  l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
+  sav2db = save_todb(gc)
   
-  display(tick_dict['ui'],tick_dict['out'])
-  display(lease_ui_dict['title'],lease_ui_dict['ui'],lease_ui_dict['out'])
-  display(options_ui_dict['title'],options_ui_dict['ui'],options_ui_dict['out'])
-  display(value_dict['title'],value_dict['ui'],value_dict['out'])
-  #display(out_gen)
-  return #out_gen
+  #l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
+  
+  #display(tick_dict['ui'],tick_dict['out'])
+  #display(lease_ui_dict['title'],lease_ui_dict['ui'],lease_ui_dict['out'])
+  #display(options_ui_dict['title'],options_ui_dict['ui'],options_ui_dict['out'])
+  #display(value_dict['title'],value_dict['ui'],value_dict['out'])
+  #display(sav2db)
+  return 
