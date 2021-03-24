@@ -101,7 +101,7 @@ def get_ticker(DBdict):
   out = widgets.interactive_output(f,ui)
   display(ticksym,out)
   tick_dict = {'title':'Symbol','ui': ticksym,'out':out}
-  return tick_dict
+  return #tick_dict
   
 def get_lease_opt():
   ## get the lease input and options data
@@ -158,7 +158,7 @@ def get_lease_opt():
   display(opui, opout)
   options_ui_dict = {'title':otit,'ui':opui,'out':opout}
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
-  return lease_ui_dict, options_ui_dict
+  return #lease_ui_dict, options_ui_dict
 
 def value_inputs():
   country_name_list = list(marketdata.get_country_tax_rates().index) + ['']
@@ -251,7 +251,7 @@ def value_inputs():
   display(inptit)
   display(dfts_ui, dfts_out)
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
-  return value_dict #, out_gen
+  return #value_dict, out_gen
 
 def display_wids(DBdict):
   tick_dict = get_ticker(DBdict)
