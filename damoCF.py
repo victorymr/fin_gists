@@ -6,6 +6,8 @@ import scipy as sp
 from scipy.stats import norm
 from scipy.stats import lognorm
 import random
+import matplotlib.pyplot as plt
+
 
 from datetime import date
 import pdb
