@@ -21,6 +21,8 @@ import gspread
 from oauth2client.client import GoogleCredentials
 import gspread_dataframe
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
+gc = gspread.authorize(GoogleCredentials.get_application_default())
+
 
 from fin_gists import damoCF as dacf
 from fin_gists import shared_vars as sv
