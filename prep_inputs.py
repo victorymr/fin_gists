@@ -231,7 +231,7 @@ def value_inputs():
 
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
-    print(ind_df)
+    print(ind_df[indt_list])
     '''out_gen.append(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
     out_gen.append_display_data(pd.DataFrame(data=list_dict.values(),
                            index=list_dict.keys(),columns=[comp.ticksym]))
