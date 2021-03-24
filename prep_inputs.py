@@ -31,6 +31,7 @@ marketdata = comp_data.Market()
 def read_sheet(sheet):
   df = get_as_dataframe(sheet)
   df.replace(np.nan, '', regex=True,inplace=True)
+  df.filter(regex='^((?!Unnamed).)*$',axis=1,inplace=True)
   return df
   
 def read_DB(gc,filn='StockDB'):
@@ -266,9 +267,9 @@ def save_todb(gc):
 
   def on_button_clicked(b):
     ## do the appending business
-    ndfts = pd.DataFrame(dfts).transpose().filter(regex='^((?!Unnamed).)*$',axis=1)
-    ndfls = pd.DataFrame(dfls).transpose().filter(regex='^((?!Unnamed).)*$',axis=1)
-    ndfos = pd.DataFrame(dfos).transpose().filter(regex='^((?!Unnamed).)*$',axis=1)
+    ndfts = pd.DataFrame(dfts).transpose()
+    ndfls = pd.DataFrame(dfls).transpose()
+    ndfos = pd.DataFrame(dfos).transpose()
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
