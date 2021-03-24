@@ -99,7 +99,7 @@ def get_ticker(DBdict):
 
   ui =  {'ticksym': ticksym}
   out = widgets.interactive_output(f,ui)
-  #display(ticksym,out)
+  display(ticksym,out)
   tick_dict = {'title':'Symbol','ui': ticksym,'out':out}
   return tick_dict
   
@@ -135,8 +135,8 @@ def get_lease_opt():
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
   lsout = widgets.interactive_output(flease, lsdict)
   ltit = widgets.HTML('<h4> Lease Commitment Inputs ($M) </h4>')
-  #display(ltit)
-  #display(lsui, lsout)
+  display(ltit)
+  display(lsui, lsout)
 
   ## Options inputs
   opdict = opt_dict = {} # we may have some duplication here.
@@ -154,8 +154,8 @@ def get_lease_opt():
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
   otit = widgets.HTML('<h4> Options Outstanding Inputs </h4>')
-  #display(otit)
-  #display(opui, opout)
+  display(otit)
+  display(opui, opout)
   options_ui_dict = {'title':otit,'ui':opui,'out':opout}
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
   return lease_ui_dict, options_ui_dict
@@ -248,8 +248,8 @@ def value_inputs():
   dfts_ui = widgets.GridBox( tuple(dfts_dict.values()),layout = layout)
   dfts_out = widgets.interactive_output(finpdict, dfts_dict)
   inptit = widgets.HTML('<h2> Key Value Inputs </h2>')
-  #display(inptit)
-  #display(dfts_ui, dfts_out)
+  display(inptit)
+  display(dfts_ui, dfts_out)
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
   return value_dict #, out_gen
 
