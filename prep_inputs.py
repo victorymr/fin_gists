@@ -19,8 +19,8 @@ auth.authenticate_user()
 
 import gspread
 from oauth2client.client import GoogleCredentials
-import gspread_dataframe as gd
-from gd import get_as_dataframe, set_with_dataframe
+import gspread_dataframe
+from gspread_dataframe import get_as_dataframe, set_with_dataframe
 
 from fin_gists import damoCF as dacf
 from fin_gists import shared_vars as sv
@@ -46,14 +46,14 @@ def export_to_sheets(df,workbook="StockDB",worksheet_name='Optionholdings',mode=
     ws = gc.open(workbook).worksheet(worksheet_name)
     if(mode=='w'):
         ws.clear()
-        gd.set_with_dataframe(worksheet=ws,dataframe=df,include_index=False,include_column_header=True,resize=True)
+        set_with_dataframe(worksheet=ws,dataframe=df,include_index=False,include_column_header=True,resize=True)
         return True
     elif(mode=='a'):
         ws.add_rows(df.shape[0])
-        gd.set_with_dataframe(worksheet=ws,dataframe=df,include_index=False,include_column_header=False,row=ws.row_count+1,resize=False)
+        set_with_dataframe(worksheet=ws,dataframe=df,include_index=False,include_column_header=False,row=ws.row_count+1,resize=False)
         return True
     else:
-        return gd.get_as_dataframe(worksheet=ws)
+        return get_as_dataframe(worksheet=ws)
 
 def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
   workbook = gc.open(filn)
