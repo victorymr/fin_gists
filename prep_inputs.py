@@ -295,9 +295,9 @@ def save_todb(gc):
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     ## now write to BD
-    export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
-    export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
-    export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
+    #export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
+    #export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
+    #export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
 
     export_to_sheets_gs(gc,ndfts,worksheet_name='Ticker')
     export_to_sheets_gs(gc,ndfls,worksheet_name='Lease')
