@@ -42,7 +42,7 @@ def read_DB(gc,filn='StockDB'):
   DBdict = {isheet.title: read_sheet(isheet) for isheet in sheets}
   return DBdict
 
-def export_to_sheets(df,workbook="StockDB",worksheet_name='Optionholdings',mode='r'):
+def export_to_sheets(gc,df,workbook="StockDB",worksheet_name='Optionholdings',mode='r'):
     ws = gc.open(workbook).worksheet(worksheet_name)
     if(mode=='w'):
         ws.clear()
@@ -288,9 +288,9 @@ def save_todb(gc):
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     ## now write to BD
-    export_to_sheets(ndfts,worksheet_name='Ticker',mode='a')
-    export_to_sheets(ndfls,worksheet_name='Lease',mode='a')
-    export_to_sheets(ndfos,worksheet_name='Optionholdings',mode='a')
+    export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
+    export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
+    export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
     
   button.on_click(on_button_clicked)
   
