@@ -278,7 +278,7 @@ def value_inputs():
   display(inptit)
   display(dfts_ui, dfts_out)
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
-  return value_dict, out_gen
+  return value_dict  #, out_gen
 
 def save_todb(gc):
   ## create button that will append a row to the DB
