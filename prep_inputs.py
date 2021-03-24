@@ -32,7 +32,7 @@ def read_sheet(sheet):
   df = get_as_dataframe(sheet)
   df.replace(np.nan, '', regex=True,inplace=True)
   df.filter(regex='^((?!Unnamed).)*$',axis=1)
-  return df
+  return df.filter(regex='^((?!Unnamed).)*$',axis=1)
   
 def read_DB(gc,filn='StockDB'):
   ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
