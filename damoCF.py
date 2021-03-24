@@ -281,6 +281,15 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cfdict = locals()
   return cfdict
 
+def plot_sim():
+  ## Plot the histogram
+  fig, ax = plt.subplots(1, 1)
+  sns.set_style('darkgrid')
+  sns.histplot(sim_df['equity_val_pershare'],stat='probability')
+  ax.text(sv.comp.info['previousClose'],0.2,'* prevClose',rotation=60)
+  ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
+  ax.plot([sv.comp.info['fiftyTwoWeekHigh'],sv.comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
+
 def run_sim(comp,Inp_dict,nsim=100):
   simlist = []
   selcols = ['equity_val_pershare', 'value_equity_commonstock','long_term_coc','long_term_margin',
@@ -293,6 +302,8 @@ def run_sim(comp,Inp_dict,nsim=100):
       rowlist.append(simdict[isel])
     simlist.append(rowlist)
   sim_df = pd.DataFrame(simlist,columns=selcols)
+  plot_sim
+  sim_df[['long_term_cagr','long_term_coc','long_term_margin']].plot(title='Simulation variables')
   return sim_df
 
 def damoCF():
