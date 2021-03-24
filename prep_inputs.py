@@ -287,9 +287,9 @@ def save_todb(gc):
 
   def on_button_clicked(b):
     ## do the appending business
-    ndfts = dfts.copy() if instance(dfts,pd.DataFrame) else pd.DataFrame(dfts).transpose()
-    ndfls = dfls.copy() if instance(dfls,pd.DataFrame) else pd.DataFrame(dfls).transpose()
-    ndfos = dfos.copy() if instance(dfos,pd.DataFrame) else pd.DataFrame(dfos).transpose()
+    ndfts = dfts.copy() if isinstance(dfts,pd.DataFrame) else pd.DataFrame(dfts).transpose()
+    ndfls = dfls.copy() if isinstance(dfls,pd.DataFrame) else pd.DataFrame(dfls).transpose()
+    ndfos = dfos.copy() if isinstance(dfos,pd.DataFrame) else pd.DataFrame(dfos).transpose()
     print(ndfts.columns,ndfls.columns,ndfos.columns)
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
