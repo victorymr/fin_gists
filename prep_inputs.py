@@ -31,7 +31,7 @@ marketdata = comp_data.Market()
 def read_sheet(sheet):
   df = get_as_dataframe(sheet)
   df.replace(np.nan, '', regex=True,inplace=True)
-  df.filter(regex='^((?!Unnamed).)*$',axis=1,inplace=True)
+  df.filter(regex='^((?!Unnamed).)*$',axis=1)
   return df
   
 def read_DB(gc,filn='StockDB'):
