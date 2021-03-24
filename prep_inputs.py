@@ -265,9 +265,9 @@ def save_todb(gc):
 
   def on_button_clicked(b):
     ## do the appending business
-    ndfts = dfts
-    ndfls = dfls
-    ndfos = dfos
+    ndfts = pd.DataFrame(dfts).transpose()
+    ndfls = pd.DataFrame(dfls).transpose()
+    ndfos = pd.DataFrame(dfos).transpose()
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
