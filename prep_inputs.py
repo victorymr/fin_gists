@@ -266,9 +266,9 @@ def save_todb(gc):
 
   def on_button_clicked(b):
     ## do the appending business
-    ndfts = pd.DataFrame(dfts).transpose().filter(regex='[^(Unnamed)]',axis=1)
-    ndfls = pd.DataFrame(dfls).transpose().filter(regex='[^(Unnamed)]',axis=1)
-    ndfos = pd.DataFrame(dfos).transpose().filter(regex='[^(Unnamed)]',axis=1)
+    ndfts = pd.DataFrame(dfts).transpose().filter(regex='[(Unnamed)]',axis=1)
+    ndfls = pd.DataFrame(dfls).transpose().filter(regex='[(Unnamed)]',axis=1)
+    ndfos = pd.DataFrame(dfos).transpose().filter(regex='[(Unnamed)]',axis=1)
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
