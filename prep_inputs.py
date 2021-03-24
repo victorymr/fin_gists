@@ -100,7 +100,7 @@ def get_ticker(DBdict):
   ui =  {'ticksym': ticksym}
   out = widgets.interactive_output(f,ui)
   #display(ticksym,out)
-  tick_dict = {'title':'Symbol','ui': ui,'out':out}
+  tick_dict = {'title':'Symbol','ui': ticksym,'out':out}
   return tick_dict
   
 def get_lease_opt():
@@ -183,13 +183,13 @@ def value_inputs():
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
   dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
-  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,value=dfts[i],style=style) for i in lsdts_flt1})
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
   dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_indf})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
   dfts_dict.update({i: widgets.Dropdown(options=country_name_list, description=i,value=dfts[i],style=style) for i in lsdts_cont})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_conf})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style) for i in lsdts_liqp})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_conf})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
@@ -222,7 +222,7 @@ def value_inputs():
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','tax_rate']
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
-    print(list_dict)
+    #print(list_dict)
     print(pd.DataFrame(data=list_dict.values(),
                        index=list_dict.keys(),columns=[comp.ticksym]))
 
@@ -253,7 +253,7 @@ def value_inputs():
 def display_wids(DBdict):
   tick_dict = get_ticker(DBdict)
   lease_ui_dict, options_ui_dict = get_lease_opt()
-  value_dict, out_gen = value_inputs()
+  value_dict = value_inputs()
   
   display(tick_dict['out'])
   display(lease_ui_dict['ui'],lease_ui_dict['out'])
