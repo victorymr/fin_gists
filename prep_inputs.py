@@ -55,6 +55,13 @@ def export_to_sheets(gc,df,workbook="StockDB",worksheet_name='Optionholdings',mo
     else:
         return get_as_dataframe(worksheet=ws)
 
+def export_to_sheets_gs(gc,df,workbook="StockDB",worksheet_name='Optionholdings'):
+  ws = gc.open(workbook).worksheet(worksheet_name)
+  params = {'valueInputOption': 'USER_ENTERED'}
+  body = {'values': df.values.tolist()}
+  ws.values_append(f'{sheet_name:str}!A1:G1', params, body)
+  return True
+
 def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
   workbook = gc.open(filn)
   gcsheet = workbook.worksheet(sheetn)
@@ -291,7 +298,10 @@ def save_todb(gc):
     export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
     export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
     export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
-    
+
+    export_to_sheets_gs(gc,ndfts,worksheet_name='Ticker')
+    export_to_sheets_gs(gc,ndfls,worksheet_name='Lease')
+    export_to_sheets_gs(gc,ndfos,worksheet_name='Optionholdings')
   button.on_click(on_button_clicked)
   
   
