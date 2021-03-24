@@ -257,6 +257,7 @@ def display_wids(DBdict):
   tick_dict = get_ticker(DBdict)
   lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict = value_inputs()
+  l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
   
   display(tick_dict['ui'],tick_dict['out'])
   display(lease_ui_dict['title'],lease_ui_dict['ui'],lease_ui_dict['out'])
