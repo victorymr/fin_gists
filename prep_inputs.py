@@ -207,6 +207,7 @@ def value_inputs():
       sv.Inp_dict[k] = v
     
     sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
+    sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     sv.comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
