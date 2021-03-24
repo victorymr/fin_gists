@@ -196,6 +196,7 @@ def value_inputs():
   #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
   
+  ind_df = pd.DataFrame()
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
@@ -207,15 +208,17 @@ def value_inputs():
     sv.comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
     sv.comp.wacc = dacf.get_wacc(sv.comp)
     
-    indt_list = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
-    ind_df = pd.DataFrame(columns=indt_list)
+    indt_list_tmp = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
+    indt_list = list(filter(None, indt_list_tmp))  ## remove empty ones
+    print('# of Ind ',len(indt_list))
     for iindt in indt_list:
-      ind_dat = comp_data.Industry(iindt)
-      tmp_df = ind_dat.get_historical_growth()
-      tmp_df = tmp_df.append(ind_dat.get_margins()[['net margin','pre-tax unadjusted operating margin','pre-tax lease & r&d adj margin']])
-      tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/capital']
-      tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
-      ind_df[iindt] = tmp_df
+      if iindt not in ind_df.columns.tolist(): #only do this for new industry value
+        ind_dat = comp_data.Industry(iindt)
+        tmp_df = ind_dat.get_historical_growth()
+        tmp_df = tmp_df.append(ind_dat.get_margins()[['net margin','pre-tax unadjusted operating margin','pre-tax lease & r&d adj margin']])
+        tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/capital']
+        tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
+        ind_df[iindt] = tmp_df
       
     ## Relevant Metrics from Company's recent financials
     display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
@@ -255,9 +258,9 @@ def display_wids(DBdict):
   lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict = value_inputs()
   
-  display(tick_dict['out'])
-  display(lease_ui_dict['ui'],lease_ui_dict['out'])
-  display(options_ui_dict['ui'],options_ui_dict['out'])
-  display(value_dict['ui'],value_dict['out'])
+  display(tick_dict['ui'],tick_dict['out'])
+  display(lease_ui_dict['title'],lease_ui_dict['ui'],lease_ui_dict['out'])
+  display(options_ui_dict['title'],options_ui_dict['ui'],options_ui_dict['out'])
+  display(value_dict['title'],value_dict['ui'],value_dict['out'])
   #display(out_gen)
   return #out_gen
