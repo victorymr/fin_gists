@@ -115,8 +115,8 @@ def get_lease_opt():
   lslist = [widgets.FloatText(description = 'Year' + str(i), value = dfls['Year'+str(i)],readout_format=':,.2f') for i in range(6)]
   lstup = ['Year' + str(i) for i in range(6)]
   lsdict = dict(zip(lstup,lslist))
-  lsdict['bulk_commitment'] = widgets.FloatText(description = 'bulk_commitment', value = dfls['YearBulk'],style=style)
-  lsdict['nyrs_bulk'] = widgets.FloatText(description = 'N yrs bulk', value = dfls['nBulk'],style=style)
+  lsdict['bulk_commitment'] = widgets.FloatText(description = 'bulk_commitment', value = dfls['bulk_commitment'],style=style)
+  lsdict['nyrs_bulk'] = widgets.FloatText(description = 'N yrs bulk', value = dfls['nyrs_bulk'],style=style)
   lsdict['cost_of_debt'] = widgets.FloatText(description = 'debt cost', value = dfls['cost_of_debt'],style=style)
 
   #globals().update(lsdict)
@@ -268,8 +268,8 @@ def save_todb(gc):
   def on_button_clicked(b):
     ## do the appending business
     ndfts = pd.DataFrame(dfts).transpose()
-    ndfls = dfls # pd.DataFrame(dfls).transpose()
-    ndfos = dfos # pd.DataFrame(dfos).transpose()
+    ndfls = dfls.copy() # pd.DataFrame(dfls).transpose()
+    ndfos = dfos.copy() # pd.DataFrame(dfos).transpose()
     print(ndfts.columns,ndfls.columns,ndfos.columns)
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
