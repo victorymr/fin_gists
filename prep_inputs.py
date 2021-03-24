@@ -253,6 +253,25 @@ def value_inputs():
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
   return #value_dict, out_gen
 
+def save_todb():
+  ## create button that will append a row to the DB
+  button = widgets.Button(description="Save me!")
+  display(button)
+
+  def on_button_clicked(b):
+    ## do the appending business
+    ndfts = dfts
+    ndfls = dfls
+    ndfos = dfos
+    for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
+    for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
+    for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
+    ## now write to BD
+
+    
+  button.on_click(on_button_clicked)
+  
+  
 def display_wids(DBdict):
   tick_dict = get_ticker(DBdict)
   lease_ui_dict, options_ui_dict = get_lease_opt()
