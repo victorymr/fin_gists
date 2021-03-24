@@ -35,14 +35,16 @@ def read_sheet(sheet):
   
 def read_DB(gc,filn='StockDB'):
   ## This function can be made more elegant and streamlined to automatically identify the sheets and download in dfs/dict
-  workbook = gc.open('StockDB')
+  workbook = gc.open(filn)
   sheets = workbook.worksheets()
   #sheets = ["Ticker",'Lease','Optionholdings']
   DBdict = {isheet.title: read_sheet(isheet) for isheet in sheets}
   return DBdict
-
-
   
+def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
+  workbook = gc.open(filn)
+  gcsheet = workbook.worksheet(sheetn)
+  gcsheet.append_row(dfrow)
   
 def get_ticker(DBdict):
   ## Enter your Ticker Symbol - make sure no mistakes!!
@@ -95,6 +97,7 @@ def get_ticker(DBdict):
 
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
+    sv.Inp_dict['Ticker'] = ticksym
     #get_lease_opt()
 
   ui =  {'ticksym': ticksym}
@@ -129,6 +132,7 @@ def get_lease_opt():
     comp.mean_margin = comp.ebit_adj/comp.ttm_revs
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
+    for k,v in lsdict.items(): sv.Inp_dict[k] = v
     #value_inputs()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
@@ -149,7 +153,7 @@ def get_lease_opt():
     opt_dict['n_options'] = opdict['n_options']
     comp.opt_dict = opt_dict
     sv.comp = comp
-
+    for k,v in opdict.items(): sv.Inp_dict[k] = v
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
   opout = widgets.interactive_output(foptions, opdict)
@@ -202,6 +206,7 @@ def value_inputs():
     for k,v in dfts_dict.items():
       sv.Inp_dict[k] = v
     
+    sv.Inpt_dict['UUID'] = sv.Inpt_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     sv.comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
@@ -253,7 +258,7 @@ def value_inputs():
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
   return #value_dict, out_gen
 
-def save_todb():
+def save_todb(gc):
   ## create button that will append a row to the DB
   button = widgets.Button(description="Save me!")
   display(button)
@@ -267,7 +272,9 @@ def save_todb():
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     ## now write to BD
-
+    write_rowDB(gc,nfdts,sheetn='Ticker',filn='StockDB')
+    write_rowDB(gc,nfdts,sheetn='Lease',filn='StockDB')
+    write_rowDB(gc,nfdts,sheetn='Optionholdings',filn='StockDB')
     
   button.on_click(on_button_clicked)
   
