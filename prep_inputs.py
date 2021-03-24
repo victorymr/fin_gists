@@ -275,9 +275,9 @@ def save_todb(gc):
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     ## now write to BD
-    write_rowDB(gc,nfdts,sheetn='Ticker',filn='StockDB')
-    write_rowDB(gc,nfdts,sheetn='Lease',filn='StockDB')
-    write_rowDB(gc,nfdts,sheetn='Optionholdings',filn='StockDB')
+    write_rowDB(gc,ndfts,sheetn='Ticker',filn='StockDB')
+    write_rowDB(gc,ndfts,sheetn='Lease',filn='StockDB')
+    write_rowDB(gc,ndfts,sheetn='Optionholdings',filn='StockDB')
     
   button.on_click(on_button_clicked)
   
