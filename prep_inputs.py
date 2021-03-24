@@ -270,6 +270,7 @@ def save_todb(gc):
     ndfts = pd.DataFrame(dfts).transpose()
     ndfls = pd.DataFrame(dfls).transpose()
     ndfos = pd.DataFrame(dfos).transpose()
+    print(ndfts,ndfls,ndfos)
     for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
     for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
