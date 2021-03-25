@@ -68,7 +68,24 @@ def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
   workbook = gc.open(filn)
   gcsheet = workbook.worksheet(sheetn)
   gcsheet.append_row(dfrow)
-  
+
+def comp_finpop(comp):
+  comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
+  comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
+  try:
+    shortinv = comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
+  except: 
+    shortinv =0
+    print('** There seem to be no short term investments or marketable securities - perhaps already clubbed in Cash?')
+  comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+shortinv
+  comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - comp.cash_mms
+  comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/comp.net_debt
+  comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
+  comp.rnd_dict = dacf.rnd_conv(comp)
+  comp.curr_cagr = dacf.get_cagr(comp)
+  comp.marketdata = comp_data.Market()
+  return comp
+ 
 def get_ticker(DBdict):
   ## Enter your Ticker Symbol - make sure no mistakes!!
   ## If this symbol exists in my DB - I am going to get its latest data else empty df
@@ -107,16 +124,8 @@ def get_ticker(DBdict):
     # get comp info
     #print(dfts)
     comp = yf.Ticker(ticksym)
-    comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
-    comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
-    comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
-    comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - comp.cash_mms
-    comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/comp.net_debt
-    comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
-    comp.rnd_dict = dacf.rnd_conv(comp)
-    comp.curr_cagr = dacf.get_cagr(comp)
-    comp.marketdata = comp_data.Market()
     comp.ticksym = ticksym
+    comp = comp_finpop(comp)
 
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
