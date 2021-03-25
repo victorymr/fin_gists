@@ -309,7 +309,6 @@ def run_sim(comp,Inp_dict,nsim=100):
   sim_df = pd.DataFrame(simlist,columns=selcols)
   cfdict = calc_cashflow(comp,Inp_dict,sim={'Do':0,'Vol':5})
   plot_sim(sim_df,cfdict)
-  fig, ax = plt.subplots(1, 1)
   sim_df[['long_term_cagr','long_term_coc','long_term_margin']].plot(title='Simulation variables')
   #plt.show()
   return sim_df
