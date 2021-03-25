@@ -24,7 +24,7 @@ def get_cagr(comp):
   if time_to_10K >0.5: 
     revs_10K = comp.financials.loc['Total Revenue'].iloc[0]
   else: ## less than 1/2 year then the cagr may not be that representative so go to older 10K
-    revs_10k = comp.financials.loc['Total Revenue'].iloc[1]
+    revs_10K = comp.financials.loc['Total Revenue'].iloc[1]
     time_to_10K += 1 # add a year
   revs_ttm = sum(comp.quarterly_financials.loc['Total Revenue'])
   cagr = (revs_ttm/revs_10K)**(1/time_to_10K)-1
