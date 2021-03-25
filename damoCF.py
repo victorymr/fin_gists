@@ -86,7 +86,7 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
     equity_beta = comp.info['beta']
     equity_return = risk_free_rate+equity_beta*market_risk_premium
     
-    cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
+    cash_mms = comp.cash_mms
     net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'] + comp.quarterly_balance_sheet.loc['Long Term Debt'] - cash_mms
     
     market_cap = comp.info['marketCap']
@@ -235,7 +235,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   invested_capital = (equity_book_value + debt_book_value 
                       + rnd_dict['rnd_asset'] 
                       - lease_dict['debt_value_lease']
-                      - sv.comp.cash_mms)
+                      - comp.cash_mms)
   curr_sales2cap = ttm_revs/invested_capital
   
   '''--------// Build the Cashflow //-----'''
@@ -279,7 +279,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   equity_value = (value_of_OpAss - debt_book_value 
                   - lease_dict['debt_value_lease']  
                   - ID['minority_interest'] 
-                  + sv.comp.cash_mms
+                  + comp.cash_mms
                   + ID['crossholdings_nonopassets'])
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
@@ -292,9 +292,9 @@ def plot_sim(sim_df,cfdict):
   fig, ax = plt.subplots(1, 1)
   sns.set_style('darkgrid')
   sns.histplot(sim_df['equity_val_pershare'],stat='probability')
-  ax.text(sv.comp.info['previousClose'],0.2,'* prevClose',rotation=60)
+  ax.text(comp.info['previousClose'],0.2,'* prevClose',rotation=60)
   ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
-  ax.plot([sv.comp.info['fiftyTwoWeekHigh'],sv.comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
+  ax.plot([comp.info['fiftyTwoWeekHigh'],comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
   #plt.show();
   return ax
 
