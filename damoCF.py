@@ -292,9 +292,9 @@ def plot_sim():
   sns.set_style('darkgrid')
   sns.histplot(sim_df['equity_val_pershare'],stat='probability')
   ax.text(sv.comp.info['previousClose'],0.2,'* prevClose',rotation=60)
-  ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
+  #ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
   ax.plot([sv.comp.info['fiftyTwoWeekHigh'],sv.comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
-  plt.show()
+  plt.show():
 
 def run_sim(comp,Inp_dict,nsim=100):
   simlist = []
