@@ -78,9 +78,12 @@ def comp_finpop(comp):
     shortinv =0
     print('** There seem to be no short term investments or marketable securities - perhaps already clubbed in Cash?')
   comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+shortinv
-  short_longterm_debt = 0 if 'Short Long Term Debt' not in comp.quarterly_balance_sheet.index else comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
-  longterm_debt = 0 if isNaN(comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0]) else comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0]  
-  comp.net_debt = short_longterm_debt + longterm_debt - comp.cash_mms
+  comp.short_longterm_debt = 0 if 'Short Long Term Debt' not in comp.quarterly_balance_sheet.index else comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
+  comp.longterm_debt = 0
+  try:
+    comp.longterm_debt = comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
+    if math.isnan(comp.longterm_debt): comp.longterm_debt = 0 
+  comp.net_debt = comp.short_longterm_debt + comp.longterm_debt - comp.cash_mms
   try:
     interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])
   except:
