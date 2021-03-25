@@ -284,7 +284,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cfdict = locals()
   return cfdict
 
-def plot_sim():
+def plot_sim(sim_df,cfdict):
   ## Plot the histogram
   fig, ax = plt.subplots(1, 1)
   sns.set_style('darkgrid')
