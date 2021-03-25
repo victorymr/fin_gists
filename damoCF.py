@@ -6,7 +6,6 @@ import scipy as sp
 from scipy.stats import norm
 from scipy.stats import lognorm
 import random
-%matplotlib inline
 import matplotlib.pyplot as plt
 import seaborn as sns
 
