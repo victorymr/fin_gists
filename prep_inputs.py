@@ -78,8 +78,14 @@ def comp_finpop(comp):
     shortinv =0
     print('** There seem to be no short term investments or marketable securities - perhaps already clubbed in Cash?')
   comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+shortinv
-  comp.net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0] + comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] - comp.cash_mms
-  comp.interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])/comp.net_debt
+  short_longterm_debt = 0 if 'Short Long Term Debt' not in comp.quarterly_balance_sheet.index else comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
+  longterm_debt = 0 if isNaN(comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0]) else comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0]  
+  comp.net_debt = short_longterm_debt + longterm_debt - comp.cash_mms
+  try:
+    interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])
+  except:
+    interest_expense = 0
+  comp.interest_expense = interest_expense/comp.net_debt
   comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
   comp.rnd_dict = dacf.rnd_conv(comp)
   comp.curr_cagr = dacf.get_cagr(comp)
