@@ -67,7 +67,7 @@ def get_industry_info(ID,metric='long_term_coc'):
     elif metric == 'stddev':
       tmpstr = inddata.get_betas().loc['standard deviation of equity'].strip('%')
     elif metric == 'beta':
-      tmpstr = inddata.get_betas().loc['beta']
+      tmpstr = inddata.get_betas().loc['beta ']
       percfac = 1
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
