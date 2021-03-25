@@ -294,6 +294,7 @@ def plot_sim():
   #ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
   ax.plot([sv.comp.info['fiftyTwoWeekHigh'],sv.comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
   plt.show();
+  return ax
 
 def run_sim(comp,Inp_dict,nsim=100):
   simlist = []
@@ -307,9 +308,10 @@ def run_sim(comp,Inp_dict,nsim=100):
       rowlist.append(simdict[isel])
     simlist.append(rowlist)
   sim_df = pd.DataFrame(simlist,columns=selcols)
-  plot_sim
+  ax = plot_sim()
   #fig, ax = plt.subplots(1, 1)
   #sim_df[['long_term_cagr','long_term_coc','long_term_margin']].plot(title='Simulation variables')
+  #plt.show()
   return sim_df
 
 def damoCF():
