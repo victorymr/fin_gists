@@ -152,7 +152,7 @@ def option_conv(comp):
   variance = stddev**2
   price = (comp.info['bid']+comp.info['ask'])/2
   strike = opt_dict['strike']
-  divyield = comp.info['dividendYield']
+  divyield = comp.info['dividendYield'] if comp.info['dividendYield'] is not None else 0
   expiration = opt_dict['expiration']
   n_options = opt_dict['n_options']
   n_shares = comp.info['sharesOutstanding']
