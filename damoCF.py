@@ -85,14 +85,11 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
 
     equity_beta = comp.info['beta']
     equity_return = risk_free_rate+equity_beta*market_risk_premium
-    
-    cash_mms = comp.cash_mms
-    net_debt = comp.quarterly_balance_sheet.loc['Short Long Term Debt'] + comp.quarterly_balance_sheet.loc['Long Term Debt'] - cash_mms
-    
+        
     market_cap = comp.info['marketCap']
 
-    company_value = market_cap + net_debt.iloc[0]
-    WACC = market_cap/company_value * equity_return + net_debt.iloc[0]/company_value * debt_return * (1-tax_rate)
+    company_value = market_cap + comp.net_debt
+    WACC = market_cap/company_value * equity_return + comp.net_debt/company_value * debt_return * (1-tax_rate)
     return WACC
 
 ## growth patterns
@@ -228,9 +225,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cost_capital_cumm = (1+cost_capital).cumprod()
   discount_factor = 1/cost_capital_cumm
 
-  debt_book_value = (comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
-                     + comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
-                     )
+  debt_book_value = comp.short_longterm_debt + comp.longterm_debt
   equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
   invested_capital = (equity_book_value + debt_book_value 
                       + rnd_dict['rnd_asset'] 
