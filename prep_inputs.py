@@ -83,7 +83,7 @@ def comp_finpop(comp):
   comp.longterm_debt = 0
   try:
     comp.longterm_debt = comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
-    if math.isnan(comp.longterm_debt): comp.longterm_debt = 0 
+    if math.isnan(comp.longterm_debt) comp.longterm_debt = 0 
   comp.net_debt = comp.short_longterm_debt + comp.longterm_debt - comp.cash_mms
   try:
     interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])
