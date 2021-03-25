@@ -61,11 +61,15 @@ def get_industry_info(ID,metric='long_term_coc'):
   metdat_av=0
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(ID[iindt])
+    percfac = 100
     if metric == 'long_term_coc':
       tmpstr = inddata.get_cost_of_capital().loc['cost of capital'].strip('%')
     elif metric == 'stddev':
       tmpstr = inddata.get_betas().loc['standard deviation of equity'].strip('%')
-    metdat = float(tmpstr)/100 if tmpstr else 0
+    elif metric == 'beta':
+      tmpstr = inddata.get_betas().loc['beta']
+      percfac = 1
+    metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
   return metdat_av
@@ -83,7 +87,7 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
     prev_year = str(int(date.today().strftime('%Y'))-1)
     market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
 
-    equity_beta = comp.info['beta']
+    equity_beta = comp.info['beta'] if comp.info['beta'] else comp.ind_beta
     equity_return = risk_free_rate+equity_beta*market_risk_premium
         
     market_cap = comp.info['marketCap']
