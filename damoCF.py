@@ -7,6 +7,7 @@ from scipy.stats import norm
 from scipy.stats import lognorm
 import random
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 from datetime import date
