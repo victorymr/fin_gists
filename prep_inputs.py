@@ -256,6 +256,7 @@ def value_inputs():
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     sv.comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
     sv.comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
+    sv.comp.ind_beta = dacf.get_industry_info(sv.Inp_dict,metric='beta')
     sv.comp.wacc = dacf.get_wacc(sv.comp)
     
     indt_list_tmp = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
