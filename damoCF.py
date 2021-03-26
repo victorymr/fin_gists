@@ -316,6 +316,21 @@ def run_sim(comp,Inp_dict,nsim=100):
   #plt.show()
   return sim_df
 
+def sanity_checks(cfdict):
+  #compare the current and projected numbers against peer group
+  ## 10 yr
+  df = pd.DataFrame(index = ['revenue','ROIC', 'EBIT'],columns=['Current','10th Year','Industry US'])
+  df['10th Year'] = [cfdict['cashflow'].loc['rev_fcst'][-1], 
+                     cfdict['cashflow'].loc['EBIT'][-1], 
+                     cfdict['cashflow'].loc['ROIC'][-1]]
+  df['Current'] = [cfdict['cashflow'].loc['rev_fcst'][0], 
+                     cfdict['cashflow'].loc['EBIT'][0], 
+                     cfdict['cashflow'].loc['ROIC'][0]]
+  
+  #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
+  print(df)
+  #revenue
+  
 def damoCF():
   return
 
