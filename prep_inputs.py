@@ -96,7 +96,7 @@ def comp_finpop(comp):
     interest_expense = 0
   comp.interest_expense = interest_expense/comp.net_debt
   comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
-  comp.rnd = financial.loc['Research Development']
+  comp.rnd = financials.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
   comp.curr_cagr = dacf.get_cagr(comp)
   comp.marketdata = comp_data.Market()
