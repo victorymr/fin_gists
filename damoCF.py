@@ -130,7 +130,7 @@ def lease_conv(lease_inp,cost_of_debt=0.03,nyrs_bulk=3):
 #3 we want to convert it from a opex to capital asset
 def rnd_conv(comp):
   rnd = comp.rnd
-  tax_rate = comp.taz_rate
+  tax_rate = comp.tax_rate
   nyrs = len(rnd)
   amort = rnd[1:]*(1/max(nyrs-1,1)) # current year from prev
   unamort = rnd*(np.arange(nyrs,0,-1)-1)/(nyrs-1)
