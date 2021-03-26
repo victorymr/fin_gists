@@ -71,28 +71,32 @@ def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
   gcsheet.append_row(dfrow)
 
 def comp_finpop(comp):
-  comp.ttm_revs = sum(comp.quarterly_financials.loc['Total Revenue']) #
-  comp.ttm_ebit = sum(comp.quarterly_financials.loc['Ebit'])
+  quarterly_financials = comp.quarterly_financials.fillna(0)
+  quarterly_balance_sheet = comp.quarterly_balance_sheet.fillna(0)
+  financials = comp.financials.fillna(0)
+  
+  comp.ttm_revs = sum(quarterly_financials.loc['Total Revenue']) #
+  comp.ttm_ebit = sum(quarterly_financials.loc['Ebit'])
   try:
-    shortinv = comp.quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
+    shortinv = quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
   except: 
     shortinv =0
     print('** There seem to be no short term investments or marketable securities - perhaps already clubbed in Cash?')
-  comp.cash_mms = comp.quarterly_balance_sheet.loc['Cash'].iloc[0]+shortinv
-  comp.short_longterm_debt = 0 if 'Short Long Term Debt' not in comp.quarterly_balance_sheet.index else comp.quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
+  comp.cash_mms = quarterly_balance_sheet.loc['Cash'].iloc[0]+shortinv
+  comp.short_longterm_debt = 0 if 'Short Long Term Debt' not in quarterly_balance_sheet.index else quarterly_balance_sheet.loc['Short Long Term Debt'].iloc[0]
   comp.longterm_debt = 0
   try:
-    comp.longterm_debt = comp.quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
-    comp.longterm_debt = 0 if math.isnan(comp.longterm_debt) else comp.longterm_debt
+    comp.longterm_debt = quarterly_balance_sheet.loc['Long Term Debt'].iloc[0] 
   except:
     print('There is no Long term debt! or it is corrupted!')
   comp.net_debt = comp.short_longterm_debt + comp.longterm_debt - comp.cash_mms
   try:
-    interest_expense = sum(comp.quarterly_financials.loc['Interest Expense'])
+    interest_expense = sum(quarterly_financials.loc['Interest Expense'])
   except:
     interest_expense = 0
   comp.interest_expense = interest_expense/comp.net_debt
-  comp.tax_rate = np.mean(comp.financials.loc['Income Tax Expense']/comp.financials.loc['Ebit']) # avg over past few years
+  comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
+  comp.rnd = financial.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
   comp.curr_cagr = dacf.get_cagr(comp)
   comp.marketdata = comp_data.Market()
