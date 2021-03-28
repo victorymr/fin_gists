@@ -125,7 +125,6 @@ def get_ticker(DBdict):
     ## If this symbol exists in my DB - I am going to get its latest data
     global dfts, dfls, dfos, comp, rnd_dict
     comp = sv.comp
-    comp.ticksym = ticksym.upper()
 
     dftickset = dft[dft['Ticker']==comp.ticksym]
     if len(dftickset):
@@ -142,6 +141,7 @@ def get_ticker(DBdict):
     #print(dfts)
     comp = yf.Ticker(ticksym)
     comp = comp_finpop(comp)
+    comp.ticksym = ticksym.upper()
 
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
