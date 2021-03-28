@@ -147,7 +147,7 @@ def get_ticker(DBdict):
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
     sv.Inp_dict['Ticker'] = ticksym
-    get_lease_opt()
+    #get_lease_opt()
 
   ui =  {'ticksym': ticksym}
   out = widgets.interactive_output(f,ui)
