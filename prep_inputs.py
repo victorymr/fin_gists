@@ -181,7 +181,7 @@ def get_lease_opt():
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
     for k,v in lsdict.items(): sv.Inp_dict[k] = v
-    #value_inputs()
+    value_inputs()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
