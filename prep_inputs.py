@@ -191,7 +191,8 @@ def get_lease_opt():
   display(lsui, lsout)
 
   ## Options inputs
-  opdict = opt_dict = {} # we may have some duplication here.
+  optdict = {} 
+  op_dict = {}
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
   opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['expiration'],style=style)
   opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['n_options'],style=style)
