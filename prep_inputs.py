@@ -125,8 +125,9 @@ def get_ticker(DBdict):
     ## If this symbol exists in my DB - I am going to get its latest data
     global dfts, dfls, dfos, comp, rnd_dict
     comp = sv.comp
+    comp.ticksym = ticksym.upper()
 
-    dftickset = dft[dft['Ticker']==ticksym]
+    dftickset = dft[dft['Ticker']==comp.ticksym]
     if len(dftickset):
       dfts = dftickset.iloc[-1]
       dfls = dfl[dfl['UUID'].astype(str)==dfts['UUID']]
@@ -140,7 +141,6 @@ def get_ticker(DBdict):
     # get comp info
     #print(dfts)
     comp = yf.Ticker(ticksym)
-    comp.ticksym = ticksym
     comp = comp_finpop(comp)
 
     sv.comp = comp
