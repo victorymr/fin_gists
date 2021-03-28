@@ -230,7 +230,7 @@ def get_options():
     for k,v in opdict.items(): 
       sv.Inp_dict[k] = v
       dfos[k] = v
-    value_input()
+    value_inputs()
 
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
