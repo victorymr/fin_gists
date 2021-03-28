@@ -118,7 +118,8 @@ def get_ticker(DBdict):
       placeholder='Type something',
       description='Ticker Symbol:',
       disabled=False,
-      style=style
+      style=style,
+      continuous_update = False
   )
   
   def f(ticksym):
@@ -181,7 +182,7 @@ def get_lease_opt():
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
     for k,v in lsdict.items(): sv.Inp_dict[k] = v
-    get_options()
+    #get_options()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
@@ -191,7 +192,6 @@ def get_lease_opt():
   display(lsui, lsout)
 
   ## Options inputs
-  '''
   opdict = {} 
   opt_dict = {}
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
@@ -210,7 +210,6 @@ def get_lease_opt():
   display(otit)
   display(opui, opout)
   options_ui_dict = {'title':otit,'ui':opui,'out':opout}
-  '''
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
   return #lease_ui_dict, options_ui_dict
 
@@ -230,7 +229,7 @@ def get_options():
     for k,v in opdict.items(): 
       sv.Inp_dict[k] = v
       dfos.loc[0,k] = v
-    value_inputs()
+    #value_inputs()
 
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
