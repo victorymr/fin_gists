@@ -192,7 +192,7 @@ def get_lease_opt():
 
   ## Options inputs
   opdict = {} 
-  op_dict = {}
+  opt_dict = {}
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
   opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['expiration'],style=style)
   opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['n_options'],style=style)
