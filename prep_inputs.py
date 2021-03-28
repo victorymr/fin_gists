@@ -126,7 +126,7 @@ def get_ticker(DBdict):
     global dfts, dfls, dfos, comp, rnd_dict
     comp = sv.comp
 
-    dftickset = dft[dft['Ticker']==comp.ticksym]
+    dftickset = dft[dft['Ticker']==ticksym]
     if len(dftickset):
       dfts = dftickset.iloc[-1]
       dfls = dfl[dfl['UUID'].astype(str)==dfts['UUID']]
