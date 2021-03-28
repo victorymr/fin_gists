@@ -158,7 +158,7 @@ def get_lease_opt():
   ## get the lease input and options data
   ## Make a widgets and prepopulate them? Allow user to modify if need be
   ## 
-  global dfls, dflo
+  global dfls, dfos
   lslist = [widgets.FloatText(description = 'Year' + str(i), value = dfls['Year'+str(i)],readout_format=':,.2f') for i in range(6)]
   lstup = ['Year' + str(i) for i in range(6)]
   lsdict = dict(zip(lstup,lslist))
@@ -213,7 +213,7 @@ def get_lease_opt():
 
 def get_options():
   ## Options inputs
-  global dflo
+  global dfos
   opdict = opt_dict = {} # we may have some duplication here.
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
   opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['expiration'],style=style)
