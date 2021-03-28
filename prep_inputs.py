@@ -146,7 +146,7 @@ def get_ticker(DBdict):
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
     sv.Inp_dict['Ticker'] = ticksym
-    #get_lease_opt()
+    get_lease_opt()
 
   ui =  {'ticksym': ticksym}
   out = widgets.interactive_output(f,ui)
@@ -227,6 +227,7 @@ def value_inputs():
   lsdts_liqp = ['prob_failure','distress_price']
   lsdts_liqt = ['liquidation_type']
   lsdts_flt3 = ['NOLbase']
+  lsdts_txt1 = ['Story/Rationale']
   #pdb.set_trace()
   #print(industry_name_list)
   #print(lsdts_indt)
@@ -235,16 +236,17 @@ def value_inputs():
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
   dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
-  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1})
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.05,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
   dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
   dfts_dict.update({i: widgets.Dropdown(options=country_name_list, description=i,value=dfts[i],style=style) for i in lsdts_cont})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_conf})
-  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_conf})
+  dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
-  
+  dfts_dict.update({i: widgets.TextArea(description=i,value=dfts[i],style=style) for i in lsdts_txt1})
+
   #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
   
