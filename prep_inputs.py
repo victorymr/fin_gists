@@ -229,7 +229,7 @@ def get_options():
     sv.comp.opt_dict = opt_dict
     for k,v in opdict.items(): 
       sv.Inp_dict[k] = v
-      dfos[k] = v
+      dfos.loc[0,k] = v
     value_inputs()
 
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
