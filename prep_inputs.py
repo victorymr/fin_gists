@@ -199,8 +199,7 @@ def get_lease_opt():
     opt_dict['strike'] = opdict['strike']
     opt_dict['expiration'] = opdict['expiration']
     opt_dict['n_options'] = opdict['n_options']
-    comp.opt_dict = opt_dict
-    sv.comp = comp
+    sv.comp.opt_dict = opt_dict
     for k,v in opdict.items(): sv.Inp_dict[k] = v
 
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
@@ -211,6 +210,28 @@ def get_lease_opt():
   options_ui_dict = {'title':otit,'ui':opui,'out':opout}
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
   return #lease_ui_dict, options_ui_dict
+
+def get_options():
+  ## Options inputs
+  global dflo
+  opdict = opt_dict = {} # we may have some duplication here.
+  opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
+  opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['expiration'],style=style)
+  opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['n_options'],style=style)
+  def foptions(**opdict):
+    opt_dict['strike'] = opdict['strike']
+    opt_dict['expiration'] = opdict['expiration']
+    opt_dict['n_options'] = opdict['n_options']
+    sv.comp.opt_dict = opt_dict
+    for k,v in opdict.items(): sv.Inp_dict[k] = v
+
+  opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
+  opout = widgets.interactive_output(foptions, opdict)
+  otit = widgets.HTML('<h4> Options Outstanding Inputs </h4>')
+  display(otit)
+  display(opui, opout)
+  options_ui_dict = {'title':otit,'ui':opui,'out':opout}
+  return 
 
 def value_inputs():
   country_name_list = list(marketdata.get_country_tax_rates().index) + ['']
