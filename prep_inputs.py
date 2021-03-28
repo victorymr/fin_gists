@@ -268,7 +268,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
-  dfts_dict.update({i: widgets.TextArea(description=i,value=dfts[i],style=style) for i in lsdts_txt1})
+  dfts_dict.update({i: widgets.Textarea(description=i,value=dfts[i],style=style) for i in lsdts_txt1})
 
   #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
