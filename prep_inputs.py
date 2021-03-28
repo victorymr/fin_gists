@@ -181,7 +181,7 @@ def get_lease_opt():
     sv.Inp_dict['lease_dict'] = lease_dict
     sv.comp = comp
     for k,v in lsdict.items(): sv.Inp_dict[k] = v
-    value_inputs()
+    get_options()
   
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   lsui = widgets.GridBox( tuple(lsdict.values()),layout = layout)
@@ -191,6 +191,7 @@ def get_lease_opt():
   display(lsui, lsout)
 
   ## Options inputs
+  '''
   opdict = {} 
   opt_dict = {}
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
@@ -209,13 +210,15 @@ def get_lease_opt():
   display(otit)
   display(opui, opout)
   options_ui_dict = {'title':otit,'ui':opui,'out':opout}
+  '''
   lease_ui_dict = {'title':ltit,'ui':lsui,'out':lsout}
   return #lease_ui_dict, options_ui_dict
 
 def get_options():
   ## Options inputs
   global dfos
-  opdict = opt_dict = {} # we may have some duplication here.
+  opdict = {}
+  opt_dict = {} # we may have some duplication here.
   opdict['strike'] = widgets.FloatText(description = 'Avg Strike', value = dfos['strike'],style=style)
   opdict['expiration'] = widgets.FloatText(description = 'Avg Expiration', value = dfos['expiration'],style=style)
   opdict['n_options'] = widgets.FloatText(description = 'Num of Options', value = dfos['n_options'],style=style)
@@ -224,7 +227,10 @@ def get_options():
     opt_dict['expiration'] = opdict['expiration']
     opt_dict['n_options'] = opdict['n_options']
     sv.comp.opt_dict = opt_dict
-    for k,v in opdict.items(): sv.Inp_dict[k] = v
+    for k,v in opdict.items(): 
+      sv.Inp_dict[k] = v
+      dfos[k] = v
+    value_input()
 
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   opui = widgets.GridBox(tuple(opdict.values()),layout = layout)
