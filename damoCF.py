@@ -287,10 +287,10 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #sanity checks
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow
-    listofmill = ['rev_fcst','EBIT','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
+    listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
-    print(tmp_cf)
-    display(tmp_cf)
+    #print(tmp_cf)
+    display(tmp_cf.transpose().round(2))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'total'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
