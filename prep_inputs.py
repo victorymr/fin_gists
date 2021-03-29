@@ -279,8 +279,8 @@ def value_inputs():
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
   story_out = widgets.interactive_output(fstory, story_dict)
-  #story_ui = widgets.VBox(tuple(story_dict))
-  display(story_dict.values(),story_out)
+  story_ui = widgets.VBox(tuple(story_dict.values()))
+  display(story_ui,story_out)
 
   #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
