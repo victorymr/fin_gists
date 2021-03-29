@@ -295,15 +295,15 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'total'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
                'pv_totalCF': [pv_totalCF, 'total'],
-               'liquidation effect': [-pv_totalCF+value_of_OpAss,'relative']
+               'liquidation effect': [-pv_totalCF+value_of_OpAss,'relative'],
                'value_of_OpAss': [value_of_OpAss, 'total'],
                'debt_book_value': [-debt_book_value, 'relative'],
                'debt_value_lease': [-lease_dict['debt_value_lease'],'relative'],
                'minority_interest': [-ID['minority_interest'],'relative'],
                'cash&mms': [comp.cash_mms,'relative'],
-               'crossholdings_nonopassets': [ID['crossholdings_nonopassets'],'relative']
-               'equity_value': [equity_value, 'total']
-               'value_options_outstanding': [-ID['value_op_outstanding'],'relative']
+               'crossholdings_nonopassets': [ID['crossholdings_nonopassets'],'relative'],
+               'equity_value': [equity_value, 'total'],
+               'value_options_outstanding': [-ID['value_op_outstanding'],'relative'],
                'value_equity_commonstock': [value_equity_commonstock, 'total']
               }
     print(wf_dict)
