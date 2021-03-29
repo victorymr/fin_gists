@@ -377,7 +377,7 @@ def run_cashflow():
   button = widgets.Button(description="Save me!")
   def on_button_clicked(b):
     cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
-    print(cfdict.cashflow.transpose().round(2))
+    #print(cfdict.cashflow.transpose().round(2))
     sv.Inp_dict['cfdict'] = cfdict
   button.on_click(on_button_clicked)
   display(button)
