@@ -274,7 +274,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
-  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%'}) for i in lsdts_txt1}
+  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
   def fstory(**story_dict):
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
