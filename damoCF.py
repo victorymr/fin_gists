@@ -275,7 +275,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     liquid_val = pv_totalCF
   else:
     liquid_val =  equity_book_value + debt_book_value
-  value_of_OpAss = pv_totalCF + liquid_val*ID['prob_failure']*ID['distress_price']
+  value_of_OpAss = pv_totalCF*(1-ID['prob_failure']) + liquid_val*ID['prob_failure']*ID['distress_price']
   equity_value = (value_of_OpAss - debt_book_value 
                   - lease_dict['debt_value_lease']  
                   - ID['minority_interest'] 
@@ -283,11 +283,37 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                   + ID['crossholdings_nonopassets'])
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
-  
+  if not sim['Do']: # if not simulation do some plotting and printing
+    #sanity checks
+    #print pretty cashflow - $s in mill others in %
+    tmp_cf = cashflow
+    listofmill = ['rev_fcst','EBIT','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
+    tmp_cf[listofmill] = cashflow[listofmilll]/1e6
+    print(tmp_cf)
+    display(tmp_cf)
+    #print waterfall
+    wf_dict = {'pv_terminal_value': [pv_terminal_value, 'total'],
+               'pv_CFNyr': [pv_CFNyr, 'relative'],
+               'pv_totalCF': [pv_totalCF, 'total'],
+               'liquidation effect': [-pv_totalCF+value_of_OpAss,'relative']
+               'value_of_OpAss': [value_of_OpAss, 'total'],
+               'debt_book_value': [-debt_book_value, 'relative'],
+               'debt_value_lease': [-lease_dict['debt_value_lease'],'relative'],
+               'minority_interest': [-ID['minority_interest'],'relative'],
+               'cash&mms': [comp.cash_mms,'relative'],
+               'crossholdings_nonopassets': [ID['crossholdings_nonopassets'],'relative']
+               'equity_value': [equity_value, 'total']
+               'value_options_outstanding': [-ID['value_op_outstanding'],'relative']
+               'value_equity_commonstock': [value_equity_commonstock, 'total']
+              }
+    print(wf_dict)
+
   cfdict = locals()
   return cfdict
 
-def plot_sim(sim_df,cfdict):
+def mk_waterfall():
+  
+def plot_sim(sim_df,cfdict,comp=sv.comp):
   ## Plot the histogram
   fig, ax = plt.subplots(1, 1)
   sns.set_style('darkgrid')
@@ -326,7 +352,7 @@ def sanity_checks(cfdict):
   df['Current'] = [cfdict['cashflow'].loc['rev_fcst'][0], 
                      cfdict['cashflow'].loc['EBIT'][0], 
                      cfdict['cashflow'].loc['ROIC'][0]]
-  
+  ##get industry data
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
   print(df)
   #revenue
