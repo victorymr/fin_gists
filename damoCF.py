@@ -288,7 +288,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow
     listofmill = ['rev_fcst','EBIT','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
-    tmp_cf[listofmill] = cashflow[listofmilll]/1e6
+    tmp_cf[listofmill] = cashflow[listofmill]/1e6
     print(tmp_cf)
     display(tmp_cf)
     #print waterfall
