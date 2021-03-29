@@ -371,6 +371,18 @@ def sanity_checks(cfdict):
                      cfdict['cashflow'].loc['EBIT'][0], 
                      cfdict['cashflow'].loc['ROIC'][0]]
   ##get industry data
+  
+  for iindt in ['Industry1','Industry2','Industry3']:
+    inddata = comp_data.Industry(ID[iindt])
+    cash_arr = inddata.get_cash()
+    ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
+    tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))
+    tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))
+    EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
+    df[sv.Inp_dict[iindt]] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
+                             [ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
+                             [ind_cash*100./float(cash_arr['cash/total assets'].strip('%')),
+                             tmpcoc, tmproe, EBIT] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
   print(df)
   #revenue
