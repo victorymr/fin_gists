@@ -273,7 +273,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
-  dfts_dict.update({i: widgets.Textarea(description=i,value=dfts[i],style=style) for i in lsdts_txt1})
+  dfts_dict.update({i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%'}) for i in lsdts_txt1})
 
   #out_gen = widgets.Output(layout={'border': '1px solid black'},wait=True)
   #display(out_gen)
@@ -338,11 +338,18 @@ def value_inputs():
   value_dict = {'title':inptit,'ui':dfts_ui,'out':dfts_out}
   return value_dict  #, out_gen
 
+def append_todb(gc,df,work_sheet):
+  ndf = df.copy() if isinstance(df,pd.DataFrame) else pd.DataFrame(df).transpose()
+  for i in ndf.columns: ndf[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
+  ## now write to BD
+  export_to_sheets(gc,ndf,worksheet_name='Ticker',mode='a')
+
 def save_todb(gc):
   ## create button that will append a row to the DB
   button = widgets.Button(description="Save me!")
 
   def on_button_clicked(b):
+    '''
     ## do the appending business
     ndfts = dfts.copy() if isinstance(dfts,pd.DataFrame) else pd.DataFrame(dfts).transpose()
     ndfls = dfls.copy() if isinstance(dfls,pd.DataFrame) else pd.DataFrame(dfls).transpose()
@@ -355,21 +362,75 @@ def save_todb(gc):
     export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
     export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
     export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
+    '''
+    append_todb(gc,dfts,'Ticker')
+    append_todb(gc,dfls,'Lease')
+    append_todb(gc,dfts,'Optionholdings')
 
-    #export_to_sheets_gs(gc,ndfts,worksheet_name='Ticker')
-    #export_to_sheets_gs(gc,ndfls,worksheet_name='Lease')
-    #export_to_sheets_gs(gc,ndfos,worksheet_name='Optionholdings')
+
   button.on_click(on_button_clicked)
   display(button)
   return button
 
-  
-  
+def run_cashflow():
+  ## create button
+  button = widgets.Button(description="Save me!")
+  def on_button_clicked(b):
+    cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
+    print(cfdict.cashflow.transpose().round(2))
+    sv.Inp_dict['cfdict'] = cfdict
+  button.on_click(on_button_clicked)
+  display(button)
+  return button
+
+def run_cashflow():
+  ## create button
+  button = widgets.Button(description="Cashflow Projections")
+  def on_button_clicked(b):
+    cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
+    print(cfdict.cashflow.transpose().round(2))
+    sv.Inp_dict['cfdict'] = cfdict
+  button.on_click(on_button_clicked)
+  display(button)
+  return button
+
+def run_cashflow_sim():
+  ## create button
+  button = widgets.Button(description="Simulate CF")
+  def on_button_clicked(b):
+    cfdict = dacf.run_sim(sv.comp,sv.Inp_dict,nsim=100)
+    sv.Inp_dict['sim_df'] = sim_df
+  button.on_click(on_button_clicked)
+  display(button)
+  return button
+
+def save_results(gc):
+  ## create button
+  button = widgets.Button(description="Save results")
+  columns1 = ['UUID','Ticker','LastUpdate']
+  columns2 = ['Price','Sim25','Sim75']
+  res_dict = {}
+  res_df = pd.DataFrame(columns=columns1+columns2)
+  def on_button_clicked(b):
+    for i in columns1: res_dict[i] = sv.Inp_dict[i]
+    res_dict['FairPrice'] = sv.Inp_dict['cfdict']['equity_val_pershare']
+    res_dict['Sim25'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],.25)
+    res_dict['Sim75'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],.75)
+    res_dict['CurrentPrice'] = sv.comp.info['previousClose']
+    res_df = pd.DataFrame.from_dict(res_dict)
+    export_to_sheets(gc,res_df,worksheet_name='Results',mode='a')
+  button.on_click(on_button_clicked)
+  display(button)
+  return button
+
 def display_wids(DBdict):
   #tick_dict = get_ticker(DBdict)
   #lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict = value_inputs()
   sav2db = save_todb(gc)
+  run_cf = run_cashflow()
+  run_cfsim = run_cashflow_sim()
+  sav_res = save_results(gc)
   
   #l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
   
