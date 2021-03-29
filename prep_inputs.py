@@ -279,7 +279,7 @@ def value_inputs():
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
   story_out = widgets.interactive_output(fstory, story_dict)
-  story_layout =widgets.Layout(grid_template_columns='1fr')
+  story_layout =widgets.Layout(grid_template_columns='1fr',width='1000px')
   story_ui = widgets.Box(tuple(story_dict.values()),layout=story_layout)
   display(story_ui,story_out)
 
