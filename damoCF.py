@@ -292,7 +292,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     perclist = list(set(cashflow.columns.tolist())-set(listofmill))
     percdict = dict(zip(perclist,["{:.1f}%"]*len(perclist)))
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
-    tm_ccf[perclist] = cashflow[perclist]*100
+    tmp_cf[perclist] = cashflow[perclist]*100
     #print(tmp_cf)
     #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
     form_dict.update(percdict)
