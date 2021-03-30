@@ -366,14 +366,14 @@ def sanity_checks(cfdict):
   listind = ['Industry1','Industry2','Industry3']
   indlist = [sv.Inp_dict[i] for i in listind]
   df = pd.DataFrame(index = ['revenue','assets','equity','ROE','ROIC'],columns=['Current','10th Year']+indlist)
-  df.loc[:,'10th Year'] = [cfdict['cashflow'].loc['rev_fcst'][-1]/1e6, 
+  df.loc[:,'10th Year'] = [cfdict['cashflow']['rev_fcst'].iloc[-1]/1e6, 
                      cfdict['value_equity_commonstock']/1e6,
-                     cfdict['cashflow'].loc['EBITafterTax'][-1]/cfdict['value_equity_commonstock'],
-                     cfdict['cashflow'].loc['ROIC'][-1]]
-  df.loc[:,'Current'] = [cfdict['cashflow'].loc['rev_fcst'][0]/1e6, 
+                     cfdict['cashflow']['EBITafterTax'].iloc[-1]/cfdict['value_equity_commonstock'],
+                     cfdict['cashflow']['ROIC'].iloc[-1]]
+  df.loc[:,'Current'] = [cfdict['cashflow']['rev_fcst'].iloc[0]/1e6, 
                    cfdict['equity_book_value']/1e6,
-                   cfdict['cashflow'].loc['EBITaftertax'][0]/cfdict['equity_book_value'], 
-                   cfdict['cashflow'].loc['ROIC'][0]]
+                   cfdict['cashflow']['EBITaftertax'].iloc[0]/cfdict['equity_book_value'], 
+                   cfdict['cashflow']['ROIC'].iloc[0]]
   ##get industry data
   
   for iindt in indlist:
