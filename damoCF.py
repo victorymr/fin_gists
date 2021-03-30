@@ -306,7 +306,8 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                'value_options_outstanding': [-ID['value_op_outstanding'],'relative'],
                'value_equity_commonstock': [value_equity_commonstock, 'total']
               }
-    print(wf_dict)
+    wf_dictm = {k:[v[0]/1e6,v[1]] for k,v in wf_dict.items()} 
+    print(wf_dictm)
 
   cfdict = locals()
   return cfdict
@@ -319,7 +320,7 @@ def mk_waterfall(wf_dict):
       measure = [v[1] for k,v in wf_dict.items()],
       x = [k for k,v in wf_dict.items()], 
       textposition = "outside",
-      text = [str(v[0]) for k,v in wf_dict.items()],
+      text = ['{:,0.1f}'.format(v[0]) for k,v in wf_dict.items()],
       y = [v[0] for k,v in wf_dict.items()],
       connector = {"line":{"color":"rgb(63, 63, 63)"}},
   ))
