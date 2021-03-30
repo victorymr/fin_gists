@@ -306,15 +306,13 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                'value_options_outstanding': [-ID['value_op_outstanding'],'relative'],
                'value_equity_commonstock': [value_equity_commonstock, 'total']
               }
-    wf_dictm = {k:[v[0]/1e6,v[1]] for k,v in wf_dict.items()} 
-    print(wf_dictm)
-
   cfdict = locals()
   return cfdict
 
 def mk_waterfall(wf_dict):
   import plotly.graph_objects as go
-
+  wf_dict = {k:[v[0]/1e6,v[1]] for k,v in wf_dict.items()} 
+  print(wf_dict)
   fig = go.Figure(go.Waterfall(
       name = "WF", orientation = "v",
       measure = [v[1] for k,v in wf_dict.items()],
