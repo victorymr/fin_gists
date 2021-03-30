@@ -288,9 +288,14 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
+    currdict = dict(zip(listofmill,["${:,.2f}"]*len(listofmill)))
+    perclist = list(set(cashflow.columns())-set(listofmill))
+    percdict = dict(zip(perclist,["{:.2f}%"]*len(perclist)))
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     #print(tmp_cf)
-    display(tmp_cf.transpose().style.format("{:>,.2f}"))
+    #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
+    format_mapping = currdict.append(percdict)
+    display(tmp_cf.transpose().style.format(format_mapping))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
