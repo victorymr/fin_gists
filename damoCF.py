@@ -384,8 +384,8 @@ def sanity_checks(cfdict):
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))
     EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
     df.loc[:,iindt] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
-                             [ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
-                             tmproe, tmpcoc] 
+                       ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
+                       tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
   print(df)
   #revenue
