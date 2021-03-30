@@ -292,7 +292,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print(tmp_cf)
     display(tmp_cf.transpose().round(2))
     #print waterfall
-    wf_dict = {'pv_terminal_value': [pv_terminal_value, 'total'],
+    wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
                'pv_totalCF': [pv_totalCF, 'total'],
                'liquidation effect': [-pv_totalCF+value_of_OpAss,'relative'],
