@@ -294,7 +294,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     #print(tmp_cf)
     #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
-    format_mapping = currdict.append(percdict)
+    format_mapping = currdict.update(percdict)
     display(tmp_cf.transpose().style.format(format_mapping))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
