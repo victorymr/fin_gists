@@ -368,7 +368,7 @@ def sanity_checks(cfdict):
   df = pd.DataFrame(index = ['revenue','assets','equity','ROE','ROIC'],columns=['Current','10th Year']+indlist)
   df.loc[:,'10th Year'] = [cfdict['cashflow'].loc['rev_fcst'][-1]/1e6, 
                      cfdict['value_equity_commonstock']/1e6,
-                     cfdict['cashflow'].loc['EBITafterTax'][-1]/cfdict['value_equity_commonstock']
+                     cfdict['cashflow'].loc['EBITafterTax'][-1]/cfdict['value_equity_commonstock'],
                      cfdict['cashflow'].loc['ROIC'][-1]]
   df.loc[:,'Current'] = [cfdict['cashflow'].loc['rev_fcst'][0]/1e6, 
                    cfdict['equity_book_value']/1e6,
