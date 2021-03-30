@@ -288,10 +288,11 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
-    form_dict = dict(zip(listofmill,["${:,.2f}"]*len(listofmill)))
+    form_dict = dict(zip(listofmill,["${:,.0f}"]*len(listofmill)))
     perclist = list(set(cashflow.columns.tolist())-set(listofmill))
-    percdict = dict(zip(perclist,["{:.2f}%"]*len(perclist)))
+    percdict = dict(zip(perclist,["{:.1f}%"]*len(perclist)))
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
+    tm_ccf[perclist] = cashflow[perclist]*100
     #print(tmp_cf)
     #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
     form_dict.update(percdict)
