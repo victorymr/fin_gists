@@ -394,7 +394,7 @@ def sanity_checks(cfdict):
                        ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
                        tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
-  display(df.transpose.style.format(dict(zip(paramlist,paramformat))))
+  display(df.transpose().style.format(dict(zip(paramlist,paramformat))))
   #revenue
   
 def damoCF():
