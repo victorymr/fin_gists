@@ -311,16 +311,16 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cfdict = locals()
   return cfdict
 
-def mk_waterfall():
+def mk_waterfall(wf_dict):
   import plotly.graph_objects as go
 
   fig = go.Figure(go.Waterfall(
-      name = "20", orientation = "v",
-      measure = ["relative", "relative", "total", "relative", "relative", "total"],
-      x = ["Sales", "Consulting", "Net revenue", "Purchases", "Other expenses", "Profit before tax"],
+      name = "WF", orientation = "v",
+      measure = [v[1] for k,v in wf_dict.items()],
+      x = [k for k,v in wf_dict.items()], 
       textposition = "outside",
-      text = ["+60", "+80", "", "-40", "-20", "Total"],
-      y = [60, 80, 0, -40, -20, 0],
+      text = [str(v[0]) for k,v in wf_dict.items()],
+      y = [v[0] for k,v in wf_dict.items()],
       connector = {"line":{"color":"rgb(63, 63, 63)"}},
   ))
 
@@ -363,26 +363,29 @@ def run_sim(comp,Inp_dict,nsim=100):
 def sanity_checks(cfdict):
   #compare the current and projected numbers against peer group
   ## 10 yr
-  df = pd.DataFrame(index = ['revenue','ROIC', 'EBIT'],columns=['Current','10th Year','Industry US'])
-  df['10th Year'] = [cfdict['cashflow'].loc['rev_fcst'][-1], 
-                     cfdict['cashflow'].loc['EBIT'][-1], 
+  listind = ['Industry1','Industry2','Industry3']
+  indlist = [sv.Inp_dict[i] for i in listind]
+  df = pd.DataFrame(index = ['revenue','assets','equity',''ROE','ROIC'],columns=['Current','10th Year']+indlist)
+  df.loc[:,'10th Year'] = [cfdict['cashflow'].loc['rev_fcst'][-1]/1e6, 
+                     cfdict['value_equity_commonstock']/1e6,
+                     cfdict[''cashflow'].loc['EBITafterTax'][-1]/cfdict['value_equity_commonstock']
                      cfdict['cashflow'].loc['ROIC'][-1]]
-  df['Current'] = [cfdict['cashflow'].loc['rev_fcst'][0], 
-                     cfdict['cashflow'].loc['EBIT'][0], 
-                     cfdict['cashflow'].loc['ROIC'][0]]
+  df.loc[:,'Current'] = [cfdict['cashflow'].loc['rev_fcst'][0]/1e6, 
+                   cfdict['equity_book_value']/1e6,
+                   cfdict['cashflow'].loc['EBITaftertax'][0]/cfdict['equity_book_value'], 
+                   cfdict['cashflow'].loc['ROIC'][0]]
   ##get industry data
   
-  for iindt in ['Industry1','Industry2','Industry3']:
-    inddata = comp_data.Industry(ID[iindt])
+  for iindt in indlist:
+    inddata = comp_data.Industry(iindt)
     cash_arr = inddata.get_cash()
     ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
     tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))
     EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
-    df[sv.Inp_dict[iindt]] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
+    df.loc[:,iindt] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
                              [ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
-                             [ind_cash*100./float(cash_arr['cash/total assets'].strip('%')),
-                             tmpcoc, tmproe, EBIT] 
+                             tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
   print(df)
   #revenue
