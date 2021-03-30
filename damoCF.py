@@ -370,7 +370,9 @@ def sanity_checks(cfdict):
   ## 10 yr
   listind = ['Industry1','Industry2','Industry3']
   indlist = [sv.Inp_dict[i] for i in listind]
-  df = pd.DataFrame(index = ['revenue','equity','ROE','ROIC'],columns=['Current','10th Year']+indlist)
+  paramlist = ['revenue','equity','ROE','ROIC']
+  paramformat = ["${:,.0f}"]*2 + ["${:,.1%}"]*2
+  df = pd.DataFrame(index = paramlist,columns=['Current','10th Year']+indlist)
   df.loc[:,'10th Year'] = [cfdict['cashflow']['rev_fcst'].iloc[-1]/1e6, 
                      cfdict['value_equity_commonstock']/1e6,
                      cfdict['cashflow']['EBITafterTax'].iloc[-1]/cfdict['value_equity_commonstock'],
@@ -392,7 +394,7 @@ def sanity_checks(cfdict):
                        ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
                        tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
-  display(df.style.format("{:,.2f}"))
+  display(df.style.format(dict(zip(paramlist,paramformat))))
   #revenue
   
 def damoCF():
