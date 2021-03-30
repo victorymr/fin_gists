@@ -296,7 +296,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print(tmp_cf)
     #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
     form_dict.update(percdict)
-    display(tmp_cf.transpose().style.format(form_dict))
+    display(tmp_cf.style.format(form_dict))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
