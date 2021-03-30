@@ -274,12 +274,12 @@ def value_inputs():
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
   
-  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%','width':'1500px'}) for i in lsdts_txt1}
+  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
   def fstory(**story_dict):
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
   story_out = widgets.interactive_output(fstory, story_dict)
-  story_layout =widgets.Layout(grid_template_columns='1fr',width='1500px')
+  story_layout =widgets.Layout(grid_template_columns='1fr',width='1000px')
   story_ui = widgets.Box(tuple(story_dict.values()),layout=story_layout)
   display(story_ui,story_out)
 
@@ -390,7 +390,7 @@ def run_cashflow():
     sv.Inp_dict['cfdict'] = cfdict
     display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
     dacf.mk_waterfall(cfdict['wf_dict'])
-    sanity_checks(cfdict)
+    dacf.sanity_checks(cfdict)
   button.on_click(on_button_clicked)
   display(button)
   return button
