@@ -215,7 +215,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   wacc = comp.wacc  #get_wacc(comp)
 
   if sim['Do']:
-    long_term_margin = min(0.6,create_rand(long_term_margin*sim['Vol']/5,long_term_margin)) #margin can't be >60%!!
+    long_term_margin = min(long_term_margin*1.5,create_rand(long_term_margin*sim['Vol']/15,long_term_margin)) #margin can't be >60%!!
     long_term_coc = create_rand(long_term_coc*sim['Vol'],long_term_coc)
     long_term_cagr = min(long_term_coc/2,create_rand(long_term_cagr*sim['Vol'],long_term_cagr)) #long term growth rate has to be lower than cost of capital or else infite growth
     
@@ -371,7 +371,7 @@ def sanity_checks(cfdict):
   listind = ['Industry1','Industry2','Industry3']
   indlist = [sv.Inp_dict[i] for i in listind]
   paramlist = ['revenue','equity','ROE','ROIC']
-  paramformat = ["${:,.0f}"]*2 + ["${:,.1%}"]*2
+  paramformat = ["${:,.0f}"]*2 + ["{:,.1%}"]*2
   df = pd.DataFrame(index = paramlist,columns=['Current','10th Year']+indlist)
   df.loc[:,'10th Year'] = [cfdict['cashflow']['rev_fcst'].iloc[-1]/1e6, 
                      cfdict['value_equity_commonstock']/1e6,
