@@ -286,7 +286,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   if not sim['Do']: # if not simulation do some plotting and printing
     #sanity checks
     #print pretty cashflow - $s in mill others in %
-    tmp_cf = cashflow
+    tmp_cf = cashflow.copy()
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
     form_dict = dict(zip(listofmill,["${:,.0f}"]*len(listofmill)))
     perclist = list(set(cashflow.columns.tolist())-set(listofmill))
@@ -385,8 +385,8 @@ def sanity_checks(cfdict):
     inddata = comp_data.Industry(iindt)
     cash_arr = inddata.get_cash().squeeze()
     ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
-    tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))
-    tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))
+    tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
+    tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))/100
     EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
     df.loc[:,iindt] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
                        ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
