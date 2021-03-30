@@ -296,7 +296,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     #print(tmp_cf)
     #format_mapping = {"Currency": "${:,.2f}", "Int": "{:,.0f}", "Rate": "{:.2f}%"}
     form_dict.update(percdict)
-    display(tmp_cf.style.format(form_dict))
+    #display(tmp_cf.style.format(form_dict))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
@@ -372,12 +372,14 @@ def sanity_checks(cfdict):
   indlist = [sv.Inp_dict[i] for i in listind]
   paramlist = ['revenue','equity','ROE','ROIC']
   paramformat = ["${:,.0f}"]*2 + ["{:,.1%}"]*2
-  df = pd.DataFrame(index = paramlist,columns=['Current','10th Year']+indlist)
-  df.loc[:,'10th Year'] = [cfdict['cashflow']['rev_fcst'].iloc[-1]/1e6, 
+  ## check if cfdict has sandf - if so check if the industries have been done
+  ## if so don't pull the same industries again. - code all this later
+  sandf = pd.DataFrame(index = paramlist,columns=['Current','10th Year']+indlist)
+  sandf.loc[:,'10th Year'] = [cfdict['cashflow']['rev_fcst'].iloc[-1]/1e6, 
                      cfdict['value_equity_commonstock']/1e6,
                      cfdict['cashflow']['EBITafterTax'].iloc[-1]/cfdict['value_equity_commonstock'],
                      cfdict['cashflow']['ROIC'].iloc[-1]]
-  df.loc[:,'Current'] = [cfdict['cashflow']['rev_fcst'].iloc[0]/1e6, 
+  sandf.loc[:,'Current'] = [cfdict['cashflow']['rev_fcst'].iloc[0]/1e6, 
                    cfdict['equity_book_value']/1e6,
                    cfdict['cashflow']['EBITafterTax'].iloc[0]/cfdict['equity_book_value'], 
                    cfdict['cashflow']['ROIC'].iloc[0]]
@@ -390,11 +392,13 @@ def sanity_checks(cfdict):
     tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))/100
     EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
-    df.loc[:,iindt] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
+    sandf.loc[:,iindt] = [ind_cash*100./float(cash_arr['cash/revenues'].strip('%')),
                        ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
                        tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
-  display(df.transpose().style.format(dict(zip(paramlist,paramformat))))
+  display(sandf.transpose().style.format(dict(zip(paramlist,paramformat))))
+  cfdict['sandf'] = sandf
+  return
   #revenue
   
 def damoCF():
