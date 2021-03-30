@@ -320,7 +320,7 @@ def mk_waterfall(wf_dict):
       measure = [v[1] for k,v in wf_dict.items()],
       x = [k for k,v in wf_dict.items()], 
       textposition = "outside",
-      text = ['{:,0.1f}'.format(v[0]) for k,v in wf_dict.items()],
+      text = ["{:,0.1f}".format(v[0]) for k,v in wf_dict.items()],
       y = [v[0] for k,v in wf_dict.items()],
       connector = {"line":{"color":"rgb(63, 63, 63)"}},
   ))
