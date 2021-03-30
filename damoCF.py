@@ -290,7 +290,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     #print(tmp_cf)
-    display(tmp_cf.transpose().round(2))
+    display(tmp_cf.transpose().style.format("{:,.2f}")
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
