@@ -384,7 +384,7 @@ def save_todb(gc):
 def run_cashflow():
   ## create button
   button = widgets.Button(description="Cashflow Projections")
-  out = Output()
+  out = widgets.Output()
   display(out)
   def on_button_clicked(b):
     cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
