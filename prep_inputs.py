@@ -388,6 +388,9 @@ def run_cashflow():
     cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
     #print(cfdict['cashflow'].transpose().round(2))
     sv.Inp_dict['cfdict'] = cfdict
+    display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
+    dacf.mk_waterfall(cdfdict['wf_dict'])
+    sanity_checks(cfdict)
   button.on_click(on_button_clicked)
   display(button)
   return button
@@ -396,7 +399,7 @@ def run_cashflow_sim():
   ## create button
   button = widgets.Button(description="Simulate CF")
   def on_button_clicked(b):
-    cfdict = dacf.run_sim(sv.comp,sv.Inp_dict,nsim=100)
+    sim_df = dacf.run_sim(sv.comp,sv.Inp_dict,nsim=100)
     sv.Inp_dict['sim_df'] = sim_df
   button.on_click(on_button_clicked)
   display(button)
