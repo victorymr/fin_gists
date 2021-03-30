@@ -108,7 +108,7 @@ def get_ticker(DBdict):
   ## populate the cells - either from spreadhseet or calculations or defaults
   ## Where the spreadsheet populates but we have more recent data - print the new data to allow user to decide
   global dfts, dfls, dfos, comp, rnd_dict
-
+  
   dft = DBdict['Ticker']
   dfl = DBdict['Lease']
   dfo = DBdict['Optionholdings']
@@ -389,7 +389,7 @@ def run_cashflow():
     #print(cfdict['cashflow'].transpose().round(2))
     sv.Inp_dict['cfdict'] = cfdict
     display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
-    dacf.mk_waterfall(cdfdict['wf_dict'])
+    dacf.mk_waterfall(cfdict['wf_dict'])
     sanity_checks(cfdict)
   button.on_click(on_button_clicked)
   display(button)
