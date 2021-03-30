@@ -289,7 +289,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     tmp_cf = cashflow
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
     currdict = dict(zip(listofmill,["${:,.2f}"]*len(listofmill)))
-    perclist = list(set(cashflow.columns().tolist())-set(listofmill))
+    perclist = list(set(cashflow.columns.tolist())-set(listofmill))
     percdict = dict(zip(perclist,["{:.2f}%"]*len(perclist)))
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     #print(tmp_cf)
