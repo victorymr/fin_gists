@@ -290,7 +290,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
     listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     #print(tmp_cf)
-    display(tmp_cf.transpose().style.format("{:>,.2f}"))
+    display(tmp_cf.transpose().style.format("{:<,0.2f}"))
     #print waterfall
     wf_dict = {'pv_terminal_value': [pv_terminal_value, 'relative'],
                'pv_CFNyr': [pv_CFNyr, 'relative'],
@@ -377,7 +377,7 @@ def sanity_checks(cfdict):
   
   for iindt in indlist:
     inddata = comp_data.Industry(iindt)
-    cash_arr = inddata.get_cash()
+    cash_arr = inddata.get_cash().squeeze()
     ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
     tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))
@@ -386,7 +386,7 @@ def sanity_checks(cfdict):
                        ind_cash*100./float(cash_arr['cash/firm value'].strip('%')),
                        tmproe, tmpcoc] 
   #df['Industry US] = {'revenue10thyr': cfdict['cashflow'].loc['rev_fcst'][-1], 
-  print(df)
+  display(df.style.format("{:<,0.2f}"))
   #revenue
   
 def damoCF():
