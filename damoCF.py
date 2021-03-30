@@ -372,7 +372,7 @@ def sanity_checks(cfdict):
                      cfdict['cashflow']['ROIC'].iloc[-1]]
   df.loc[:,'Current'] = [cfdict['cashflow']['rev_fcst'].iloc[0]/1e6, 
                    cfdict['equity_book_value']/1e6,
-                   cfdict['cashflow']['EBITaftertax'].iloc[0]/cfdict['equity_book_value'], 
+                   cfdict['cashflow']['EBITafterTax'].iloc[0]/cfdict['equity_book_value'], 
                    cfdict['cashflow']['ROIC'].iloc[0]]
   ##get industry data
   
