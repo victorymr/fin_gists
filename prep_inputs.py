@@ -313,6 +313,8 @@ def value_inputs():
         tmp_df = tmp_df.append(ind_dat.get_margins()[['net margin','pre-tax unadjusted operating margin','pre-tax lease & r&d adj margin']])
         tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/capital']
         tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
+        tmp_df = tmp_df.append(comp.df_ind_coc[iindt])
+        tmp_df = tmp_df.append(comp.df_ind_beta[iindt])
         ind_df[iindt] = tmp_df
       
     ## Relevant Metrics from Company's recent financials
@@ -339,6 +341,7 @@ def value_inputs():
     cont_dict = {v: marketdata.get_country_tax_rates().loc[v,prev_year] for k,v in sv.Inp_dict.items() if k in lsdts_cont}
     cont_df = pd.DataFrame(cont_dict,index=['Tax rates'])
     print(cont_df)
+    print(comp.df_country_tax)
     
     sv.comp = comp
     
