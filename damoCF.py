@@ -40,7 +40,7 @@ def get_average_margin(past_ebit):
 
 def get_market_info(ID,metric='long_tax_rate'):
   marketdata = comp_data.Market()
-  met_df = pd.DataFrame(index=metric)
+  met_df = pd.DataFrame()
   if metric=='long_tax_rate':
     country_df = marketdata.get_country_tax_rates()
   elif metric=='risk_premium_US':
@@ -61,12 +61,12 @@ def get_market_info(ID,metric='long_tax_rate'):
     metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
-    met_df[:,ID[icont]] = metdat if tmpstr else 0
+    met_df[metric,ID[icont]] = metdat if tmpstr else 0
   return metdat_av, met_df
 
 def get_industry_info(ID,metric='long_term_coc'):
   metdat_av=0
-  met_df = pd.DataFrame(index=metric)
+  met_df = pd.DataFrame()
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(ID[iindt])
     percfac = 100
@@ -80,7 +80,7 @@ def get_industry_info(ID,metric='long_term_coc'):
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
-    met_df[:,ID[iindt]] = metdat if tmpstr else 0
+    met_df[metric,ID[iindt]] = metdat if tmpstr else 0
   return metdat_av, met_df
 
 '''----// Get WACC and net debt //----'''
@@ -158,7 +158,7 @@ def option_conv(comp):
   opt_dict = sv.comp.opt_dict
   inddata = comp_data.Industry(sv.Inp_dict['Industry1']) 
   
-  stddev = get_industry_info(sv.Inp_dict,metric='stddev')
+  stddev, std_df = get_industry_info(sv.Inp_dict,metric='stddev')
   #stddev = float(inddata.get_betas().loc['standard deviation of equity'].strip('%'))
   # another source inddata.get_standard_deviation().loc['std deviation in equity']
   variance = stddev**2
