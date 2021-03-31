@@ -61,7 +61,7 @@ def get_market_info(ID,metric='long_tax_rate'):
     metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
-    met_df[metric,ID[icont]] = metdat if tmpstr else 0
+    met_df.loc[metric,ID[icont]] = metdat if tmpstr else 0
   return metdat_av, met_df
 
 def get_industry_info(ID,metric='long_term_coc'):
@@ -82,7 +82,7 @@ def get_industry_info(ID,metric='long_term_coc'):
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
-    met_df[metric,ID[iindt]] = metdat if tmpstr else 0
+    met_df.loc[metric,ID[iindt]] = metdat if tmpstr else 0
   return metdat_av, met_df
 
 '''----// Get WACC and net debt //----'''
