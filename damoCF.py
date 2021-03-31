@@ -77,7 +77,7 @@ def get_industry_info(ID,metric='long_term_coc'):
     elif metric == 'beta':
       tmpstr = inddata.get_betas().filter(regex='(^(beta))',axis=0)[0]
       percfac = 1
-    elseif metric=='debt_cost':
+    elif metric=='debt_cost':
       tmpstr = inddata.get_cost_of_capital().loc['cost of debt'].strip('%')
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
