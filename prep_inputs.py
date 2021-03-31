@@ -431,8 +431,8 @@ def save_results(gc):
   def on_button_clicked(b):
     for i in columns1: res_dict[i] = sv.Inp_dict[i]
     res_dict['FairPrice'] = sv.Inp_dict['cfdict']['equity_val_pershare']
-    res_dict['Sim25'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],.25)
-    res_dict['Sim75'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],.75)
+    res_dict['Sim25'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],25)
+    res_dict['Sim75'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],75)
     res_dict['CurrentPrice'] = sv.comp.info['previousClose']
     res_df = pd.DataFrame(data=res_dict,index=[0])
     export_to_sheets(gc,res_df,worksheet_name='Results',mode='a')
