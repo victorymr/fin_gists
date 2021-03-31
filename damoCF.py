@@ -331,7 +331,8 @@ def mk_waterfall(wf_dict):
 
   fig.update_layout(
           title = "Equity Value Water Fall",
-          showlegend = True
+          showlegend = True,
+          width = 800
   )
   fig.show()
   return
