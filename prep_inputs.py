@@ -402,12 +402,15 @@ def run_cashflow():
 def run_cashflow_sim():
   ## create button
   button = widgets.Button(description="Simulate CF")
+  out = widgets.Output()
   def on_button_clicked(b):
-    sim_df = dacf.run_sim(sv.comp,sv.Inp_dict,nsim=100)
+    with out:
+      out.clear_output(True)
+      sim_df = dacf.run_sim(sv.comp,sv.Inp_dict,nsim=100)
     sv.Inp_dict['sim_df'] = sim_df
   button.on_click(on_button_clicked)
   display(button)
-  return button
+  return button, out
 
 def save_results(gc):
   ## create button
@@ -434,9 +437,10 @@ def display_wids(DBdict):
   value_dict = value_inputs()
   sav2db = save_todb(gc)
   run_cf,cf_out = run_cashflow()
-  run_cfsim = run_cashflow_sim()
+  run_cfsim, sim_out = run_cashflow_sim()
   sav_res = save_results(gc)
   display(cf_out)
+  display(sim_out)
   #l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
   
   #display(tick_dict['ui'],tick_dict['out'])
