@@ -100,6 +100,8 @@ def comp_finpop(comp):
   comp.rnd_dict = dacf.rnd_conv(comp)
   comp.curr_cagr = dacf.get_cagr(comp)
   comp.marketdata = comp_data.Market()
+  comp.equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
+  comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt)
   return comp
  
 def get_ticker(DBdict):
@@ -246,7 +248,7 @@ def value_inputs():
   dfts_list = dfts.index
   #dfts_res = [i for i in dfts_list if 'Unnamed' not in i] 
   lsdts_int = ['year_conv',	'terminal_year']
-  lsdts_flt1 = ['beg_cagr',	'long_term_cagr',	'beg_margin',	'long_term_margin',	'tax_rate']
+  lsdts_flt1 = ['beg_cagr',	'long_term_cagr',	'beg_margin',	'long_term_margin',	'tax_rate','wacc','long_term_coc']
   lsdts_flt2 = ['sales_to_capital', 'minority_interest',	'crossholdings_nonopassets' ]
   lsdts_indt =['Industry1',	'Industry2', 'Industry3']
   lsdts_indf = ['Industry1Wt',	'Industry2Wt', 'Industry3Wt']
@@ -262,8 +264,8 @@ def value_inputs():
   #print(dfts)
 
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
-  dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
-  dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
+  #dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
+  #dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
   dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.05,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
   dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
@@ -296,10 +298,10 @@ def value_inputs():
     sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
-    sv.comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
-    sv.comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
-    sv.comp.ind_beta = dacf.get_industry_info(sv.Inp_dict,metric='beta')
-    sv.comp.wacc = dacf.get_wacc(sv.comp)
+    comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
+    comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
+    comp.ind_beta = dacf.get_industry_info(sv.Inp_dict,metric='beta')
+    comp.wacc = dacf.get_wacc(sv.comp)
     
     indt_list_tmp = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
     indt_list = list(filter(None, indt_list_tmp))  ## remove empty ones
@@ -314,9 +316,10 @@ def value_inputs():
         ind_df[iindt] = tmp_df
       
     ## Relevant Metrics from Company's recent financials
-    display(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
+    display(widgets.HTML('<h4> Metrics from Company Recent Financials & some basic calcs </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
-               'interest_expense','tax_rate']
+               'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
+               'tax_rate','long_tax_rate']
     list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
     #print(list_dict)
     print(pd.DataFrame(data=list_dict.values(),
@@ -325,17 +328,14 @@ def value_inputs():
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df[indt_list])
-    '''out_gen.append(widgets.HTML('<h4> Metrics from Company Recent Financials </h4>'))
-    out_gen.append_display_data(pd.DataFrame(data=list_dict.values(),
-                           index=list_dict.keys(),columns=[comp.ticksym]))
-    out_gen.append(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
-    out_gen.append_display_data(ind_df)'''
     
     ## Relevant Country of operation Metrics
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
-    cont_list = [(v, marketdata.get_country_tax_rates().loc[v,prev_year]) for k,v in sv.Inp_dict.items() if k in lsdts_cont]
-    display(('Tax Rates ',cont_list))
+    cont_dict = {v: marketdata.get_country_tax_rates().loc[v,prev_year] for k,v in sv.Inp_dict.items() if k in lsdts_cont}
+    display('Tax Rates ',pd.DataFrame(cont_dict))
+    
+    sv.comp = comp
     
   layout =widgets.Layout(grid_template_columns='1fr 1fr 1fr')
   dfts_ui = widgets.GridBox( tuple(dfts_dict.values()),layout = layout)
