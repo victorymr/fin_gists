@@ -77,6 +77,8 @@ def get_industry_info(ID,metric='long_term_coc'):
     elif metric == 'beta':
       tmpstr = inddata.get_betas().filter(regex='(^(beta))',axis=0)[0]
       percfac = 1
+    elseif metric='debt_cost':
+      tmpstr = inddata.get_cost_of_capital().loc['cost of debt'].strip('%')
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
@@ -84,7 +86,7 @@ def get_industry_info(ID,metric='long_term_coc'):
   return metdat_av, met_df
 
 '''----// Get WACC and net debt //----'''
-def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02, tax_rate=0.3):
+def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_cost=0.02, tax_rate=0.3):
     risk_free = yf.Ticker('^TNX')
     risk_free_rate = risk_free.info['previousClose']/100
 
@@ -94,16 +96,21 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
       comp = company_ticker
     
     prev_year = str(int(date.today().strftime('%Y'))-1)
-    #market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
-    market_risk_premium, mkt_df = get_market_info(ID,metric='risk_premium')
+    if 'Country1' in sv.Inp_dict:
+      market_risk_premium, mkt_df = get_market_info(sv.Inp_dict,metric='risk_premium')
+    else:
+      market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
     
-    equity_beta = comp.info['beta'] if comp.info['beta'] else comp.ind_beta
+    if 'Industry1' in sv.Inp_dict:
+      ## debt_return cost of debt industry specific. Interest expense
+      debt_cost, debt_cf = get_industry_info(sv.Inp_dict,metric='debt_cost')
+    
+    equity_beta = comp.info['beta'] if comp.info['beta'] else comp.ind_beta ## does this need to be levered?
     equity_return = risk_free_rate+equity_beta*market_risk_premium
-        
     market_cap = comp.info['marketCap']
 
     company_value = market_cap + comp.net_debt
-    WACC = market_cap/company_value * equity_return + comp.net_debt/company_value * debt_return * (1-tax_rate)
+    WACC = market_cap/company_value * equity_return + comp.net_debt/company_value * debt_cost * (1-tax_rate)
     return WACC
 
 ## growth patterns
