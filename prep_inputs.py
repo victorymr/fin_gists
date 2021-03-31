@@ -328,8 +328,8 @@ def value_inputs():
     dictformat = dict(zip(list_dict.keys(),listformat))
     #print(list_dict)
     display(pd.DataFrame(data=list_dict.values(),
-                       columns=list_dict.keys(),index=[comp.ticksym])
-                       .style.format(dictformat))
+                       columns=[comp.ticksym],index=list_dict.keys())
+                       .transpose().style.format(dictformat))
 
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
