@@ -327,7 +327,7 @@ def value_inputs():
     listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
     #print(list_dict)
-    print(pd.DataFrame(data=list_dict.values(),
+    display(pd.DataFrame(data=list_dict.values(),
                        index=list_dict.keys(),columns=[comp.ticksym])
                        .style.format(dictformat))
 
@@ -341,7 +341,7 @@ def value_inputs():
     cont_dict = {v: marketdata.get_country_tax_rates().loc[v,prev_year] for k,v in sv.Inp_dict.items() if k in lsdts_cont}
     cont_df = pd.DataFrame(cont_dict,index=['Tax rates'])
     print(cont_df)
-    print(comp.df_country_tax)
+    #print(comp.dfcountry_tax)
     
     sv.comp = comp
     
