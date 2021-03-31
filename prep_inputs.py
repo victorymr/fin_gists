@@ -298,9 +298,9 @@ def value_inputs():
     sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
-    comp.long_tax_rate = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
-    comp.long_term_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
-    comp.ind_beta = dacf.get_industry_info(sv.Inp_dict,metric='beta')
+    comp.long_tax_rate, comp.df_country_tax = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
+    comp.long_term_coc, comp.df_ind_coc = dacf.get_industry_info(sv.Inp_dict,metric='long_term_coc')
+    comp.ind_beta, comp.df_ind_beta = dacf.get_industry_info(sv.Inp_dict,metric='beta')
     comp.wacc = dacf.get_wacc(sv.comp)
     
     indt_list_tmp = [v for k,v in sv.Inp_dict.items() if k in lsdts_indt]
@@ -333,7 +333,8 @@ def value_inputs():
     prev_year = str(int(datetime.today().strftime('%Y'))-1)
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
     cont_dict = {v: marketdata.get_country_tax_rates().loc[v,prev_year] for k,v in sv.Inp_dict.items() if k in lsdts_cont}
-    display('Tax Rates ',pd.DataFrame(cont_dict))
+    cont_df = pd.DataFrame(cont_dict,index=['Tax rates'])
+    print(cont_df)
     
     sv.comp = comp
     
