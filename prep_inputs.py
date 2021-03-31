@@ -320,10 +320,14 @@ def value_inputs():
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
                'tax_rate','long_tax_rate']
-    list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
+    #list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
+    list_dict = {i:eval("comp."+i) for i in listvar}
+    listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
+    dictformat = dict(zip(list_dict.keys(),listformat))
     #print(list_dict)
     print(pd.DataFrame(data=list_dict.values(),
-                       index=list_dict.keys(),columns=[comp.ticksym]))
+                       index=list_dict.keys(),columns=[comp.ticksym])
+                       .style.format(dictformat))
 
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
