@@ -345,7 +345,7 @@ def plot_sim(sim_df,cfdict,comp=sv.comp):
   ax.text(comp.info['previousClose'],0.2,'* prevClose',rotation=60)
   ax.text(cfdict['equity_val_pershare'],0.2,'* Intrinsic Value',rotation=60)
   ax.plot([comp.info['fiftyTwoWeekHigh'],comp.info['fiftyTwoWeekLow']],[.10,.10],color='r')
-  #plt.show();
+  plt.show();
   return ax
 
 def run_sim(comp,Inp_dict,nsim=100):
@@ -363,7 +363,7 @@ def run_sim(comp,Inp_dict,nsim=100):
   cfdict = calc_cashflow(comp,Inp_dict,sim={'Do':0,'Vol':5})
   plot_sim(sim_df,cfdict)
   sim_df[['long_term_cagr','long_term_coc','long_term_margin']].plot(title='Simulation variables')
-  #plt.show()
+  plt.show()
   return sim_df
 
 def sanity_checks(cfdict):
