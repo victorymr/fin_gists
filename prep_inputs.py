@@ -385,19 +385,19 @@ def run_cashflow():
   ## create button
   button = widgets.Button(description="Cashflow Projections")
   out = widgets.Output()
-  display(out)
+  #display(out)
   def on_button_clicked(b):
     cfdict = dacf.calc_cashflow(sv.comp,sv.Inp_dict,sim={'Do':0,'Vol':5})
     #print(cfdict['cashflow'].transpose().round(2))
     with out:
       out.clear_output(True)
-      display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
-      dacf.mk_waterfall(cfdict['wf_dict'])
+      display(cfdict['tmp_cf'].style.format(cfdict['form_dict'])
       dacf.sanity_checks(cfdict)
+      dacf.mk_waterfall(cfdict['wf_dict'])
     sv.Inp_dict['cfdict'] = cfdict
   button.on_click(on_button_clicked)
   display(button)
-  return button
+  return button, out
 
 def run_cashflow_sim():
   ## create button
@@ -433,10 +433,10 @@ def display_wids(DBdict):
   #lease_ui_dict, options_ui_dict = get_lease_opt()
   value_dict = value_inputs()
   sav2db = save_todb(gc)
-  run_cf = run_cashflow()
+  run_cf,cf_out = run_cashflow()
   run_cfsim = run_cashflow_sim()
   sav_res = save_results(gc)
-  
+  display(cf_out)
   #l = widgets.link((tick_dict['ui'], 'value'), (value_dict['ui'], 'value'))
   
   #display(tick_dict['ui'],tick_dict['out'])
