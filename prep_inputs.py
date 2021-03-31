@@ -402,7 +402,7 @@ def run_cashflow():
       display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
       display('Current Actual Sale2cap','{:.2f}'.format(cfdict['curr_sales2cap']))
       dacf.sanity_checks(cfdict)
-      dacf.mk_waterfall(cfdict['wf_dict'])
+      dacf.mk_waterfall(cfdict['wf_dict'],divby=sv.comp.info['sharesOutstanding'])
     sv.Inp_dict['cfdict'] = cfdict
   button.on_click(on_button_clicked)
   display(button)
