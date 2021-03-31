@@ -40,25 +40,33 @@ def get_average_margin(past_ebit):
 
 def get_market_info(ID,metric='long_tax_rate'):
   marketdata = comp_data.Market()
+  met_df = pd.DataFrame(index=metric)
   if metric=='long_tax_rate':
     country_df = marketdata.get_country_tax_rates()
-  elif metric=='risk_premium':
+  elif metric=='risk_premium_US':
     country_df = marketdata.get_risk_premiums_US()
+  elif metric=='risk_premium':
+    country_df = marketdata.get_risk_premiums()
   
   metdat_av=0
   prev_year = str(int(date.today().strftime('%Y'))-1)
   for icont in ['Country1','Country2','Country3']:
     if metric=='long_tax_rate':
       tmpstr = country_df.loc[ID[icont]][prev_year].strip('%')
-    elif metric=='risk_premium':
+    elif metric=='risk_premium_US':
       tmpstr = country_df['implied premium (fcfe)'].loc[prev_year].strip('%')
+    elif metric=='risk_premium':
+      tmpstr = country_df.loc[country_df.index.str.replace(" ",'')
+                              ==ID[icont].replace(" ",'')]['total equity risk premium'].strip('%')
     metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
-  return metdat_av
+    met_df[:,ID[icont]] = metdat if tmpstr else 0
+  return metdat_av, met_df
 
 def get_industry_info(ID,metric='long_term_coc'):
   metdat_av=0
+  met_df = pd.DataFrame(index=metric)
   for iindt in ['Industry1','Industry2','Industry3']:
     inddata = comp_data.Industry(ID[iindt])
     percfac = 100
@@ -72,7 +80,8 @@ def get_industry_info(ID,metric='long_term_coc'):
     metdat = float(tmpstr)/percfac if tmpstr else 0
     wts = ID[iindt + 'Wt']
     metdat_av += metdat*wts
-  return metdat_av
+    met_df[:,ID[iindt]] = metdat if tmpstr else 0
+  return metdat_av, met_df
 
 '''----// Get WACC and net debt //----'''
 def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02, tax_rate=0.3):
@@ -85,8 +94,9 @@ def get_wacc(company_ticker="MSFT", market_risk_premium=0.059, debt_return=0.02,
       comp = company_ticker
     
     prev_year = str(int(date.today().strftime('%Y'))-1)
-    market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
-
+    #market_risk_premium = float(comp.marketdata.get_risk_premiums_US()['implied premium (fcfe)'].loc[prev_year].strip('%'))/100
+    market_risk_premium, mkt_df = get_market_info(ID,metric='risk_premium')
+    
     equity_beta = comp.info['beta'] if comp.info['beta'] else comp.ind_beta
     equity_return = risk_free_rate+equity_beta*market_risk_premium
         
