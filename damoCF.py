@@ -330,10 +330,10 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cfdict = locals()
   return cfdict
 
-def mk_waterfall(wf_dict):
+def mk_waterfall(wf_dict,divby=1e6):
   import plotly.graph_objects as go
-  wf_dict = {k:[v[0]/1e6,v[1]] for k,v in wf_dict.items()} 
-  print(wf_dict)
+  wf_dict = {k:[v[0]/divby,v[1]] for k,v in wf_dict.items()} 
+  #print(wf_dict)
   fig = go.Figure(go.Waterfall(
       name = "WF", orientation = "v",
       measure = [v[1] for k,v in wf_dict.items()],
