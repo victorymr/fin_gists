@@ -391,7 +391,7 @@ def run_cashflow():
     #print(cfdict['cashflow'].transpose().round(2))
     with out:
       out.clear_output(True)
-      display(cfdict['tmp_cf'].style.format(cfdict['form_dict'])
+      display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
       dacf.sanity_checks(cfdict)
       dacf.mk_waterfall(cfdict['wf_dict'])
     sv.Inp_dict['cfdict'] = cfdict
