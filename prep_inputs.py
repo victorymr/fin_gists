@@ -328,7 +328,7 @@ def value_inputs():
     dictformat = dict(zip(list_dict.keys(),listformat))
     #print(list_dict)
     display(pd.DataFrame(data=list_dict.values(),
-                       index=list_dict.keys(),columns=[comp.ticksym])
+                       columns=list_dict.keys(),index=[comp.ticksym])
                        .style.format(dictformat))
 
     ## Relevant Industry Metrics
