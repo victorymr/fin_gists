@@ -339,7 +339,7 @@ def mk_waterfall(wf_dict):
   
 def plot_sim(sim_df,cfdict,comp=sv.comp):
   ## Plot the histogram
-  #fig, ax = plt.subplots(1, 1)
+  fig, ax = plt.subplots(1, 1)
   sns.set_style('darkgrid')
   sns.histplot(sim_df['equity_val_pershare'],stat='probability')
   ax.text(comp.info['previousClose'],0.2,'* prevClose',rotation=60)
