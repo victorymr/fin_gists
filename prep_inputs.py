@@ -358,7 +358,7 @@ def append_todb(gc,df,work_sheet):
   ndf = df.copy() if isinstance(df,pd.DataFrame) else pd.DataFrame(df).transpose()
   for i in ndf.columns: ndf[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
   ## now write to BD
-  export_to_sheets(gc,ndf,worksheet_name='Ticker',mode='a')
+  export_to_sheets(gc,ndf,worksheet_name=work_sheet,mode='a')
 
 def save_todb(gc):
   ## create button that will append a row to the DB
@@ -381,7 +381,7 @@ def save_todb(gc):
     '''
     append_todb(gc,dfts,'Ticker')
     append_todb(gc,dfls,'Lease')
-    append_todb(gc,dfts,'Optionholdings')
+    append_todb(gc,dfos,'Optionholdings')
 
 
   button.on_click(on_button_clicked)
@@ -425,7 +425,7 @@ def save_results(gc):
   ## create button
   button = widgets.Button(description="Save results")
   columns1 = ['UUID','Ticker','LastUpdate']
-  columns2 = ['Price','Sim25','Sim75']
+  columns2 = ['Price','Sim25','Sim75','CurrentPrice']
   res_dict = {}
   res_df = pd.DataFrame(columns=columns1+columns2)
   def on_button_clicked(b):
