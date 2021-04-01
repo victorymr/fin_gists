@@ -385,7 +385,8 @@ def sanity_checks(cfdict):
   #compare the current and projected numbers against peer group
   ## 10 yr
   listind = ['Industry1','Industry2','Industry3']
-  indlist = [sv.Inp_dict[i] for i in listind]
+  indlist_tmp = [sv.Inp_dict[i] for i in listind]
+  indlist = list(filter(None, indlist_tmp))
   paramlist = ['revenue','equity','ROE','ROIC']
   paramformat = ["${:,.0f}"]*2 + ["{:,.1%}"]*2
   ## check if cfdict has sandf - if so check if the industries have been done
@@ -404,6 +405,7 @@ def sanity_checks(cfdict):
   for iindt in indlist:
     inddata = comp_data.Industry(iindt)
     cash_arr = inddata.get_cash().squeeze()
+    pdb.set_trace()
     ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
     tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))/100
