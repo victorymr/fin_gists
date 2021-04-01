@@ -294,8 +294,7 @@ def value_inputs():
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
-      fac = 1e6 if k in ['minority_interest',	'crossholdings_nonopassets'] else 1
-      sv.Inp_dict[k] = v*fac
+      sv.Inp_dict[k] = v
     
     sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
     sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
@@ -368,20 +367,6 @@ def save_todb(gc):
   button = widgets.Button(description="Save me!")
 
   def on_button_clicked(b):
-    '''
-    ## do the appending business
-    ndfts = dfts.copy() if isinstance(dfts,pd.DataFrame) else pd.DataFrame(dfts).transpose()
-    ndfls = dfls.copy() if isinstance(dfls,pd.DataFrame) else pd.DataFrame(dfls).transpose()
-    ndfos = dfos.copy() if isinstance(dfos,pd.DataFrame) else pd.DataFrame(dfos).transpose()
-    #print(ndfts.columns,ndfls.columns,ndfos.columns)
-    for i in ndfts.columns: ndfts[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
-    for i in ndfls.columns: ndfls[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
-    for i in ndfos.columns: ndfos[i] = sv.Inp_dict[i] ## assumes all columns are in Inp_dict
-    ## now write to BD
-    export_to_sheets(gc,ndfts,worksheet_name='Ticker',mode='a')
-    export_to_sheets(gc,ndfls,worksheet_name='Lease',mode='a')
-    export_to_sheets(gc,ndfos,worksheet_name='Optionholdings',mode='a')
-    '''
     append_todb(gc,dfts,'Ticker')
     append_todb(gc,dfls,'Lease')
     append_todb(gc,dfos,'Optionholdings')
