@@ -294,7 +294,8 @@ def value_inputs():
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
-      sv.Inp_dict[k] = v
+      fac = 1e6 if k in ['minority_interest',	'crossholdings_nonopassets'] else 1
+      sv.Inp_dict[k] = v*fac
     
     sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
     sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
