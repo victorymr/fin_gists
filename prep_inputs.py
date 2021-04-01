@@ -129,7 +129,7 @@ def get_ticker(DBdict):
     global dfts, dfls, dfos, comp, rnd_dict
     comp = sv.comp
 
-    dftickset = dft[dft['Ticker']==ticksym]
+    dftickset = dft[dft['Ticker']==ticksym.upper()]
     if len(dftickset):
       dfts = dftickset.iloc[-1]
       dfls = dfl[dfl['UUID'].astype(str)==dfts['UUID']]
@@ -248,7 +248,8 @@ def value_inputs():
   dfts_list = dfts.index
   #dfts_res = [i for i in dfts_list if 'Unnamed' not in i] 
   lsdts_int = ['year_conv',	'terminal_year']
-  lsdts_flt1 = ['beg_cagr',	'long_term_cagr',	'beg_margin',	'long_term_margin',	'tax_rate','wacc','long_term_coc']
+  lsdts_flt1a = ['beg_cagr',	'long_term_cagr']
+  lsdts_flt1b = ['beg_margin',	'long_term_margin',	'tax_rate','wacc','long_term_coc']
   lsdts_flt2 = ['sales_to_capital', 'minority_interest',	'crossholdings_nonopassets' ]
   lsdts_indt =['Industry1',	'Industry2', 'Industry3']
   lsdts_indf = ['Industry1Wt',	'Industry2Wt', 'Industry3Wt']
@@ -266,7 +267,8 @@ def value_inputs():
   dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
   #dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
   #dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
-  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1})
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=-0.5,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1a})
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=-0.5,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1b})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
   dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
