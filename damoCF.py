@@ -293,9 +293,9 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   value_of_OpAss = pv_totalCF*(1-ID['prob_failure']) + liquid_val*ID['prob_failure']*ID['distress_price']
   equity_value = (value_of_OpAss - debt_book_value 
                   - lease_dict['debt_value_lease']  
-                  - ID['minority_interest'] 
+                  - ID['minority_interest']*1e6 
                   + comp.cash_mms
-                  + ID['crossholdings_nonopassets'])
+                  + ID['crossholdings_nonopassets']*1e6)
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   if not sim['Do']: # if not simulation do some plotting and printing
@@ -320,9 +320,9 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
                'value_of_OpAss': [value_of_OpAss, 'total'],
                'debt_book_value': [-debt_book_value, 'relative'],
                'debt_value_lease': [-lease_dict['debt_value_lease'],'relative'],
-               'minority_interest': [-ID['minority_interest'],'relative'],
+               'minority_interest': [-ID['minority_interest']*1e6,'relative'],
                'cash&mms': [comp.cash_mms,'relative'],
-               'crossholdings_nonopassets': [ID['crossholdings_nonopassets'],'relative'],
+               'crossholdings_nonopassets': [ID['crossholdings_nonopassets']*1e6,'relative'],
                'equity_value': [equity_value, 'total'],
                'value_options_outstanding': [-ID['value_op_outstanding'],'relative'],
                'value_equity_commonstock': [value_equity_commonstock, 'total']
