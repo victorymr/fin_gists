@@ -268,7 +268,7 @@ def value_inputs():
   #dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
   #dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
   dfts_dict.update({i: widgets.FloatSlider(description=i,min=-0.5,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1a})
-  dfts_dict.update({i: widgets.FloatSlider(description=i,min=-0.5,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1b})
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1b})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
   dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
