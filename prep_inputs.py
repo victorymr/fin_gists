@@ -296,8 +296,6 @@ def value_inputs():
     for k,v in dfts_dict.items():
       sv.Inp_dict[k] = v
     
-    sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
-    sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
     value_op_outstanding = dacf.option_conv(comp)
     sv.Inp_dict['value_op_outstanding'] = value_op_outstanding
     comp.long_tax_rate, comp.df_country_tax = dacf.get_market_info(sv.Inp_dict,metric='long_tax_rate')
@@ -367,10 +365,11 @@ def save_todb(gc):
   button = widgets.Button(description="Save me!")
 
   def on_button_clicked(b):
+    sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
+    sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
     append_todb(gc,dfts,'Ticker')
     append_todb(gc,dfls,'Lease')
     append_todb(gc,dfos,'Optionholdings')
-
 
   button.on_click(on_button_clicked)
   display(button)
