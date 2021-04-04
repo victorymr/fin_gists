@@ -313,7 +313,7 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt3})
   
   story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,continuous_update=False,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
-  @debounce(0.5)
+  #@debounce(0.5)
   def fstory(**story_dict):
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
@@ -326,7 +326,7 @@ def value_inputs():
   #display(out_gen)
   
   ind_df = pd.DataFrame()
-  @debounce(.5)
+  #@debounce(.5)
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
