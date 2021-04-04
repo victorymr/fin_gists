@@ -31,6 +31,40 @@ from fin_gists import shared_vars as sv
 style = {'description_width': 'initial'}
 marketdata = comp_data.Market()
 
+import asyncio
+
+class Timer:
+    def __init__(self, timeout, callback):
+        self._timeout = timeout
+        self._callback = callback
+
+    async def _job(self):
+        await asyncio.sleep(self._timeout)
+        self._callback()
+
+    def start(self):
+        self._task = asyncio.ensure_future(self._job())
+
+    def cancel(self):
+        self._task.cancel()
+
+def debounce(wait):
+    """ Decorator that will postpone a function's
+        execution until after `wait` seconds
+        have elapsed since the last time it was invoked. """
+    def decorator(fn):
+        timer = None
+        def debounced(*args, **kwargs):
+            nonlocal timer
+            def call_it():
+                fn(*args, **kwargs)
+            if timer is not None:
+                timer.cancel()
+            timer = Timer(wait, call_it)
+            timer.start()
+        return debounced
+    return decorator
+
 def read_sheet(sheet):
   df = get_as_dataframe(sheet)
   df.replace(np.nan, '', regex=True,inplace=True)
@@ -264,21 +298,22 @@ def value_inputs():
   #print(lsdts_indt)
   #print(dfts)
 
-  dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style) for i in lsdts_int }
+  dfts_dict = {i: widgets.IntText(description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_int }
   #dfts_dict.update({'Forecast': widgets.HTML('<b>Time Horizon</b>')})
   #dfts_dict.update({'GrowthMargins': widgets.HTML('<b>Growth & Margins</b>')})
   dfts_dict.update({i: widgets.FloatSlider(description=i,min=-0.5,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1a})
   dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt1b})
-  dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt2})
-  dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style) for i in lsdts_indt})
+  dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt2})
+  dfts_dict.update({i: widgets.Dropdown(options=industry_name_list, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indt})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_indf})
-  dfts_dict.update({i: widgets.Dropdown(options=country_name_list, description=i,value=dfts[i],style=style) for i in lsdts_cont})
+  dfts_dict.update({i: widgets.Dropdown(options=country_name_list, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_cont})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_conf})
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
-  dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style) for i in lsdts_liqt})
-  dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style) for i in lsdts_flt3})
+  dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqt})
+  dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt3})
   
-  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
+  story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,continuous_update=False,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
+  @debounce(1)
   def fstory(**story_dict):
     for k,v in story_dict.items():
       sv.Inp_dict[k] = v
@@ -291,6 +326,7 @@ def value_inputs():
   #display(out_gen)
   
   ind_df = pd.DataFrame()
+  @debounce(5)
   def finpdict(**dfts_dict):
     comp = sv.comp
     for k,v in dfts_dict.items():
