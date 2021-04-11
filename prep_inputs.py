@@ -293,6 +293,7 @@ def value_inputs():
   lsdts_liqt = ['liquidation_type']
   lsdts_flt3 = ['NOLbase']
   lsdts_txt1 = ['Story/Rationale']
+  lsdts_reit = ['darate','sbc','beg_int','long_term_int','stock_dilution_rate','maintcapex']
   #pdb.set_trace()
   #print(industry_name_list)
   #print(lsdts_indt)
@@ -311,7 +312,8 @@ def value_inputs():
   dfts_dict.update({i: widgets.FloatSlider(min=0,max=1,step=0.05, description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqp})
   dfts_dict.update({i: widgets.Dropdown(options=[('Fair Value', 'V'), ('Book Value', 'B')], description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_liqt})
   dfts_dict.update({i: widgets.FloatText(description=i,value=dfts[i],style=style,continuous_update=False) for i in lsdts_flt3})
-  
+  dfts_dict.update({i: widgets.FloatSlider(description=i,min=0,max=1,step=0.01,value=dfts[i],style=style,continuous_update=False) for i in lsdts_reit})
+
   story_dict = {i: widgets.Textarea(description=i,value=dfts[i],style=style,continuous_update=False,layout={'height':'100%','width':'1000px'}) for i in lsdts_txt1}
   #@debounce(0.5)
   def fstory(**story_dict):
