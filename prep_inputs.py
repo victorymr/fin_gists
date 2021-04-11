@@ -284,7 +284,7 @@ def value_inputs():
   lsdts_int = ['year_conv',	'terminal_year']
   lsdts_flt1a = ['beg_cagr',	'long_term_cagr']
   lsdts_flt1b = ['beg_margin',	'long_term_margin',	'tax_rate','wacc','long_term_coc']
-  lsdts_flt2 = ['sales_to_capital', 'minority_interest',	'crossholdings_nonopassets' ]
+  lsdts_flt2 = ['sales_to_capital', 'minority_interest','crossholdings_nonopassets' ]
   lsdts_indt =['Industry1',	'Industry2', 'Industry3']
   lsdts_indf = ['Industry1Wt',	'Industry2Wt', 'Industry3Wt']
   lsdts_cont = ['Country1','Country2','Country3']
@@ -293,7 +293,9 @@ def value_inputs():
   lsdts_liqt = ['liquidation_type']
   lsdts_flt3 = ['NOLbase']
   lsdts_txt1 = ['Story/Rationale']
-  lsdts_reit = ['darate','sbc','beg_int','long_term_int','stock_dilution_rate','maintcapex']
+  lsdts_reit = ['darate','sbc','beg_int','long_term_int','stock_dilution_rate','maintcapex',
+                'beg_div_growth','long_div_growth','cap_rate']
+
   #pdb.set_trace()
   #print(industry_name_list)
   #print(lsdts_indt)
