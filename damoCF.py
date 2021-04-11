@@ -215,7 +215,7 @@ def cf_reit_adj(cashflow):
   cashflow['EBITafectTax'] = cashflow['EBTafterTax'] ## for REIT we actually need the EBT - but doing this for downstreem calcs - fix later
   cashflow['FFO'] = cashflow['EBTafterTax'] - cashflow['Reinvestment'] + cashflow['da']
   cashflow['FCFF'] = cashflow['FFO'] + cashflow['sbc'] - cashflow['maintcapex'] ## this is equal to AFFO
-  cashflow['shares'] = sv.comp.info['sharesOutstanding']*(1+sv.Inp_dict['stock_dilution_rate'])**np.range(terminal_year) # num shares will grow for new capital projects
+  cashflow['shares'] = sv.comp.info['sharesOutstanding']*(1+sv.Inp_dict['stock_dilution_rate'])**np.arange(1,terminal_year+1) # num shares will grow for new capital projects
   cashflow['PVFCFF'] = cashflow['FCFF']*cashflow['discount_factor']
   cashflow['PVFCFFpershare'] = cashflow['PVFCFF']/cashflow['shares'] # this can be used for IRR? This is actually FCFE - sinze it removes interest?
   return cashflow
