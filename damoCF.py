@@ -285,15 +285,17 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   InvCap.pop(0)
   cashflow['NOL'] = NOL
   cashflow['EBITafterTax'] = cashflow['EBIT']-(cashflow['EBIT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
-  cashflow['FCFF'] = cashflow['EBITafterTax'] - cashflow['Reinvestment']
   cashflow['cost_capital'] = cost_capital
   cashflow['discount_factor'] = discount_factor
-  cashflow['PVFCFF'] = cashflow['FCFF']*cashflow['discount_factor']
+  if sv.Inp_dict['Industry1'] == 'REIT':
+    cashflow = cf_reit_adj(cashflow)
+  else:
+    cashflow['FCFF'] = cashflow['EBITafterTax'] - cashflow['Reinvestment']
+    cashflow['PVFCFF'] = cashflow['FCFF']*cashflow['discount_factor']
 
   cashflow['InvestedCapital'] = InvCap
   cashflow['ROIC'] = cashflow['EBITafterTax']/cashflow['InvestedCapital']
-
-
+  
   # Calculate terminal value
   terminal_cashflow = cashflow['FCFF'].iloc[-1] * (1 + long_term_cagr)
   terminal_value = terminal_cashflow / (long_term_coc-long_term_cagr)
