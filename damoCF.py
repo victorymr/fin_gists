@@ -208,7 +208,7 @@ def cf_reit_adj(cashflow):
   cashflow['da'] = sv.Inp_dict['darate']*cashflow['rev_fcst']
   cashflow['sbc'] = cashflow['rev_fcst']*sv.Inp_dict['sbc']
   cashflow['maintcapex'] = cashflow['rev_fcst']*sv.Inp_dict['maintcapex']
-  interest_rate = rate_of_change(sv.Inp_dict['beg_int'],sv.Inp_dict['year_conv'],sv.Inpt_dict['long_term_int'],sv.Inp_dict['terminal_year'],1)
+  interest_rate = rate_of_change(sv.Inp_dict['beg_int'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_term_int'],sv.Inp_dict['terminal_year'],1)
   cashflow['interestexp'] = cashflow['rev_fcst']*interest_rate
   cashflow['EBT'] = cashflow['EBIT'] - cashflow['interestexp'] # In a REIT Interest expense is part of the business model
   cashflow['EBTafterTax'] = cashflow['EBT']-(cashflow['EBT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
