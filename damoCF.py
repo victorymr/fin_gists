@@ -205,19 +205,19 @@ def create_rand(s,l,v=0,type='lognorm'):
  
 ## REIT adjustments in CF - add the few extra elements for reit
 def cf_reit_adj(cashflow):
-  cashflow['darate'] = sv.Inp_dict['darate']
-  cashflow['da'] = cashflow['darate']*cashflow['rev_fcst']
+  cashflow['da'] = sv.Inp_dict['darate']*cashflow['rev_fcst']
   cashflow['sbc'] = cashflow['rev_fcst']*sv.Inp_dict['sbc']
   cashflow['maintcapex'] = cashflow['rev_fcst']*sv.Inp_dict['maintcapex']
-  interest_rate = rate_of_change(ID['beg_int'],ID['year_conv'],long_term_int,ID['terminal_year'],1)
+  interest_rate = rate_of_change(sv.Inp_dict['beg_int'],sv.Inp_dict['year_conv'],sv.Inpt_dict['long_term_int'],sv.Inp_dict['terminal_year'],1)
   cashflow['interestexp'] = cashflow['rev_fcst']*interest_rate
   cashflow['EBT'] = cashflow['EBIT'] - cashflow['interestexp'] # In a REIT Interest expense is part of the business model
   cashflow['EBTafterTax'] = cashflow['EBT']-(cashflow['EBT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
+  cashflow['EBITafectTax'] = cashflow['EBTafterTax'] ## for REIT we actually need the EBT - but doing this for downstreem calcs - fix later
   cashflow['FFO'] = cashflow['EBTafterTax'] - cashflow['Reinvestment'] + cashflow['da']
   cashflow['FCFF'] = cashflow['FFO'] + cashflow['sbc'] - cashflow['maintcapex'] ## this is equal to AFFO
-  cashflow['shares'] = sv.comp.info['sharesOutstanding']*(1+sv.Inp_dict['stock_dilution_rate'])**np.range(terminal_year)
+  cashflow['shares'] = sv.comp.info['sharesOutstanding']*(1+sv.Inp_dict['stock_dilution_rate'])**np.range(terminal_year) # num shares will grow for new capital projects
   cashflow['PVFCFF'] = cashflow['FCFF']*cashflow['discount_factor']
-  cashflow['PVFCFFpershare'] = cashflow['PVFCFF']/cashflow['shares']
+  cashflow['PVFCFFpershare'] = cashflow['PVFCFF']/cashflow['shares'] # this can be used for IRR? This is actually FCFE - sinze it removes interest?
   return cashflow
 
 def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
