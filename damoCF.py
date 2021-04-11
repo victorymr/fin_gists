@@ -202,7 +202,40 @@ def create_rand(s,l,v=0,type='lognorm'):
     rv = lognorm(s,v,l)
   outrand = rv.ppf(random.random()) 
   return outrand
- 
+
+## DDM Model
+def ddm():
+  curr_div = sv.comp.info['dividendYield']*sv.comp.info['previousClose']
+  div_growth = rate_of_change(sv.Inp_dict['curr_div_growth'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_div_growth'],sv.Inp_dict['terminal_year'],1)
+  div_growth_cumm = (1+div_growth).cumprod()
+  future_div = curr_div*div_growth_cum
+  
+  cost_capital = rate_of_change(sv.Inp_dict['wacc'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_term_coc'],sv.Inp_dict['terminal_year'],1)
+  cost_capital_cumm = (1+cost_capital).cumprod()
+  discount_factor = 1/cost_capital_cumm
+  
+  future_div_disc = future_div*discount_factor
+  disc_divNyr = sum(future_div_disc)
+  terminal_div = future_div_dic.iloc[-1] * (1 + sv.Inp_dict['long_div_growth'])
+  terminal_div_disc = terminal_div/(sv.Inp_dict['wacc']-sv.Inp_dict['long_div_growth'])
+  
+  valuepershare = future_div_disc + terminal_div_disc
+  
+  ddm_dict = locals()
+  return ddm_dict
+
+## NAV - cap rate model
+def caprate_mod():
+  NOI = EBITexpected + SG&A
+  NNOI = NOI - sv.Inp_dict['maintcapex']
+  ValRealEstateOps =  NNOI/sv.Inp_dict['caprate']
+  ValueofEquity = ValRealEstateOps - (comp.short_longterm_debt + comp.longterm_debt) + sv.comp.cash_mms
+  ValuePerShare = ValueofEquity/comp.info['sharesOutstanding']
+  
+  caprate_nav_dict = locals()
+  return caprate_nav_dict
+  
+
 ## REIT adjustments in CF - add the few extra elements for reit
 def cf_reit_adj(cashflow):
   cashflow['da'] = sv.Inp_dict['darate']*cashflow['rev_fcst']
