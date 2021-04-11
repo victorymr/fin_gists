@@ -287,7 +287,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cashflow['EBITafterTax'] = cashflow['EBIT']-(cashflow['EBIT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
   cashflow['cost_capital'] = cost_capital
   cashflow['discount_factor'] = discount_factor
-  if sv.Inp_dict['Industry1'] == 'REIT':
+  if sv.Inp_dict['Industry1'] == 'R.E.I.T.':
     cashflow = cf_reit_adj(cashflow)
   else:
     cashflow['FCFF'] = cashflow['EBITafterTax'] - cashflow['Reinvestment']
