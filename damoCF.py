@@ -206,7 +206,7 @@ def create_rand(s,l,v=0,type='lognorm'):
 ## DDM Model
 def ddm():
   curr_div = sv.comp.info['dividendYield']*sv.comp.info['previousClose']
-  div_growth = rate_of_change(sv.Inp_dict['curr_div_growth'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_div_growth'],sv.Inp_dict['terminal_year'],1)
+  div_growth = rate_of_change(sv.Inp_dict['beg_div_growth'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_div_growth'],sv.Inp_dict['terminal_year'],1)
   div_growth_cumm = (1+div_growth).cumprod()
   future_div = curr_div*div_growth_cum
   
@@ -226,9 +226,9 @@ def ddm():
 
 ## NAV - cap rate model
 def caprate_mod():
-  NOI = EBITexpected + SG&A
+  NOI = EBITexpected + sgna + da # basically the gross profit
   NNOI = NOI - sv.Inp_dict['maintcapex']
-  ValRealEstateOps =  NNOI/sv.Inp_dict['caprate']
+  ValRealEstateOps =  NNOI/sv.Inp_dict['cap_rate']
   ValueofEquity = ValRealEstateOps - (comp.short_longterm_debt + comp.longterm_debt) + sv.comp.cash_mms
   ValuePerShare = ValueofEquity/comp.info['sharesOutstanding']
   
