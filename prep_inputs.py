@@ -293,8 +293,7 @@ def value_inputs():
   lsdts_liqt = ['liquidation_type']
   lsdts_flt3 = ['NOLbase']
   lsdts_txt1 = ['Story/Rationale']
-  lsdts_reit = ['darate','sbc','beg_int','long_term_int','stock_dilution_rate','maintcapex',
-                'beg_div_growth','long_div_growth','cap_rate']
+  lsdts_reit = ['darate','sbc','beg_int','long_term_int','stock_dilution_rate','maintcapex','beg_div_growth','long_div_growth','cap_rate']
 
   #pdb.set_trace()
   #print(industry_name_list)
