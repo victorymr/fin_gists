@@ -11,6 +11,7 @@ from datetime import datetime
 import pdb
 import comp_data
 from yfinance import yfinance as yf
+from yahoo_fin import stock_info as si
 
 import ipywidgets as widgets
 from IPython.display import display, clear_output
@@ -104,11 +105,30 @@ def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
   gcsheet = workbook.worksheet(sheetn)
   gcsheet.append_row(dfrow)
 
+def get_yahoo_fin(Ticker='MSFT'):
+  ## get data from the yahoo_fin table - some data elements are not available in the yfinance app
+  inc_stat = si.get_income_statement(Ticker)
+  bal_sheeet = si.get_balance_sheet(Ticker)
+  ## EBITDA, DA get the 
+  revenue = inc_stat[inc_stat.Breakdown = 'Total Revenue']
+  grossprofit = inc_stat[inc_stat.Breakdown = 'Gross Profit']
+  cagr = revenue[1:-1]/revenue[2:]-1 # skip the ttm column 
+  ebitda_margin = inc_stat[inc_stat.Breakdown = 'Normalized EBITDA']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
+  ebit_margin = ebitda_margin + inc_stat[inc_stat.Breakdown = 'Reconciled Depreciation']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
+  dilutedshares = bal_sheet[bal_sheet.Breakdown = 'Shares Issued']
+  dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1
+
+  y_dict = locals()
+  return y_dict
+
+    
 def comp_finpop(comp):
+  y_dict = get_yahoo_fin(comp.ticksym)
   quarterly_financials = comp.quarterly_financials.fillna(0)
   quarterly_balance_sheet = comp.quarterly_balance_sheet.fillna(0)
   financials = comp.financials.fillna(0)
-  
+  cashflow = comp.cashflow.fillna(0)
+
   comp.ttm_revs = sum(quarterly_financials.loc['Total Revenue']) #
   comp.ttm_ebit = sum(quarterly_financials.loc['Ebit'])
   try:
@@ -135,7 +155,13 @@ def comp_finpop(comp):
   comp.curr_cagr = dacf.get_cagr(comp)
   comp.marketdata = comp_data.Market()
   comp.equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
-  comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt)
+  comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt) # actual capital will need debt tments for lease, rnd etc
+  
+  ## dividends
+  comp.dividends = cashflow.loc['Dividends Paid']/y_dict['dilutedshares']
+  comp.dividendgrowth = comp.dividends[:-1]/comp.dividends[1:]-1
+  comp.avgdivgrowth = mean(comp.dividendgrowth)
+  
   return comp
  
 def get_ticker(DBdict):
@@ -177,8 +203,8 @@ def get_ticker(DBdict):
     # get comp info
     #print(dfts)
     comp = yf.Ticker(ticksym)
-    comp = comp_finpop(comp)
     comp.ticksym = ticksym.upper()
+    comp = comp_finpop(comp)
 
     sv.comp = comp
     sv.Inp_dict['rnd_dict'] = comp.rnd_dict
@@ -360,8 +386,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials & some basic calcs </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
-               'tax_rate','long_tax_rate']
-    #list_dict = {i:'{:,.2f}'.format(eval("comp."+i)) for i in listvar}
+               'tax_rate','long_tax_rate','avgdivgrowth']
     list_dict = {i:eval("comp."+i) for i in listvar}
     listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
@@ -370,6 +395,13 @@ def value_inputs():
                        columns=[comp.ticksym],index=list_dict.keys())
                        .transpose().style.format(dictformat))
 
+    ## display few yahoo_finance metrics
+    display(widgets.HTML('<h4> Additional date from yahoo_finance & some basic calcs </h4>'))
+    ylist = ['ebitda_margin','ebit_margin','dilutionrate']
+    ylistform = ['{:.1%}']*(len(ylist))
+    ydictformat = zip(ylist,ylistform)
+    display(pd.DataFrame(data = comp.y_dict[ylst].style.format(ydictformat)))
+    
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
     print(ind_df[indt_list])
