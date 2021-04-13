@@ -110,12 +110,12 @@ def get_yahoo_fin(Ticker='MSFT'):
   inc_stat = si.get_income_statement(Ticker)
   bal_sheeet = si.get_balance_sheet(Ticker)
   ## EBITDA, DA get the 
-  revenue = inc_stat[inc_stat.Breakdown = 'Total Revenue']
-  grossprofit = inc_stat[inc_stat.Breakdown = 'Gross Profit']
+  revenue = inc_stat[inc_stat.Breakdown == 'Total Revenue']
+  grossprofit = inc_stat[inc_stat.Breakdown == 'Gross Profit']
   cagr = revenue[1:-1]/revenue[2:]-1 # skip the ttm column 
-  ebitda_margin = inc_stat[inc_stat.Breakdown = 'Normalized EBITDA']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
-  ebit_margin = ebitda_margin + inc_stat[inc_stat.Breakdown = 'Reconciled Depreciation']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
-  dilutedshares = bal_sheet[bal_sheet.Breakdown = 'Shares Issued']
+  ebitda_margin = inc_stat[inc_stat.Breakdown == 'Normalized EBITDA']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
+  ebit_margin = ebitda_margin + inc_stat[inc_stat.Breakdown == 'Reconciled Depreciation']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
+  dilutedshares = bal_sheet[bal_sheet.Breakdown == 'Shares Issued']
   dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1
 
   y_dict = locals()
