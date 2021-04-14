@@ -107,16 +107,22 @@ def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
 
 def get_yahoo_fin(Ticker='MSFT'):
   ## get data from the yahoo_fin table - some data elements are not available in the yfinance app
-  inc_stat = si.get_income_statement(Ticker)
-  bal_sheeet = si.get_balance_sheet(Ticker)
+  si_dict = si.get_financials(Ticker, yearly = True, quarterly = True)
+  for k,v in enumerate(si_dict):
+    flcols = v.columns.remove('Breakdown')
+    v[flcols] = v[flcols].astype(float)
+  inc_stat = si_dict.yearly_income_statement  
+  qbal_sheeet = si_dict.quarterly_balance_sheet
   ## EBITDA, DA get the 
-  revenue = inc_stat[inc_stat.Breakdown == 'Total Revenue']
-  grossprofit = inc_stat[inc_stat.Breakdown == 'Gross Profit']
-  cagr = revenue[1:-1]/revenue[2:]-1 # skip the ttm column 
-  ebitda_margin = inc_stat[inc_stat.Breakdown == 'Normalized EBITDA']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
-  ebit_margin = ebitda_margin + inc_stat[inc_stat.Breakdown == 'Reconciled Depreciation']/inc_stat[inc_stat.Breakdown = 'Total Revenue']
-  dilutedshares = bal_sheet[bal_sheet.Breakdown == 'Shares Issued']
-  dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1
+  revenue = inc_stat[inc_stat.Breakdown == 'Total Revenue'].tolist()
+  grossprofit = inc_stat[inc_stat.Breakdown == 'Gross Profit'].tolist()
+  cagr = revenue[2:-1]/revenue[3:]-1 # skip the ttm and breakdown column 
+  ebitda = inc_stat[inc_stat.Breakdown == 'Normalized EBITDA'].to_list()
+  ebitda_margin = ebitda[1:]/revenue[1:]
+  da = inc_stat[inc_stat.Breakdown == 'Reconciled Depreciation'].to_list()
+  ebit_margin = ebitda_margin + da[1:]/revenue[1:]
+  dilutedshares = qbal_sheet[qbal_sheet.Breakdown == 'Shares Issued'].to_list()
+  dilutionrate = dilutedshares[1:-1]/dilutedshares[2:]-1 #skip the breakdown column
 
   y_dict = locals()
   return y_dict
