@@ -108,7 +108,7 @@ def write_rowDB(gc,dfrow,sheetn='Optionholdings',filn='StockDB'):
 def get_yahoo_fin(Ticker='MSFT'):
   ## get data from the yahoo_fin table - some data elements are not available in the yfinance app
   si_dict = si.get_financials(Ticker, yearly = True, quarterly = True)
-  for k,v in enumerate(si_dict):
+  for i,(k,v) in enumerate(si_dict.items()):
     flcols = v.columns.remove('Breakdown')
     v[flcols] = v[flcols].astype(float)
   inc_stat = si_dict.yearly_income_statement  
