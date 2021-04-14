@@ -11,7 +11,7 @@ from datetime import datetime
 import pdb
 import comp_data
 from yfinance import yfinance as yf
-from yahoo_fin import stock_info as si
+from yahoo_fin.yahoo_fin import stock_info as si
 
 import ipywidgets as widgets
 from IPython.display import display, clear_output
