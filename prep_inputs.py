@@ -130,7 +130,7 @@ def get_yahoo_fin(Ticker='MSFT'):
 
     
 def comp_finpop(comp):
-  y_dict = get_yahoo_fin(comp.ticksym)
+  #y_dict = get_yahoo_fin(comp.ticksym)
   quarterly_financials = comp.quarterly_financials.fillna(0)
   quarterly_balance_sheet = comp.quarterly_balance_sheet.fillna(0)
   financials = comp.financials.fillna(0)
