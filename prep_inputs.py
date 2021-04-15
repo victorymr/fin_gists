@@ -110,9 +110,9 @@ def get_yahoo_fin(Ticker='MSFT'):
   si_dict = si.get_financials(Ticker, yearly = True, quarterly = True)
   for i,(k,v) in enumerate(si_dict.items()):
     si_dict[k] = v.astype(float)
-  inc_stat = si_dict.yearly_income_statement  
-  qbal_sheeet = si_dict.quarterly_balance_sheet
-  bal_sheeet = si_dict.balance_sheet
+  inc_stat = si_dict['yearly_income_statement']  
+  qbal_sheeet = si_dict['quarterly_balance_sheet']
+  bal_sheeet = si_dict['yearly_balance_sheet']
   ## EBITDA, DA get the 
   revenue = inc_stat.loc('Total Revenue')
   grossprofit = inc_stat.loc('Gross Profit')
