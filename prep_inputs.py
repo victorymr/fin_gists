@@ -156,13 +156,6 @@ def comp_finpop(comp):
   except:
     interest_expense = 0
   comp.interest_expense = interest_expense/comp.net_debt
-  #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
-  comp.rnd = financials.loc['Research Development']
-  comp.rnd_dict = dacf.rnd_conv(comp)
-  comp.curr_cagr = dacf.get_cagr(comp)
-  comp.marketdata = comp_data.Market()
-  comp.equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
-  comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt) # actual capital will need debt tments for lease, rnd etc
   
   ## dividends
   comp.dividends = cashflow.loc['Dividends Paid']/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
@@ -179,6 +172,14 @@ def comp_finpop(comp):
   comp.ebit_margin = comp.ebit/comp.revenue
   comp.ebitda_margin = comp.ebitda/comp.revenue
   comp.da_rate = comp.da/comp.revenue
+
+  #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
+  comp.rnd = financials.loc['Research Development']
+  comp.rnd_dict = dacf.rnd_conv(comp)
+  comp.curr_cagr = dacf.get_cagr(comp)
+  comp.marketdata = comp_data.Market()
+  comp.equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
+  comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt) # actual capital will need debt tments for lease, rnd etc
   return comp
  
 def get_ticker(DBdict):
