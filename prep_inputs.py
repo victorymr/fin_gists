@@ -114,15 +114,17 @@ def get_yahoo_fin(Ticker='MSFT'):
   qbal_sheeet = si_dict['quarterly_balance_sheet']
   bal_sheeet = si_dict['yearly_balance_sheet']
   ## EBITDA, DA get the 
-  revenue = inc_stat.loc('Total Revenue')
-  grossprofit = inc_stat.loc('Gross Profit')
+  revenue = inc_stat.loc('totalRevenue')
+  grossprofit = inc_stat.loc('grossProfit')
   cagr = revenue[1:-1]/revenue[2:]-1 # skip the ttm and breakdown column 
-  ebitda = inc_stat.loc('Normalized EBITDA') ## ebit and ebitda are not correct in this scrappers..
-  ebitda_margin = ebitda[1:]/revenue[1:]
-  da = inc_stat.loc('Reconciled Depreciation')
-  ebit_margin = ebitda_margin + da[1:]/revenue[1:]
-  dilutedshares = bal_sheet.loc['Shares Issued']
-  dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1 
+  #ebitda = inc_stat.loc('normalizedEBITDA') ## ebit and ebitda are not correct in this scrappers..
+  #ebitda_margin = ebitda[1:]/revenue[1:]
+  #da = inc_stat.loc('Reconciled Depreciation')
+  #ebit_margin = ebitda_margin + da[1:]/revenue[1:]
+
+  #dilutedshares = bal_sheet.loc['sharesIssued'] - turns out the new yahoo_fin doesnt have this anyway..
+  #dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1 
+
   y_dict = locals()
   return y_dict
 
@@ -163,7 +165,7 @@ def comp_finpop(comp):
   comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt) # actual capital will need debt tments for lease, rnd etc
   
   ## dividends
-  comp.dividends = cashflow.loc['Dividends Paid']/y_dict['dilutedshares']
+  comp.dividends = cashflow.loc['Dividends Paid']/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
   comp.dividendgrowth = comp.dividends[:-1]/comp.dividends[1:]-1
   comp.avgdivgrowth = mean(comp.dividendgrowth)
   
@@ -176,7 +178,7 @@ def comp_finpop(comp):
   comp.ebitda = comp.ebit + comp.da
   comp.ebit_margin = comp.ebit/comp.revenue
   comp.ebitda_margin = comp.ebitda/comp.revenue
-  comp.dat_rate = comp.da/comp.revenue
+  comp.da_rate = comp.da/comp.revenue
   return comp
  
 def get_ticker(DBdict):
@@ -410,12 +412,13 @@ def value_inputs():
                        columns=[comp.ticksym],index=list_dict.keys())
                        .transpose().style.format(dictformat))
 
-    ## display few yahoo_finance metrics
+    '''## display few yahoo_finance metrics
     display(widgets.HTML('<h4> Additional date from yahoo_finance & some basic calcs </h4>'))
     ylist = ['ebitda_margin','ebit_margin','dilutionrate']
     ylistform = ['{:.1%}']*(len(ylist))
     ydictformat = zip(ylist,ylistform)
     display(pd.DataFrame(data = comp.y_dict[ylst].style.format(ydictformat)))
+    '''
     
     ## Relevant Industry Metrics
     display(widgets.HTML('<h4> Key Industry Metrics - Use as Reference </h4>'))
