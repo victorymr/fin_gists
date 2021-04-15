@@ -1,0 +1,78 @@
+
+!pip install selenium
+
+import requests
+from bs4 import BeautifulSoup
+import json as _json
+import re as _re
+from selenium import webdriver
+import time
+
+!apt-get update # to update ubuntu to correctly run apt install
+!apt install chromium-chromedriver
+!cp /usr/lib/chromium-browser/chromedriver /usr/bin
+sys.path.insert(0,'/usr/lib/chromium-browser/chromedriver')
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+options = Options()
+options.add_argument("start-maximized")
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+wd = webdriver.Chrome('chromedriver',chrome_options=chrome_options)
+
+from lxml import html
+import lxml
+
+## basic and bs4
+r = requests.get(url)
+soup = BeautifulSoup(r.text, "html.parser")
+soup_is = BeautifulSoup(wd.page_source,"lxml")
+ls=[]
+for l in soup_is.find_all("div" and "span"):
+    ls.append(l.string)
+    
+def get_sel_df(wd,url):
+  ## Give a Selenium webdiver url - expand and get the df
+  wd.get(url)
+  ## expand all on financials
+  btnclick = wd.find_elements(By.XPATH, "//*[@id='Col1-1-Financials-Proxy']/section/div[2]/button")
+  btnclick[0].click()
+
+  #parsing into lxml
+  tree = html.fromstring(wd.page_source)
+
+  #searching table financial data
+  table_rows = tree.xpath("//div[contains(@class, 'D(tbr)')]")
+
+  # Ensure that some table rows are found
+  assert len(table_rows) > 0
+
+  parsed_rows = []
+
+  for table_row in table_rows:
+      parsed_row = []
+      el = table_row.xpath("./div")
+
+      none_count = 0
+
+      for rs in el:
+          try:
+              (text,) = rs.xpath('.//span/text()[1]')
+              parsed_row.append(text)
+          except ValueError:
+              parsed_row.append(np.NaN)
+              none_count += 1
+
+      if (none_count < 4):
+          parsed_rows.append(parsed_row)
+
+  df = pd.DataFrame(parsed_rows)
+  #print(df)
+  return df
