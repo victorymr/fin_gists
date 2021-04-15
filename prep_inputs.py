@@ -109,21 +109,20 @@ def get_yahoo_fin(Ticker='MSFT'):
   ## get data from the yahoo_fin table - some data elements are not available in the yfinance app
   si_dict = si.get_financials(Ticker, yearly = True, quarterly = True)
   for i,(k,v) in enumerate(si_dict.items()):
-    pdb.set_trace()
-    flcols = v.columns.remove('Breakdown')
-    v[flcols] = v[flcols].astype(float)
+    si_dict[k] = v.astype(float)
   inc_stat = si_dict.yearly_income_statement  
   qbal_sheeet = si_dict.quarterly_balance_sheet
+  bal_sheeet = si_dict.balance_sheet
   ## EBITDA, DA get the 
-  revenue = inc_stat[inc_stat.Breakdown == 'Total Revenue'].tolist()
-  grossprofit = inc_stat[inc_stat.Breakdown == 'Gross Profit'].tolist()
-  cagr = revenue[2:-1]/revenue[3:]-1 # skip the ttm and breakdown column 
-  ebitda = inc_stat[inc_stat.Breakdown == 'Normalized EBITDA'].to_list()
+  revenue = inc_stat.loc('Total Revenue')
+  grossprofit = inc_stat.loc('Gross Profit')
+  cagr = revenue[1:-1]/revenue[2:]-1 # skip the ttm and breakdown column 
+  ebitda = inc_stat.loc('Normalized EBITDA') ## ebit and ebitda are not correct in this scrappers..
   ebitda_margin = ebitda[1:]/revenue[1:]
-  da = inc_stat[inc_stat.Breakdown == 'Reconciled Depreciation'].to_list()
+  da = inc_stat.loc('Reconciled Depreciation')
   ebit_margin = ebitda_margin + da[1:]/revenue[1:]
-  dilutedshares = qbal_sheet[qbal_sheet.Breakdown == 'Shares Issued'].to_list()
-  dilutionrate = dilutedshares[1:-1]/dilutedshares[2:]-1 #skip the breakdown column
+  dilutedshares = bal_sheet.loc('Shares Issued']
+  dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1 
   y_dict = locals()
   return y_dict
 
@@ -155,7 +154,7 @@ def comp_finpop(comp):
   except:
     interest_expense = 0
   comp.interest_expense = interest_expense/comp.net_debt
-  comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
+  #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
   comp.rnd = financials.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
   comp.curr_cagr = dacf.get_cagr(comp)
@@ -168,6 +167,16 @@ def comp_finpop(comp):
   comp.dividendgrowth = comp.dividends[:-1]/comp.dividends[1:]-1
   comp.avgdivgrowth = mean(comp.dividendgrowth)
   
+  # ebit, ebitda, tax, interest, da The ebit, operating income, ebitda etc in the yfinance are wrong
+  comp.revenue = financials.loc['Total Revenue']
+  comp.ebit = financials.loc['Net Income Applicable To Common Shares']+financials.loc['Income Tax Expense']-financials.loc['Interest Expense']
+  comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/comp.ebit) # avg over past few years
+  comp.interest_rate = np.mean(financials.loc['Interest Expense']/comp.revenue) # avg as a % OF REVENUE over past few years
+  comp.da = cashflow.loc['Depreciation']
+  comp.ebitda = comp.ebit + comp.da
+  comp.ebit_margin = comp.ebit/comp.revenue
+  comp.ebitda_margin = comp.ebitda/comp.revenue
+  comp.dat_rate = comp.da/comp.revenue
   return comp
  
 def get_ticker(DBdict):
