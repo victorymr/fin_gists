@@ -121,7 +121,7 @@ def get_yahoo_fin(Ticker='MSFT'):
   ebitda_margin = ebitda[1:]/revenue[1:]
   da = inc_stat.loc('Reconciled Depreciation')
   ebit_margin = ebitda_margin + da[1:]/revenue[1:]
-  dilutedshares = bal_sheet.loc('Shares Issued']
+  dilutedshares = bal_sheet.loc['Shares Issued']
   dilutionrate = dilutedshares[:-1]/dilutedshares[1:]-1 
   y_dict = locals()
   return y_dict
