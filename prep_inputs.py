@@ -124,7 +124,6 @@ def get_yahoo_fin(Ticker='MSFT'):
   ebit_margin = ebitda_margin + da[1:]/revenue[1:]
   dilutedshares = qbal_sheet[qbal_sheet.Breakdown == 'Shares Issued'].to_list()
   dilutionrate = dilutedshares[1:-1]/dilutedshares[2:]-1 #skip the breakdown column
-
   y_dict = locals()
   return y_dict
 
