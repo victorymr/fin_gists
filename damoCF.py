@@ -226,11 +226,11 @@ def ddm():
 
 ## NAV - cap rate model
 def caprate_mod():
-  NOI = comp.gross_proft_margin # basically the gross profitcomp.ttm_revs
-  NNOI = (NOI - sv.Inp_dict['maintcapex'])*comp.ttm_revs
+  NOI = sv.comp.gross_proft_margin # basically the gross profitcomp.ttm_revs
+  NNOI = (NOI - sv.Inp_dict['maintcapex'])*sv.comp.ttm_revs
   ValRealEstateOps =  NNOI/sv.Inp_dict['cap_rate']
-  ValueofEquity = ValRealEstateOps - (comp.short_longterm_debt + comp.longterm_debt) + sv.comp.cash_mms
-  ValuePerShare = ValueofEquity/comp.info['sharesOutstanding']
+  ValueofEquity = ValRealEstateOps - (sv.comp.short_longterm_debt + sv.comp.longterm_debt) + sv.comp.cash_mms
+  ValuePerShare = ValueofEquity/sv.comp.info['sharesOutstanding']
   
   caprate_nav_dict = locals()
   return caprate_nav_dict
