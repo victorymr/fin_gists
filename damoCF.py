@@ -226,8 +226,8 @@ def ddm():
 
 ## NAV - cap rate model
 def caprate_mod():
-  NOI = EBITexpected + sgna + da # basically the gross profit
-  NNOI = NOI - sv.Inp_dict['maintcapex']
+  NOI = comp.gross_proft_margin # basically the gross profitcomp.ttm_revs
+  NNOI = (NOI - sv.Inp_dict['maintcapex'])*comp.ttm_revs
   ValRealEstateOps =  NNOI/sv.Inp_dict['cap_rate']
   ValueofEquity = ValRealEstateOps - (comp.short_longterm_debt + comp.longterm_debt) + sv.comp.cash_mms
   ValuePerShare = ValueofEquity/comp.info['sharesOutstanding']
@@ -238,14 +238,15 @@ def caprate_mod():
 
 ## REIT adjustments in CF - add the few extra elements for reit
 def cf_reit_adj(cashflow):
+  cashflow['EBITDA'] = cashflow['EBIT'] # for REITs the margin provided should be EBITDA margin
   cashflow['da'] = sv.Inp_dict['darate']*cashflow['rev_fcst']
   cashflow['sbc'] = cashflow['rev_fcst']*sv.Inp_dict['sbc']
   cashflow['maintcapex'] = cashflow['rev_fcst']*sv.Inp_dict['maintcapex']
   interest_rate = rate_of_change(sv.Inp_dict['beg_int'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_term_int'],sv.Inp_dict['terminal_year'],1)
   cashflow['interestexp'] = cashflow['rev_fcst']*interest_rate
-  cashflow['EBT'] = cashflow['EBIT'] - cashflow['interestexp'] # In a REIT Interest expense is part of the business model
+  cashflow['EBT'] = cashflow['EBITDA'] -cashflow['da']- cashflow['interestexp'] # In a REIT Interest expense is part of the business model
   cashflow['EBTafterTax'] = cashflow['EBT']-(cashflow['EBT']-cashflow['NOL']).clip(lower=0)*cashflow['tax_rate']
-  cashflow['EBITafectTax'] = cashflow['EBTafterTax'] ## for REIT we actually need the EBT - but doing this for downstreem calcs - fix later
+  cashflow['EBITafterTax'] = cashflow['EBTafterTax'] ## for REIT we actually need the EBT - but doing this for downstreem calcs - fix later
   cashflow['FFO'] = cashflow['EBTafterTax'] - cashflow['Reinvestment'] + cashflow['da']
   cashflow['FCFF'] = cashflow['FFO'] + cashflow['sbc'] - cashflow['maintcapex'] ## this is equal to AFFO
   cashflow['shares'] = sv.comp.info['sharesOutstanding']*(1+sv.Inp_dict['stock_dilution_rate'])**np.arange(1,sv.Inp_dict['terminal_year']+1) # num shares will grow for new capital projects
