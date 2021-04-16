@@ -485,7 +485,7 @@ def run_cashflow():
     #print(cfdict['cashflow'].transpose().round(2))
     with out:
       out.clear_output(True)
-      display(pd.DataFrame(cfdict['Intrinsic_Price'],index=[sv.comp.ticksym ' Intrinsic Share Price ']).style.format('{:.1f}'))
+      display(pd.DataFrame(cfdict['Intrinsic_Price'],index=[sv.comp.ticksym + ' Intrinsic Share Price ']).style.format('{:.1f}'))
       display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
       display('Current Actual Sale2cap','{:.2f}'.format(cfdict['curr_sales2cap']))
       dacf.sanity_checks(cfdict)
