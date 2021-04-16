@@ -354,18 +354,23 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   if not sim['Do']: # if not simulation do some plotting and printing
     Intrinsic_Price = {'DCF': equity_val_pershare}
+    listofmill = []
+    listofnum = []
     ## if REIT run the ddm and nav model
     if sv.Inp_dict['Industry1'] == 'R.E.I.T.':
       caprate_nav_dict = caprate_mod()
       ddm_dict = ddm()  
       Intrinsic_Price['DDM'] = ddm_dict['valuepershare']
       Intrinsic_Price['navCapRate'] = caprate_nav_dict['ValuePerShare']
+      listofmill = ['EBITDA',	'da',	'sbc',	'maintcapex',	'interestexp',	'EBT',	'EBTafterTax',
+                    'EBITafterTax',	'FFO']
+      listofnum  = ['shares','PVFCFFpershare']
     #sanity checks
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow.copy()
-    listofmill = ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
-    form_dict = dict(zip(listofmill,["${:,.0f}"]*len(listofmill)))
-    perclist = list(set(cashflow.columns.tolist())-set(listofmill))
+    listofmill = listofmill + ['rev_fcst','EBIT','Reinvestment','NOL','EBITafterTax','FCFF','PVFCFF','InvestedCapital']
+    form_dict = dict(zip(listofmill+listofnum,["{:,.0f}"]*len(listofmill+listofnum)))
+    perclist = list(set(cashflow.columns.tolist())-set(listofmill+listofnum))
     percdict = dict(zip(perclist,["{:.1f}%"]*len(perclist)))
     tmp_cf[listofmill] = cashflow[listofmill]/1e6
     tmp_cf[perclist] = cashflow[perclist]*100
