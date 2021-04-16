@@ -410,7 +410,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials & some basic calcs </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
-               'tax_rate','long_tax_rate','avgdivgrowth','mean_da_rate','mean_int_rev','mean_ebitda_margin','mean_ebit_margin']
+               'tax_rate','long_tax_rate','avgdivgrowth','mean_da_rate','mean_interest_rev','mean_ebitda_margin','mean_ebit_margin']
     list_dict = {i:eval("comp."+i) for i in listvar}
     listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
