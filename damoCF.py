@@ -208,7 +208,7 @@ def ddm():
   curr_div = sv.comp.info['dividendYield']*sv.comp.info['previousClose']
   div_growth = rate_of_change(sv.Inp_dict['beg_div_growth'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_div_growth'],sv.Inp_dict['terminal_year'],1)
   div_growth_cumm = (1+div_growth).cumprod()
-  future_div = curr_div*div_growth_cum
+  future_div = curr_div*div_growth_cumm
   
   cost_capital = rate_of_change(sv.Inp_dict['wacc'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_term_coc'],sv.Inp_dict['terminal_year'],1)
   cost_capital_cumm = (1+cost_capital).cumprod()
