@@ -175,7 +175,7 @@ def comp_finpop(comp):
   comp.ebitda_margin = comp.ebitda/comp.revenue
   comp.da_rate = comp.da/comp.revenue
   comp.mean_ebitda_margin = np.mean(comp.ebitda_margin)
-  comp.mean_ebit_margin np.mean(comp.ebit_margin)
+  comp.mean_ebit_margin = np.mean(comp.ebit_margin)
   #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
   comp.rnd = financials.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
