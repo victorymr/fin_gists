@@ -522,7 +522,7 @@ def save_results(gc):
     res_dict['Sim25'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],25)
     res_dict['Sim75'] = np.percentile(sv.Inp_dict['sim_df']['equity_val_pershare'],75)
     res_dict['CurrentPrice'] = sv.comp.info['previousClose']
-    for k,v in enumerate(sv.Inp_dict['cfdict']['Intrinsic_Price']): res_dict[k] = v
+    for i, (k,v) in enumerate(sv.Inp_dict['cfdict']['Intrinsic_Price'].items()): res_dict[k] = v
     res_df = pd.DataFrame(data=res_dict,index=[0])
     export_to_sheets(gc,res_df,worksheet_name='Results',mode='a')
   button.on_click(on_button_clicked)
