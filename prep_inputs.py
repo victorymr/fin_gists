@@ -415,7 +415,7 @@ def value_inputs():
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
                'tax_rate','long_tax_rate','avgdivgrowth','mean_da_rate','mean_interest_rev','mean_ebitda_margin','mean_ebit_margin']
     list_dict = {i:eval("comp."+i) for i in listvar}
-    listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
+    listformat = [' {:,.0f}']*2 + [' {:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
     #print(list_dict)
     display(pd.DataFrame(data=list_dict.values(),
@@ -485,6 +485,7 @@ def run_cashflow():
     #print(cfdict['cashflow'].transpose().round(2))
     with out:
       out.clear_output(True)
+      display(pd.DataFrame(cfdict['Intrinsic_Price'],index=[sv.comp.ticksym ' Intrinsic Share Price ']).style.format('{:.1f}'))
       display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
       display('Current Actual Sale2cap','{:.2f}'.format(cfdict['curr_sales2cap']))
       dacf.sanity_checks(cfdict)
