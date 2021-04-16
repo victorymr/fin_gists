@@ -139,7 +139,7 @@ def comp_finpop(comp):
   comp.ttm_revs = sum(quarterly_financials.loc['Total Revenue']) #
   comp.ttm_ebit = sum(quarterly_financials.loc['Ebit'])
   comp.ttm_gross_profit = sum(quarterly_financials.loc['Gross Profit'])
-  comp.ttm_gross_profit_margin = sum(comp.ttm_gross_profit)/sum(comp.ttm_revs)
+  comp.ttm_gross_profit_margin = comp.ttm_gross_profit)/comp.ttm_revs
   comp.gross_profit_margin = np.mean(financials.loc['Gross Profit']/financials.loc['Total Revenue'])
   try:
     shortinv = quarterly_balance_sheet.loc['Short Term Investments'].iloc[0]
