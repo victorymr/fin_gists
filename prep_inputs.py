@@ -486,7 +486,7 @@ def run_cashflow():
     with out:
       out.clear_output(True)
       display(pd.DataFrame(cfdict['Intrinsic_Price'],index=[sv.comp.ticksym + ' Intrinsic Share Price ']).style.format('{:.1f}'))
-      display(widgets.HTML('<h4> Projeced Cashflows ($M) </h4>')
+      display(widgets.HTML('<h4> Projeced Cashflows ($M) </h4>'))
       display(cfdict['tmp_cf'].style.format(cfdict['form_dict']))
       display('Current Actual Sale2cap','{:.2f}'.format(cfdict['curr_sales2cap']))
       dacf.sanity_checks(cfdict)
