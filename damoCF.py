@@ -238,8 +238,9 @@ def caprate_mod():
 
 ## REIT adjustments in CF - add the few extra elements for reit
 def cf_reit_adj(cashflow):
+  da_rate = rate_of_change(sv.Inp_dict['darate'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_da_rate'],sv.Inp_dict['terminal_year'],1)
   cashflow['EBITDA'] = cashflow['EBIT'] # for REITs the margin provided should be EBITDA margin
-  cashflow['da'] = sv.Inp_dict['darate']*cashflow['rev_fcst']
+  cashflow['da'] = da_rate*cashflow['rev_fcst']
   cashflow['sbc'] = cashflow['rev_fcst']*sv.Inp_dict['sbc']
   cashflow['maintcapex'] = cashflow['rev_fcst']*sv.Inp_dict['maintcapex']
   interest_rate = rate_of_change(sv.Inp_dict['beg_int'],sv.Inp_dict['year_conv'],sv.Inp_dict['long_term_int'],sv.Inp_dict['terminal_year'],1)
