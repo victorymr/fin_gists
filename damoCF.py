@@ -216,7 +216,7 @@ def ddm():
   
   future_div_disc = future_div*discount_factor
   disc_divNyr = sum(future_div_disc)
-  terminal_div = future_div_disc.iloc[-1] * (1 + sv.Inp_dict['long_div_growth'])
+  terminal_div = future_div_disc[-1] * (1 + sv.Inp_dict['long_div_growth'])
   terminal_div_disc = terminal_div/(sv.Inp_dict['wacc']-sv.Inp_dict['long_div_growth'])
   
   valuepershare = future_div_disc + terminal_div_disc
