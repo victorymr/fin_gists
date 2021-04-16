@@ -168,7 +168,7 @@ def comp_finpop(comp):
   comp.ttm_ebit = sum(quarterly_financials.loc['Net Income Applicable To Common Shares']+ 
                       quarterly_financials.loc['Income Tax Expense']- quarterly_financials.loc['Interest Expense'])
   comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/comp.ebit) # avg over past few years
-  comp.interest_rate = np.mean(financials.loc['Interest Expense']/comp.revenue) # avg as a % OF REVENUE over past few years
+  comp.interest_rev = np.mean(financials.loc['Interest Expense']/comp.revenue) # avg as a % OF REVENUE over past few years
   comp.da = cashflow.loc['Depreciation']
   comp.ebitda = comp.ebit + comp.da
   comp.ebit_margin = comp.ebit/comp.revenue
@@ -176,6 +176,8 @@ def comp_finpop(comp):
   comp.da_rate = comp.da/comp.revenue
   comp.mean_ebitda_margin = np.mean(comp.ebitda_margin)
   comp.mean_ebit_margin = np.mean(comp.ebit_margin)
+  comp.mean_da_rate = np.mean(comp.da_rate)
+  comp.mean_interest_rev = np.mean(comp.interest_rev) # of revnenue
   #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
   comp.rnd = financials.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
@@ -408,7 +410,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials & some basic calcs </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
-               'tax_rate','long_tax_rate','avgdivgrowth','mean_ebitda_margin','mean_ebit_margin']
+               'tax_rate','long_tax_rate','avgdivgrowth','mean_da_rate','mean_int_rev','mean_ebitda_margin','mean_ebit_margin']
     list_dict = {i:eval("comp."+i) for i in listvar}
     listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
