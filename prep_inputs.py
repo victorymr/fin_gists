@@ -158,13 +158,15 @@ def comp_finpop(comp):
   comp.interest_expense = interest_expense/comp.net_debt
   
   ## dividends
-  comp.divhist = cashflow.loc['Dividends Paid']/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
+  comp.divhist = -cashflow.loc['Dividends Paid'].to_numpy()/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
   comp.dividendgrowth = comp.divhist[:-1]/comp.divhist[1:]-1
   comp.avgdivgrowth = np.mean(comp.dividendgrowth)
   
   # ebit, ebitda, tax, interest, da The ebit, operating income, ebitda etc in the yfinance are wrong
   comp.revenue = financials.loc['Total Revenue']
   comp.ebit = financials.loc['Net Income Applicable To Common Shares']+financials.loc['Income Tax Expense']-financials.loc['Interest Expense']
+  comp.ttm_ebit = sum(quarterly_financials.loc['Net Income Applicable To Common Shares']+ 
+                      quarterly_financials.loc['Income Tax Expense']- quarterly_financials.loc['Interest Expense'])
   comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/comp.ebit) # avg over past few years
   comp.interest_rate = np.mean(financials.loc['Interest Expense']/comp.revenue) # avg as a % OF REVENUE over past few years
   comp.da = cashflow.loc['Depreciation']
@@ -172,7 +174,8 @@ def comp_finpop(comp):
   comp.ebit_margin = comp.ebit/comp.revenue
   comp.ebitda_margin = comp.ebitda/comp.revenue
   comp.da_rate = comp.da/comp.revenue
-
+  comp.mean_ebitda_margin = np.mean(comp.ebitda_margin)
+  comp.mean_ebit_margin np.mean(comp.ebit_margin)
   #comp.tax_rate = np.mean(financials.loc['Income Tax Expense']/financials.loc['Ebit']) # avg over past few years
   comp.rnd = financials.loc['Research Development']
   comp.rnd_dict = dacf.rnd_conv(comp)
@@ -180,6 +183,7 @@ def comp_finpop(comp):
   comp.marketdata = comp_data.Market()
   comp.equity_book_value = comp.quarterly_balance_sheet.loc['Total Stockholder Equity'].iloc[0]
   comp.sales2cap_approx = comp.ttm_revs/(comp.equity_book_value+comp.net_debt) # actual capital will need debt tments for lease, rnd etc
+  
   return comp
  
 def get_ticker(DBdict):
@@ -404,7 +408,7 @@ def value_inputs():
     display(widgets.HTML('<h4> Metrics from Company Recent Financials & some basic calcs </h4>'))
     listvar = ['ebit_adj','ttm_ebit','mean_margin','curr_cagr',
                'interest_expense','wacc','long_term_coc','ind_beta','sales2cap_approx',
-               'tax_rate','long_tax_rate','avgdivgrowth']
+               'tax_rate','long_tax_rate','avgdivgrowth','mean_ebitda_margin','mean_ebit_margin']
     list_dict = {i:eval("comp."+i) for i in listvar}
     listformat = ['{:,.0f}']*2 + ['{:.1%}']*(len(listvar)-2)
     dictformat = dict(zip(list_dict.keys(),listformat))
