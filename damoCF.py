@@ -353,6 +353,13 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   value_equity_commonstock = equity_value - ID['value_op_outstanding']
   equity_val_pershare = value_equity_commonstock/comp.info['sharesOutstanding']
   if not sim['Do']: # if not simulation do some plotting and printing
+    Intrinsic_Price = {'DCF': equity_val_pershare}
+    ## if REIT run the ddm and nav model
+    if sv.Inp_dict['Industry1'] == 'R.E.I.T.':
+      caprate_nav_dict = caprate_mod()
+      ddm_dict = ddm()  
+      Intrinsic_Price['DDM'] = ddm_dict['valuepershare']
+      Intrinsic_Price['navCapRate'] = caprate_nav_dict['ValuePerShare']
     #sanity checks
     #print pretty cashflow - $s in mill others in %
     tmp_cf = cashflow.copy()
