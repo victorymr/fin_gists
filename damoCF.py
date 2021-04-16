@@ -272,8 +272,8 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   #prev_year = str(int(date.today().strftime('%Y'))-1)
   #long_tax_rate = get_market_info(ID,metric='long_tax_rate')
   #float(country_df.loc[country_df.index.str.contains(comp.Country)][prev_year].values[0].strip('%'))/100 # for long term
-  
-  long_tax_rate = comp.long_tax_rate  #get_market_info(ID,metric='long_tax_rate')
+
+  #long_tax_rate = comp.long_tax_rate  #get_market_info(ID,metric='long_tax_rate')
   
   #long_term_coc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100 # sector specifc?
   long_term_coc = ID['long_term_coc'] #comp.long_term_coc  #get_industry_info(ID,metric='long_term_coc')
@@ -288,7 +288,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   rev_cumrate = (1+rev_rate).cumprod()
   rev_fcst = ttm_revs*rev_cumrate
   
-  tax_rate = rate_of_change(ID['tax_rate'],ID['year_conv'],long_tax_rate,ID['terminal_year'],1)
+  tax_rate = rate_of_change(ID['tax_rate'],ID['year_conv'],ID['long_tax_rate'],ID['terminal_year'],1)
   
   margin_rate = rate_of_change(ID['beg_margin'],ID['year_conv'],long_term_margin,ID['terminal_year'],2)
   cost_capital = rate_of_change(wacc,ID['year_conv'],long_term_coc,ID['terminal_year'],1)
@@ -310,7 +310,7 @@ def calc_cashflow(comp,ID,sim={'Do':0, 'Vol':5}):
   cashflow['margin_rate'] = margin_rate
   cashflow['EBIT'] = rev_fcst*margin_rate
   cashflow['tax_rate'] = tax_rate
-  cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/ID['sales_to_capital']
+  cashflow['Reinvestment'] = np.diff(np.append([ttm_revs],rev_fcst))/ID['sales_to_capital'] if ID['sales_to_capital'] else 0
   NOL = [float(ID['NOLbase'])*1e6]
   InvCap = [invested_capital]
   for inol in range(ID['terminal_year']):
