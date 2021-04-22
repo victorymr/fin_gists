@@ -161,9 +161,12 @@ def comp_finpop(comp):
   comp.interest_expense = interest_expense/comp.net_debt
   
   ## dividends
-  comp.divhist = -cashflow.loc['Dividends Paid'].to_numpy()/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
-  comp.dividendgrowth = comp.divhist[:-1]/comp.divhist[1:]-1
-  comp.avgdivgrowth = np.mean(comp.dividendgrowth)
+  try:
+    comp.divhist = -cashflow.loc['Dividends Paid'].to_numpy()/comp.info['sharesOutstanding']  #y_dict['dilutedshares']
+    comp.dividendgrowth = comp.divhist[:-1]/comp.divhist[1:]-1
+    comp.avgdivgrowth = np.mean(comp.dividendgrowth)
+  except: 
+    comp.avgdivgrowth = 0
   
   # ebit, ebitda, tax, interest, da The ebit, operating income, ebitda etc in the yfinance are wrong
   comp.revenue = financials.loc['Total Revenue']
