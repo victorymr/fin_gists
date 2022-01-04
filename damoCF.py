@@ -49,7 +49,8 @@ def get_market_info(ID,metric='long_tax_rate'):
     country_df = marketdata.get_risk_premiums()
   
   metdat_av=0
-  prev_year = str(int(date.today().strftime('%Y'))-1)
+  #prev_year = str(int(date.today().strftime('%Y'))-1)
+  prev_year = country_df.columns.max() #get the most recent year of data.
   for icont in ['Country1','Country2','Country3']:
     if metric=='long_tax_rate':
       tmpstr = country_df.loc[ID[icont]][prev_year].strip('%')
