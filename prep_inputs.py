@@ -438,7 +438,8 @@ def value_inputs():
     print(ind_df[indt_list])
     
     ## Relevant Country of operation Metrics
-    prev_year = str(int(datetime.today().strftime('%Y'))-1)
+    #prev_year = str(int(datetime.today().strftime('%Y'))-1)
+    prev_year = marketdata.get_country_tax_rates().columns.max()
     display(widgets.HTML(value='<h4> Key Country Level Metrics from ' + prev_year + ' - Use as Reference </h4>'))
     cont_dict = {v: marketdata.get_country_tax_rates().loc[v,prev_year] for k,v in sv.Inp_dict.items() if k in lsdts_cont}
     cont_df = pd.DataFrame(cont_dict,index=['Tax rates'])
