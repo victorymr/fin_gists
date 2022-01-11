@@ -58,7 +58,7 @@ def get_market_info(ID,metric='long_tax_rate'):
       tmpstr = country_df['implied premium (fcfe)'].loc[prev_year].strip('%')
     elif metric=='risk_premium':
       tmpstr = country_df.loc[country_df.index.str.replace(" ",'')
-                              ==ID[icont].replace(" ",'')]['total equity risk premium'][0].strip('%')
+                              ==ID[icont].replace(" ",'')]['equity riskpremium'][0].strip('%')
     metdat = float(tmpstr)/100 if tmpstr else 0
     wts = ID[icont + 'Wt']
     metdat_av += metdat*wts
