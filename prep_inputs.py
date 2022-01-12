@@ -406,7 +406,7 @@ def value_inputs():
         ind_dat = comp_data.Industry(iindt)
         tmp_df = ind_dat.get_historical_growth()
         tmp_df = tmp_df.append(ind_dat.get_margins()[['net margin','pre-tax unadjusted operating margin','pre-tax lease & r&d adj margin']])
-        tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/capital']
+        tmp_df.loc['sales/capital'] = ind_dat.get_capital_expenditures()['sales/ invested capital']
         tmp_df = tmp_df.append(ind_dat.get_industry_tax_rates()[['average across only money-making companies2','aggregate tax rate3']])
         tmp_df = tmp_df.append(comp.df_ind_coc[iindt])
         tmp_df = tmp_df.append(comp.df_ind_beta[iindt])
