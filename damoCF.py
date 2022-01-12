@@ -472,7 +472,7 @@ def sanity_checks(cfdict):
   for iindt in indlist:
     inddata = comp_data.Industry(iindt)
     cash_arr = inddata.get_cash().squeeze()
-    ind_cash = float(cash_arr['cash'].replace('$','').replace(',',''))
+    ind_cash = float(cash_arr['cash (us $ millions)'].replace('$','').replace(',',''))
     tmpcoc = float(inddata.get_cost_of_capital().loc['cost of capital'].strip('%'))/100
     tmproe = float(inddata.get_roe().loc['roe (adjusted for r&d)'].strip('%'))/100
     EBIT = float(inddata.get_margins().loc['pre-tax lease & r&d adj margin'].strip('%'))
