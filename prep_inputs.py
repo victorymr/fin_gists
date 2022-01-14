@@ -338,8 +338,8 @@ def value_inputs():
   dfts_list = dfts.index
   #dfts_res = [i for i in dfts_list if 'Unnamed' not in i] 
   lsdts_int = ['year_conv',	'terminal_year']
-  lsdts_flt1a = ['beg_cagr',	'long_term_cagr']
-  lsdts_flt1b = ['beg_margin',	'long_term_margin',	'tax_rate','wacc','long_term_coc']
+  lsdts_flt1a = ['beg_cagr',	'long_term_cagr','beg_margin']
+  lsdts_flt1b = ['long_term_margin',	'tax_rate','wacc','long_term_coc']
   lsdts_flt2 = ['sales_to_capital', 'minority_interest','crossholdings_nonopassets' ]
   lsdts_indt =['Industry1',	'Industry2', 'Industry3']
   lsdts_indf = ['Industry1Wt',	'Industry2Wt', 'Industry3Wt']
