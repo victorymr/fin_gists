@@ -469,7 +469,7 @@ def save_todb(gc):
 
   def on_button_clicked(b):
     sv.Inp_dict['UUID'] = sv.Inp_dict['Ticker'] + datetime.now().strftime('%Y%m%d%H%M%S')
-    sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y')
+    sv.Inp_dict['LastUpdate'] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
     append_todb(gc,dfts,'Ticker')
     append_todb(gc,dfls,'Lease')
     append_todb(gc,dfos,'Optionholdings')
