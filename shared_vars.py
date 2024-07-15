@@ -12,7 +12,7 @@ import random
 from datetime import date
 import pdb
 import comp_data
-from yfinance import yfinance as yf
+import yfinance as yf
 
 Inp_dict = {}
 comp = yf.Ticker("MSFT")
