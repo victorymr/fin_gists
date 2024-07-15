@@ -13,7 +13,8 @@ import seaborn as sns
 from datetime import date
 import pdb
 import comp_data
-from yfinance import yfinance as yf
+#from yfinance 
+import yfinance as yf
 
 from fin_gists import shared_vars as sv
 
